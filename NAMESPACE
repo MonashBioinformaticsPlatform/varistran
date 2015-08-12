@@ -1,0 +1,4 @@
+
+# Export everything not starting with "."
+
+exportPattern("^[^\\.]")
