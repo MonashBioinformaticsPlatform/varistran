@@ -6,7 +6,7 @@ An R package providing Variance Stabilizing Transformations appropriate for RNA-
 
 ## Install
 
-Varistran is most easily installed from Github using devtools:
+Varistran is most easily installed from GitHub using devtools:
 
 ```
 library(devtools)

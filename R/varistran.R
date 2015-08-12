@@ -6,48 +6,6 @@
 }
 
 
-qqscore <- function(mat, model_mat=NULL) {
-    if (is.null(model_mat)) {
-        decomp <- svd(mat - mean(as.vector(mat)))
-        residuals <- decomp$u[, order(decomp$d)[1], drop=F]
-    } else {
-        hat <- model_mat %*% solve(t(model_mat) %*% model_mat) %*% t(model_mat)
-        residualizer <- diag(nrow=nrow(model_mat)) - hat
-        residuals <- t(residualizer %*% t(mat))
-    }
-    
-    rss <- rowSums(residuals*residuals)
-    
-    sd(rss) / mean(rss)
-    
-    #residuals <- sort(residuals)
-    #quantiles <- qnorm((seq_len(length(residuals))-0.5) / length(residuals))    
-    #-cor(residuals, quantiles)
-
-    #quantiles <- qnorm((seq_len(nrow(residuals))-0.5) / nrow(residuals))
-    #-mean( apply(residuals,2,function(x) cor(sort(x),quantiles)) )
-    #-mean( apply(residuals,2,function(x) sum(sort(x)*quantiles) / sqrt(sum(x*x)*sum(quantiles*quantiles))) )
-
-    #quantiles <-  qnorm((seq_len(ncol(residuals))-0.5) / ncol(residuals))
-    #-mean( apply(residuals,1,function(x) cor(sort(x),quantiles)) )
-}
-
-optimal.dispersion <- function(x, method="anscombe.nb",lib.size=NULL, model_mat) {
-    #good <- rowMeans(x) >= 10.0
-    #x <- x[good,]
-
-    optimize(
-         function(d) {             
-             qqscore(
-                 vst(x,method=method,lib.size=NULL,dispersion=d), 
-                 model_mat=model_mat)
-         },
-         lower = 1e-3,
-         upper = 1.0
-         )$minimum
-}
-
-
 vst.methods <- list(
     naive.poisson = list(
         is.logish        = FALSE,
@@ -85,7 +43,37 @@ vst.methods <- list(
 )
 
 
-vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NULL, model_mat=NULL) {
+
+.dispersion.score <- function(mat, design=NULL) {
+    if (is.null(design)) {
+        decomp <- svd(mat - mean(mat))
+        residuals <- decomp$u[, order(decomp$d)[1], drop=F]
+    } else {
+        hat <- design %*% solve(t(design) %*% design) %*% t(design)
+        residualizer <- diag(nrow=nrow(model_mat)) - hat
+        residuals <- t(residualizer %*% t(mat))
+    }
+    
+    rss <- rowSums(residuals*residuals)
+    
+    sd(rss) / mean(rss)
+}
+
+
+optimal.dispersion <- function(x, method="anscombe.nb", lib.size=NULL, design=NULL) {
+    optimize(
+         function(d) {             
+             .dispersion.score(
+                 vst(x,method=method,lib.size=NULL,dispersion=d), 
+                 design=design)
+         },
+         lower = 1e-3,
+         upper = 1.0
+    )$minimum
+}
+
+
+vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NULL, design=NULL) {
     x <- as.matrix(x)
     
     method.info <- vst.methods[[method]]
@@ -100,10 +88,8 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
     x.norm <- t(t(x) * (mean.size / lib.size))
     
     if (method.info$needs.dispersion) {
-        #is.null(dispersion) && stop("dispersion is required")
-        
         if (is.null(dispersion)) {
-            dispersion <- optimal.dispersion(x,method=method,lib.size=lib.size,model_mat=model_mat)
+            dispersion <- optimal.dispersion(x,method=method,lib.size=lib.size,design=design)
             cat("Dispersion estimated as ",dispersion,"\n",sep="")
         }
         
