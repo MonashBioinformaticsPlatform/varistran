@@ -6,5 +6,5 @@ Description: Transform RNA-Seq count data so that variance due to biological noi
     Transforming data in this way makes many statistical and machine learning techniques
     applicable.
 Version: 0.1
-License: LGPL2
+License: LGPL-2
 Suggests: edgeR
