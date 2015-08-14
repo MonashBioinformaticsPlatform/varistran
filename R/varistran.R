@@ -50,7 +50,7 @@ vst.methods <- list(
         residuals <- decomp$u[, order(decomp$d)[1], drop=F]
     } else {
         hat <- design %*% solve(t(design) %*% design) %*% t(design)
-        residualizer <- diag(nrow=nrow(model_mat)) - hat
+        residualizer <- diag(nrow=nrow(design)) - hat
         residuals <- t(residualizer %*% t(mat))
     }
     
