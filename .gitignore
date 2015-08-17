@@ -14,3 +14,5 @@ vignettes/*.pdf
 
 # output of test scripts
 test_output/
+
+..RCheck

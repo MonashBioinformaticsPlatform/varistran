@@ -1,3 +1,6 @@
+# 
+# Plot several transformations
+# 
 
 source("test/common.R")
 
@@ -29,7 +32,7 @@ bigdf <- bigdf[ is.finite(bigdf$y), ]
 
 bigdf$name <- factor(bigdf$name, names(funcs))
 
-save.ggplot(
+save_ggplot(
   "vsts",
   ggplot(bigdf, aes(x=x,y=y,color=name)) 
   + geom_line()  

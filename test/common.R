@@ -2,23 +2,31 @@
 source("R/varistran.R")
 
 library("ggplot2")
+library("scales")
 
 
 if (!dir.exists("test_output"))
     dir.create("test_output")
 
 
-save.plot <- function(prefix, func, width=4,height=3.5) {
+save_plot <- function(prefix, func, width=4,height=3.5) {
     filename <- paste0("test_output/",prefix,".pdf")
-    cat("Plotting",filename,"\n")
+    cat("Plotting",filename,"/ .png\n")
+
     pdf(filename, width=width, height=height)
     func()
     dev.off()
+
+    filename <- paste0("test_output/",prefix,".png")
+    png(filename, width=width, height=height, units="in", res=120)
+    func()
+    dev.off()
+
 }
 
 
-save.ggplot <- function(prefix, func, ...) {
-    save.plot(prefix, function() print(func), ...)
+save_ggplot <- function(prefix, func, ...) {
+    save_plot(prefix, function() print(func), ...)
 }
 
 

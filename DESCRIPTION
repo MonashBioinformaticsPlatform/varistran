@@ -5,6 +5,8 @@ Description: Transform RNA-Seq count data so that variance due to biological noi
     This takes the form a a log transformation which is moderated for low counts.
     Transforming data in this way makes many statistical and machine learning techniques
     applicable.
+Author: Paul Harrison
+Maintainer: Paul Harrison <paul.harrison@monash.edu>
 Version: 0.1
 License: LGPL-2.1
 Suggests: edgeR

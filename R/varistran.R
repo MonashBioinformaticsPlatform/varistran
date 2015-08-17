@@ -46,28 +46,33 @@ vst.methods <- list(
 
 .dispersion.score <- function(mat, design=NULL) {
     if (is.null(design)) {
-        decomp <- svd(mat - mean(mat))
-        residuals <- decomp$u[, order(decomp$d)[1], drop=F]
-    } else {
-        hat <- design %*% solve(t(design) %*% design) %*% t(design)
-        residualizer <- diag(nrow=nrow(design)) - hat
-        residuals <- t(residualizer %*% t(mat))
+        #decomp <- svd(mat - mean(mat))
+        #residuals <- decomp$u[, order(decomp$d)[1], drop=F]
+        design <- matrix(1, ncol=1, nrow=ncol(mat))
     }
+
+    #hat <- design %*% solve(t(design) %*% design) %*% t(design)
+    #residualizer <- diag(nrow=nrow(design)) - hat
+    #residuals <- t(residualizer %*% t(mat))
+
+    residuals <- mat %*% MASS::Null(design)
     
     rss <- rowSums(residuals*residuals)
     
-    sd(rss) / mean(rss)
+    sqrt(mean(rss)) / mean(sqrt(rss))
 }
 
 
 optimal.dispersion <- function(x, method="anscombe.nb", lib.size=NULL, design=NULL) {
+    x <- x[ rowMeans(x) >= 5, ]
+
     optimize(
          function(d) {             
              .dispersion.score(
                  vst(x,method=method,lib.size=NULL,dispersion=d), 
                  design=design)
          },
-         lower = 1e-3,
+         lower = 1e-4,
          upper = 1.0
     )$minimum
 }
