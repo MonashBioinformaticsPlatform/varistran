@@ -15,4 +15,5 @@ vignettes/*.pdf
 # output of test scripts
 test_output/
 
-..RCheck
+# generated documentation
+varistran.pdf
