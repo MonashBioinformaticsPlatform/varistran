@@ -1,6 +1,10 @@
 
 source("test/common.R")
 
+library("Biobase")
+
+bottomly.eset <- load_bottomly()
+
 counts <- exprs(bottomly.eset)
 counts <- counts[rowSums(counts) >= 1, ]
 strain <- phenoData(bottomly.eset)$strain

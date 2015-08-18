@@ -30,7 +30,7 @@ save_plot <- function(prefix, func, width=4,height=3.5) {
     dev.off()
 
     filename <- paste0("test_output/",prefix,".png")
-    png(filename, width=width, height=height, units="in", res=120)
+    png(filename, width=width, height=height, units="in", res=300)
     func()
     dev.off()
 

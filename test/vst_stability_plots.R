@@ -103,7 +103,7 @@ real_stability_plot <- function(prefix, counts, design, y_limit=NA) {
 
 # NBPSeq arab dataset
 
-if (F) {
+if (T) {
     library("NBPSeq")
     data("arab")
     counts <- arab
@@ -132,11 +132,12 @@ if (T) {
 
 # Simulated data
 
-if (F) {
+if (T) {
     dispersion <- 0.1
     means <- 10 ^ seq(from=0,to=4,length.out=100000)
-    groups <- factor(c("1","1","2","2"))
-    nsamples <- length(groups)
+    nsamples <- 4
+    #groups <- factor(c("1","1","2","2"))
+    #nsamples <- length(groups)
     
     # Always produce same output
     set.seed(2015)
@@ -154,8 +155,9 @@ if (F) {
     counts <- matrix(counts, byrow=T,ncol=4)
     colnames(counts) <- c("a","b","c","d")
     
-    design.formula <- ~ groups
-    design <- model.matrix(design.formula)
+    #design.formula <- ~ groups
+    #design <- model.matrix(design.formula)
+    design <- matrix(1, ncol=1,nrow=nsamples)
     
     stability_plot("stability_simulated", counts, design, dispersion, y_limit=0.55)
     stability_plot("stability_simulated_est", counts, design, NULL, y_limit=0.55)

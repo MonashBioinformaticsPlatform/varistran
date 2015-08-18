@@ -37,7 +37,7 @@ save_ggplot(
   ggplot(bigdf, aes(x=x,y=y,color=name)) 
   + geom_line()  
   + geom_point(size=2) 
-  + labs(x="x", y="y", color="Transformation")
+  + labs(x="x", y="y", color="Transformation", title="Variance stabilizing transformations\ndispersion=0.1")
   + scale_x_continuous(breaks=(0:5)*2)
   + my_theme
   + theme(legend.justification=c(1,0), legend.position=c(1,0))

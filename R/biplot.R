@@ -7,14 +7,18 @@ plot_biplot <- function(x, sample_labels=NULL, balance=0.25) {
         sample_labels <- colnames(x)
     
     decomp <- svd(x - rowMeans(x))
-
-    balancer <- ( nrow(x) / ncol(x) )**0.25 * sqrt(balance)
-
-    u <- t(t(decomp$u) * (sqrt(decomp$d)*balancer)) 
-    v <- t(t(decomp$v) * (sqrt(decomp$d)/balancer)) 
     
     d2 <- decomp$d ^ 2
     R2 <- d2 / sum(d2)
+
+    balancer <- sqrt( 
+        sqrt(nrow(x) / ncol(x)) 
+        / sqrt(d2[1]+d2[2]) 
+        * balance 
+    )
+
+    u <- t(t(decomp$u) * (decomp$d*balancer)) 
+    v <- t(t(decomp$v) / balancer) 
 
     features <- data.frame(
         x = u[,1],
@@ -35,7 +39,7 @@ plot_biplot <- function(x, sample_labels=NULL, balance=0.25) {
         
     if (!is.null(sample_labels))
         result <- result + 
-            geom_text(data=samples,aes(label=labels), vjust=ifelse(samples$y<0,1.25,-0.25))
+            geom_text(data=samples,aes(label=labels), vjust=ifelse(samples$y<0,1.5,-0.5))
         
     result <- result +
         geom_point(size=4,data=samples,color="red") +

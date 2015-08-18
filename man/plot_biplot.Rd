@@ -21,10 +21,19 @@ plot_biplot(x, sample_labels = NULL, balance = 0.25)
   }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Biplot based on the Singular Value Decomposition of the matrix x. The dimensions corresponding to the two largest singular values are shown.
+
+Genes are shown in blue and samples in red.
+
+The dot product of the gene and sample vectors from (0,0) approximates the difference from the average expression level of that gene in that sample.
+
+Sample points (red) are scaled to have the same mean square in the two dimensions. Therefore the gene points (blue) may be somewhat stretched along dimension 1 if dimension 1 explains more of the variance than dimension 2.
+
 }
 \value{
 A ggplot object.
+
+This must be print()-ed to actually plot.
 }
 \references{
 }
