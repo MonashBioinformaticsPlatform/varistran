@@ -1,5 +1,6 @@
 
 source("R/varistran.R")
+source("R/biplot.R")
 
 library("ggplot2")
 library("scales")
@@ -7,6 +8,17 @@ library("scales")
 
 if (!dir.exists("test_output"))
     dir.create("test_output")
+
+
+load_bottomly <- function() {
+    if (!file.exists("test_output/bottomly_eset.RData"))
+        download.file(
+            "http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bottomly_eset.RData",
+            "test_output/bottomly_eset.RData")
+    load("test_output/bottomly_eset.RData")
+
+    bottomly.eset
+}
 
 
 save_plot <- function(prefix, func, width=4,height=3.5) {

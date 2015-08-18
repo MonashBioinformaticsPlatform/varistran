@@ -9,4 +9,5 @@ Author: Paul Harrison
 Maintainer: Paul Harrison <paul.harrison@monash.edu>
 Version: 0.1
 License: LGPL-2.1
-Suggests: edgeR
+Suggests: edgeR, ggplot2
+

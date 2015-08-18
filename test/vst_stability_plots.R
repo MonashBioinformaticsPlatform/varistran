@@ -103,7 +103,7 @@ real_stability_plot <- function(prefix, counts, design, y_limit=NA) {
 
 # NBPSeq arab dataset
 
-if (T) {
+if (F) {
     library("NBPSeq")
     data("arab")
     counts <- arab
@@ -119,11 +119,7 @@ if (T) {
 # Compares expression of two common inbred mouse strains
 
 if (T) {
-    if (!file.exists("test_output/bottomly_eset.RData"))
-        download.file(
-            "http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bottomly_eset.RData",
-            "test_output/bottomly_eset.RData")
-    load("test_output/bottomly_eset.RData")
+    bottomly.eset <- load_bottomly()
     
     counts <- exprs(bottomly.eset)
     counts <- counts[rowSums(counts) >= 1, ]
@@ -136,7 +132,7 @@ if (T) {
 
 # Simulated data
 
-if (T) {
+if (F) {
     dispersion <- 0.1
     means <- 10 ^ seq(from=0,to=4,length.out=100000)
     groups <- factor(c("1","1","2","2"))
