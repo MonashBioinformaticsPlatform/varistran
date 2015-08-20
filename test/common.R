@@ -1,6 +1,6 @@
 
 source("R/varistran.R")
-source("R/biplot.R")
+source("R/plot.R")
 
 library("ggplot2")
 library("scales")

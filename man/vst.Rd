@@ -13,7 +13,7 @@ Perform a Variance Stabilizing Transformation (VST) of a matrix of count data.
 }
 
 \arguments{
-  \item{x}{ A matrix of counts. Rows are features (such as genes), and columns are samples.}
+  \item{x}{ A matrix of counts. Rows are genes (or other features), and columns are samples.}
   \item{method}{ VST to use, see details. }
   \item{lib.size}{ Optional, estimated if not given. }
   \item{cpm}{ Should the output be in log2 Counts Per Million, rather than simply log2. }
@@ -23,13 +23,27 @@ Perform a Variance Stabilizing Transformation (VST) of a matrix of count data.
 
 \details{
 
+Several methods are available. "anscombe.nb" is recommended.
+
+Methods:
+
+"anscombe.nb": Default, asinh(sqrt((x+3/8)/(1/dispersion-3/4))). Anscombe's VST for the negative binomial distribution.
+
+"anscombe.nb.simple": log(x+0.5/dispersion), a simplified VST also given by Anscombe.
+
+"anscombe.poisson": sqrt(x+3/8). Anscombe's VST for the Poisson distribution. Only appropriate if you know there is no biological noise.
+
+"naive.nb": asinh(sqrt(x)). Resultant variance is slightly inflated at low counts.
+
+"naive.poisson": sqrt(x). Resultant variance is slightly inflated at low counts.
+
 Dispersion: 
 
-edgeR's estimate of the common dispersion of the count matrix would be a good choice of dispersion.
+edgeR's estimate of the common dispersion of the count matrix would be a reasonable choice of dispersion. However Poisson noise in RNA-Seq data may be over-dispersed, in which case a slightly smaller dispersion may work better. I recommend not providing a dispersion and letting varistran pick an appropriate value.
 
-If "dispersion" is not given, it is chosen so as to minimize sd(RSS)/mean(RSS) of the Residual Sum of Squares of each feature. Residuals are calculated from the linear model specified by the parameter "design".
+If "dispersion" is not given, it is chosen so as to minimize sd(residual s.d.)/mean(residual s.d.). Residuals are calculated from the linear model specified by the parameter "design".
 
-If "design" also isn't given, Principal Components Analysis is used and the residuals are calculated by removing all but the smallest axis of variation of the data.
+If "design" also isn't given, a linear model containing only an intercept term is used. This may lead to an over-estimate of the dispersion, so do give a design is possible.
 
 }
 
@@ -38,7 +52,7 @@ A transformed matrix.
 }
 
 \references{
-
+Anscombe, F.J. (1948) "The transformation of Poisson, binomial, and negative-binomial data", Biometrika 35 (3-4): 246-254 
 }
 
 \author{
