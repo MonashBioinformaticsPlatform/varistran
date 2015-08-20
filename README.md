@@ -10,7 +10,7 @@ Varistran is most easily installed from GitHub using devtools:
 
 ```
 install.packages("devtools")
-library(devtools)
-install_github("MonashBioinformaticsPlatform/varistran")
+
+devtools::install_github("MonashBioinformaticsPlatform/varistran")
 ```
 

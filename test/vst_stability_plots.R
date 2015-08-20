@@ -54,7 +54,7 @@ stability_plot <- function(prefix, x, design, dispersion, y_limit=NA, blind=F) {
         
         n <- 20
         dfs[[name]] <- data.frame(
-            name = rep(name,nrow(binned)),
+            name = rep(name, n),
             means = bin(means[ord], n),
             variances = bin(variances[ord], n),
             sds = bin(sqrt(variances[ord]), n)
@@ -104,6 +104,7 @@ real_stability_plot <- function(prefix, counts, design, y_limit=NA) {
 # NBPSeq arab dataset
 
 if (T) {
+    cat("\n\nArab\n\n")
     library("NBPSeq")
     data("arab")
     counts <- arab
@@ -119,6 +120,7 @@ if (T) {
 # Compares expression of two common inbred mouse strains
 
 if (T) {
+    cat("\n\nBottomly\n\n")
     bottomly.eset <- load_bottomly()
     
     counts <- exprs(bottomly.eset)
@@ -127,24 +129,36 @@ if (T) {
     experiment.number <- factor( phenoData(bottomly.eset)$experiment.number )
     design <- model.matrix(~ strain + experiment.number)
 
+    dds <- DESeqDataSetFromMatrix(
+        counts, 
+        colData=data.frame(
+            name=colnames(counts),
+            strain=strain,
+            experiment.number=experiment.number
+        ), 
+        design = ~ strain + experiment.number)
+    dds <- DESeq(dds)
+    cat("DESeq2 dispersion function:\n")
+    print(dds@dispersionFunction)
+
     real_stability_plot("stability_bottomly", counts, design, y_limit=0.3)
 }
 
 # Simulated data
 
 if (T) {
+    cat("\n\nSimulated\n\n")
+
     dispersion <- 0.1
     means <- 10 ^ seq(from=0,to=4,length.out=100000)
     nsamples <- 4
-    #groups <- factor(c("1","1","2","2"))
-    #nsamples <- length(groups)
     
     # Always produce same output
     set.seed(2015)
     
     # Matrix update in place doesn't work, so use vector.
     # library(pryr)
-    counts <- numeric(length(means) * length(groups))
+    counts <- numeric(length(means) * nsamples)
     for(i in seq_along(means)) {
         counts[((i-1)*nsamples+1):(i*nsamples)] <- 
             rnbinom(nsamples, size=1/dispersion, mu=means[i])
@@ -155,55 +169,30 @@ if (T) {
     counts <- matrix(counts, byrow=T,ncol=4)
     colnames(counts) <- c("a","b","c","d")
     
-    #design.formula <- ~ groups
-    #design <- model.matrix(design.formula)
     design <- matrix(1, ncol=1,nrow=nsamples)
+
+    dds <- DESeqDataSetFromMatrix(
+        counts, 
+        colData=data.frame(names=as.character(seq_len(nsamples))), 
+        design=~1)
+    dds <- DESeq(dds)
+    cat("DESeq2 dispersion function:\n")
+    print(dds@dispersionFunction)
+
+    dgelist <- DGEList(counts)
+    dgelist <- calcNormFactors(dgelist)
+    dgelist <- estimateGLMCommonDisp(dgelist, design)
+    
+    dispersion <- dgelist$common.dispersion
+    
+    cat("EdgeR estimates the dispersion as",dispersion,"\n")
+
     
     stability_plot("stability_simulated", counts, design, dispersion, y_limit=0.55)
     stability_plot("stability_simulated_est", counts, design, NULL, y_limit=0.55)
     stability_plot("stability_simulated_est_blind", counts, design, NULL, y_limit=0.55, blind=T)
 }
 
-
-#
-#tnull <- t(Null(design))
-#y <- DGEList(counts)
-#y <- calcNormFactors(y)
-#y <- estimateGLMCommonDisp(y, design)
-#y <- estimateGLMTrendedDisp(y, design)
-#
-#dispersion <- y$common.dispersion
-##dispersion <- min(y$trended.dispersion)
-#print(dispersion)
-#
-#
-##dispersion <- 1.0 #dispersion * 0.4
-#print(dispersion)
-#
-##dispersion <- optimal.dispersion(counts, design=design)
-##print(dispersion)
-#
-##dispersion <- NULL
-#
-##dds <- DESeqDataSetFromMatrix(counts, colData=data.frame(name=colnames(counts),group=group), #design = design.formula)
-##dds <- DESeq(dds)
-##print(dds@dispersionFunction)
-#
-#
-##v <- vst(counts,method="anscombe.nb",dispersion=dispersion,cpm=T)
-##plotMDS(v, top=nrow(v))
-##
-##low <- apply(v,1,min)
-##high <- apply(v,1,max)
-##span <- high-low
-##good <- order(span, decreasing=T)[1:500]
-##nesoni.heatmap(t(scale(t(v[good,]),scale=F,center=T)))
-#
-#
-##v <- vst(counts, method="anscombe.nb.simple", dispersion=dispersion)
-#
-##d <- NULL
-#d <- design
 
 
 
