@@ -33,7 +33,7 @@ Methods:
 
 "anscombe.poisson": sqrt(x+3/8). Anscombe's VST for the Poisson distribution. Only appropriate if you know there is no biological noise.
 
-"naive.nb": asinh(sqrt(x)). Resultant variance is slightly inflated at low counts.
+"naive.nb": asinh(sqrt(x/dispersion)). Resultant variance is slightly inflated at low counts.
 
 "naive.poisson": sqrt(x). Resultant variance is slightly inflated at low counts.
 
@@ -43,7 +43,7 @@ edgeR's estimate of the common dispersion of the count matrix would be a reasona
 
 If "dispersion" is not given, it is chosen so as to minimize sd(residual s.d.)/mean(residual s.d.). Residuals are calculated from the linear model specified by the parameter "design".
 
-If "design" also isn't given, a linear model containing only an intercept term is used. This may lead to an over-estimate of the dispersion, so do give a design is possible.
+If "design" also isn't given, a linear model containing only an intercept term is used. This may lead to an over-estimate of the dispersion, so do give a design if possible.
 
 }
 

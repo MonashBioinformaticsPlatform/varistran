@@ -7,7 +7,7 @@ Biplot of expression data
 Produce a ggplot object containing a biplot of expression data.
 }
 \usage{
-plot_biplot(x, sample_labels = NULL, balance = 0.25)
+plot_biplot(x, sample_labels = NULL, feature_labels = NULL, n_features = 20, balance = 0.25, text_size=0.025)
 }
 \arguments{
   \item{x}{ 
@@ -16,8 +16,17 @@ plot_biplot(x, sample_labels = NULL, balance = 0.25)
   \item{sample_labels}{
       Sample labels.
   }
+  \item{feature_labels}{
+      Feature labels.
+  }
   \item{balance}{
       Relative scaling of features and samples.
+  }
+  \item{n_features) {
+      Number of extreme features to label.
+  }
+  \item{text_size) {
+      plot_biplot attempts to stop labels from overlapping. Adjust this so that text just doesn't overlap. Set to zero to allow labels to completely overlap.
   }
 }
 \details{

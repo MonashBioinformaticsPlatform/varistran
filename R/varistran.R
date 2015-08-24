@@ -102,6 +102,12 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
         result <- result + log2(1e6/mean.size)
     }
     
+    if (!is.null(colnames(x)))
+        colnames(result) <- colnames(x)
+    
+    if (!is.null(rownames(x)))
+        rownames(result) <- rownames(x)
+    
     attr(result, "lib.size") <- lib.size
     attr(result, "cpm") <- cpm
     attr(result, "method") <- method
