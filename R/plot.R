@@ -127,8 +127,6 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
     
     result <- ggplot2::ggplot(features, ggplot2::aes(x=x,y=y)) + 
         ggplot2::coord_fixed() + 
-        ggplot2::geom_point(size=1, color="#0088ff") +
-        ggplot2::geom_point(size=4,data=samples,color="red") +
         ggplot2::xlab(sprintf("Dimension 1, %.1f%% of variance", R2[1]*100)) +
         ggplot2::ylab(sprintf("Dimension 2, %.1f%% of variance", R2[2]*100)) +
         ggplot2::theme_bw()
@@ -159,14 +157,14 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
         to_label <- .stack_labels(to_label, scaled_text_size)
         
         result <- result +
-            ggplot2::geom_segment(data=to_label, ggplot2::aes(x=x,y=y,xend=x,yend=yoff), color="#888888")
+            ggplot2::geom_segment(data=to_label, ggplot2::aes(x=x,y=y,xend=x,yend=yoff), color="#cccccc")
 
         #result <- result +
         #    ggplot2::geom_segment(data=to_label, ggplot2::aes(x=left,y=yoff,xend=right,yend=yoff), color="#888888")
             
         if (any(to_label$is_feature))
             result <- result + 
-                ggplot2::geom_text(data=to_label[to_label$is_feature,],ggplot2::aes(label=labels,y=yoff,vjust=vjust), color="#0088ff")
+                ggplot2::geom_text(data=to_label[to_label$is_feature,],ggplot2::aes(label=labels,y=yoff,vjust=vjust), color="#888888")
         
         if (any(!to_label$is_feature))
             result <- result + 
@@ -178,6 +176,10 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
         xhigh <- max(xhigh,max(to_label$right)) 
         result <- result + ggplot2::xlim(xlow,xhigh) + ggplot2::ylim(ylow,yhigh)
     }
+
+    result <- result +    
+        ggplot2::geom_point(size=1.5, color="#0088ff") +
+        ggplot2::geom_point(size=3,data=samples,color="red")
     
     result
 }
