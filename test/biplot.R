@@ -32,7 +32,7 @@ y <- vst(counts, design=design)
 
 save_ggplot(
     "biplot",
-    plot_biplot(y, sample_labels=labels, feature_labels=gene_names[good], text_size=0.03) + my_theme,
+    plot_biplot(y, sample_labels=labels, feature_labels=gene_names[good], text_size=0.025) + my_theme,
     width=9,height=9
     )
 
