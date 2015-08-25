@@ -37,7 +37,9 @@ Say you have a count matrix `counts` and a design matrix `design`. To perform a 
 y <- varistran::vst(counts, design=design)
 ```
 
-An appropraite dispersion is estimated with the aid of the design matrix. (If omitted, this defaults to a column of ones, for blind estimation of the dispersion. This might slightly over-estimate the dispersion.)
+By default, Anscombe's variance stabilizing transformation for the negative binomial distribution is used. This behaves like log2 for large counts (log2 Counts-Per-Million is `cpm=T` is given).
+
+An appropraite dispersion is estimated with the aid of the design matrix. (If omitted, this defaults to a column of ones, for blind estimation of the dispersion. This might slightly over-estimate the dispersion. A third possibility is to estimate the dispersion with edgeR.)
 
 ### Diagnostic plots
 
