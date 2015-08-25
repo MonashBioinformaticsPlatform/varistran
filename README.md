@@ -28,3 +28,27 @@ By default, library size estimation is by TMM, implemented in edgeR from BioCond
 source("http://bioconductor.org/biocLite.R")
 biocLite("edgeR")
 ```
+
+## Example usage
+
+Say you have a count matrix `counts` and a design matrix `design`. To perform a variance stabilizing transformation:
+
+```
+y <- varistran::vst(counts, design=design)
+```
+
+An appropraite dispersion is estimated with the aid of the design matrix. (If omitted, this defaults to a column of ones, for blind estimation of the dispersion. This might slightly over-estimate the dispersion.)
+
+### Diagnostic plots
+
+`plot_stability` allows assessment of how well the variance has been stabilized:
+
+```
+varistran::plot_stability(y, counts, design=design)
+```
+
+`plot_biplot` provides a two-dimensional overview of your samples and genes using Principle Components Analysis (similar to `plotMDS` in limma):
+
+```
+varistran::plot_biplot(y)
+```
