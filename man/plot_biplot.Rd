@@ -22,10 +22,10 @@ plot_biplot(x, sample_labels = NULL, feature_labels = NULL, n_features = 20, bal
   \item{balance}{
       Relative scaling of features and samples.
   }
-  \item{n_features) {
+  \item{n_features} {
       Number of extreme features to label.
   }
-  \item{text_size) {
+  \item{text_size} {
       plot_biplot attempts to stop labels from overlapping. Adjust this so that text just doesn't overlap. Set to zero to allow labels to completely overlap.
   }
 }

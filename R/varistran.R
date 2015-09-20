@@ -48,11 +48,14 @@ vst.methods <- list(
     if (is.null(design))
         design <- matrix(1, ncol=1, nrow=ncol(mat))
     
+    # Residuals, rotated from the subspace orthogonal 
+    # to the linear model that they inhabit (using QR decomposition)   
     residuals <- mat %*% MASS::Null(design)
     
-    rss <- rowSums(residuals*residuals)
+    # Residual standard deviation
+    rsd <- sqrt(rowMeans(residuals*residuals))
     
-    sqrt(mean(rss)) / mean(sqrt(rss))
+    sd(rsd) / mean(rsd)
 }
 
 
@@ -62,7 +65,7 @@ vst.methods <- list(
     optimize(
          function(d) {             
              .dispersion.score(
-                 vst(x,method=method,lib.size=NULL,dispersion=d), 
+                 vst(x,method=method,lib.size=lib.size,dispersion=d), 
                  design=design)
          },
          lower = 1e-4,

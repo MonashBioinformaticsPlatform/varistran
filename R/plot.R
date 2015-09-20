@@ -12,7 +12,7 @@
 # Stack some labels
 .stack_labels <- function(df, text_size) {
     df$vjust <- ifelse(df$y<0,1.5,-0.5)
-    width <- nchar(df$label) * text_size * 0.75
+    width <- nchar(df$label) * text_size * 0.6
     df$left <- df$x - width*0.5
     df$right <- df$x + width*0.5
     df$yoff <- df$y
@@ -166,7 +166,7 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
             
         if (any(to_label$is_feature))
             result <- result + 
-                ggplot2::geom_text(data=to_label[to_label$is_feature,],ggplot2::aes(label=labels,y=yoff,vjust=vjust), alpha=0.5)
+                ggplot2::geom_text(data=to_label[to_label$is_feature,],ggplot2::aes(label=labels,y=yoff,vjust=vjust), alpha=0.333)
         
         if (any(!to_label$is_feature))
             result <- result + 
