@@ -6,7 +6,7 @@ library("biomaRt")
 
 bottomly.eset <- load_bottomly()
 
-if (is.null(gene_names)) {
+if (!("gene_names" %in% ls())) {
     ensembl <- useMart("ensembl")
     mouse_ensembl <- useDataset("mmusculus_gene_ensembl", mart=ensembl)
     result <- getBM(attributes=c("ensembl_gene_id", "external_gene_name"), filters="ensembl_gene_id", values=rownames(bottomly.eset), mart=mouse_ensembl)
@@ -36,3 +36,11 @@ save_ggplot(
     width=9,height=9
     )
 
+yy <- y
+colnames(yy) <- NULL
+rownames(yy) <- NULL
+save_ggplot(
+    "biplot-unlabelled",
+    plot_biplot(yy, text_size=0.025) + my_theme,
+    width=9,height=9
+    )

@@ -85,9 +85,21 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
     
     if (is.null(sample_labels) && !is.null(colnames(x)))
         sample_labels <- colnames(x)
+    
+    if (is.null(sample_labels))
+        sample_labels <- rep("", ncol(x))
+    
+    sample_labels[is.na(sample_labels)] <- ""
+    
 
     if (is.null(feature_labels) && !is.null(rownames(x)))
         feature_labels <- rownames(x)
+
+    if (is.null(feature_labels))
+        feature_labels <- rep("", nrow(x))
+    
+    feature_labels[is.na(feature_labels)] <- ""
+
 
     n_features <- min(n_features, nrow(x))
     
@@ -108,22 +120,18 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
     features <- data.frame(
         x = u[,1],
         y = u[,2],
-        is_feature = rep(TRUE, nrow(x))
+        is_feature = rep(TRUE, nrow(x)),
+        label = feature_labels,
+        stringsAsFactors = FALSE
     )
-    if (!is.null(feature_labels))
-        features$labels <- feature_labels
     
     samples <- data.frame(
         x = v[,1],
         y = v[,2],
-        is_feature = rep(FALSE, ncol(x))
+        is_feature = rep(FALSE, ncol(x)),
+        label = sample_labels,
+        stringsAsFactors = FALSE
     )
-    if (!is.null(sample_labels)) {
-        samples$labels <- sample_labels
-        to_label <- samples
-    } else {
-        to_label <- NULL
-    }
     
     result <- ggplot2::ggplot(features, ggplot2::aes(x=x,y=y)) + 
         ggplot2::coord_fixed() + 
@@ -133,22 +141,20 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
         ggplot2::ylab(sprintf("Dimension 2, %.1f%% of variance", R2[2]*100)) +
         ggplot2::theme_bw()
 
-    if (!is.null(feature_labels) && n_features > 0) {
-        score <- decomp$u[,1]^2 + decomp$u[,2]^2
-        selection <- order(score,decreasing=T)[seq_len(n_features)]
-        
-        if (is.null(to_label))
-            to_label <- features[selection,]
-        else
-            to_label <- rbind(to_label, features[selection,])
-    }
+    to_label <- samples
+
+    score <- decomp$u[,1]^2 + decomp$u[,2]^2
+    selection <- order(score,decreasing=T)[seq_len(n_features)]
+    to_label <- rbind(to_label, features[selection,])
+    
+    to_label <- to_label[to_label$label != "", ]
     
     ylow <- min(features$y,samples$y)
     yhigh <- max(features$y,samples$y)
     xlow <- min(features$x,samples$x)
     xhigh <- max(features$x,samples$x)
     
-    if (!is.null(to_label)) {
+    if (nrow(to_label) > 0) {
         scale <- max(
             max(features$x,samples$x)-min(features$x,samples$x),
             max(features$y,samples$y)-min(features$y,samples$y)
@@ -161,16 +167,13 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
         result <- result +
             ggplot2::geom_segment(data=to_label, ggplot2::aes(x=x,y=y,xend=x,yend=yoff), alpha=0.2)
 
-        #result <- result +
-        #    ggplot2::geom_segment(data=to_label, ggplot2::aes(x=left,y=yoff,xend=right,yend=yoff), color="#888888")
-            
         if (any(to_label$is_feature))
             result <- result + 
-                ggplot2::geom_text(data=to_label[to_label$is_feature,],ggplot2::aes(label=labels,y=yoff,vjust=vjust), alpha=0.333)
+                ggplot2::geom_text(data=to_label[to_label$is_feature,],ggplot2::aes(label=label,y=yoff,vjust=vjust), alpha=0.333)
         
         if (any(!to_label$is_feature))
             result <- result + 
-                ggplot2::geom_text(data=to_label[!to_label$is_feature,],ggplot2::aes(label=labels,y=yoff,vjust=vjust))
+                ggplot2::geom_text(data=to_label[!to_label$is_feature,],ggplot2::aes(label=label,y=yoff,vjust=vjust))
         
         ylow <- min(ylow,min(to_label$yoff)-scaled_text_size)
         yhigh <- max(yhigh,max(to_label$yoff)+scaled_text_size)
