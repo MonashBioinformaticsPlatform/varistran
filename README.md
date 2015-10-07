@@ -4,6 +4,8 @@ An R package providing Variance Stabilizing Transformations appropriate for RNA-
 
 * [Documentation (PDF)](http://rnasystems.erc.monash.edu/doc/varistran.pdf)
 
+* [Poster for ABACBS 2015](doc/varistran-poster-abacbs-2015.pdf)
+
 ## Install
 
 Varistran is most easily installed from GitHub using devtools:
@@ -54,3 +56,8 @@ varistran::plot_stability(y, counts, design=design)
 ```
 varistran::plot_biplot(y)
 ```
+
+![Example of a biplot](doc/biplot-example.png)
+
+
+
