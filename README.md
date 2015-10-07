@@ -60,4 +60,13 @@ varistran::plot_biplot(y)
 ![Example of a biplot](doc/biplot-example.png)
 
 
+## Links
+
+* [Monash Bioinformatics Platform, Monash University](https://platforms.monash.edu/bioinformatics)
+
+* [RNA Systems Laboratory, Monash University](http://rnasystems.erc.monash.edu)
+
+
+
+
 
