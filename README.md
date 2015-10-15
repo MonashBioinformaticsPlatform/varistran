@@ -4,7 +4,7 @@ An R package providing Variance Stabilizing Transformations appropriate for RNA-
 
 * [Documentation (PDF)](http://rnasystems.erc.monash.edu/doc/varistran.pdf)
 
-* [Poster for ABACBS 2015](doc/varistran-poster-abacbs-2015.pdf)
+* [Poster for ABACBS 2015](doc/varistran-poster-abacbs-2015.pdf) [(on F1000, doi: 10.7490/f1000research.1110757.1)](http://f1000research.com/posters/4-1041)
 
 ## Install
 
