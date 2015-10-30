@@ -1,6 +1,7 @@
 
-source("R/varistran.R")
-source("R/plot.R")
+# Simulate installation
+devtools::load_all(export_all=FALSE)
+detach("package:varistran")
 
 library("ggplot2")
 library("scales")
@@ -42,4 +43,8 @@ save_ggplot <- function(prefix, func, ...) {
 }
 
 
-my_theme <- theme_minimal() + theme(panel.border = element_rect(fill=NA), panel.grid.minor = element_blank())
+my_theme <-
+    theme_minimal() +
+    theme(
+        panel.border = element_rect(fill=NA),
+        panel.grid.minor = element_blank())

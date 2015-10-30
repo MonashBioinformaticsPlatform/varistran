@@ -1,6 +1,6 @@
-# 
+#
 # Plot several transformations
-# 
+#
 
 source("test/common.R")
 
@@ -11,9 +11,9 @@ dispersion <- 0.1
 dfs <- list()
 
 funcs <- list(
-    "log(x+c)" = vst.methods$anscombe.nb.simple$vst,
-    "Anscombe" = vst.methods$anscombe.nb$vst,
-    "Naive" = vst.methods$naive.nb$vst,
+    "log(x+c)" = varistran::vst.methods$anscombe.nb.simple$vst,
+    "Anscombe" = varistran::vst.methods$anscombe.nb$vst,
+    "Naive" = varistran::vst.methods$naive.nb$vst,
     "log(x)" = function(x, dispersion) log2(x)
 )
 
@@ -34,9 +34,9 @@ bigdf$name <- factor(bigdf$name, names(funcs))
 
 save_ggplot(
   "vsts",
-  ggplot(bigdf, aes(x=x,y=y,color=name)) 
-  + geom_line()  
-  + geom_point(size=2) 
+  ggplot(bigdf, aes(x=x,y=y,color=name))
+  + geom_line()
+  + geom_point(size=2)
   + labs(x="x", y="y", color="Transformation", title="Variance stabilizing transformations\ndispersion=0.1")
   + scale_x_continuous(breaks=(0:5)*2)
   + my_theme

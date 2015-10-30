@@ -23,16 +23,21 @@ design <- model.matrix(~ strain + experiment.number)
 
 labels <- paste0(substr(strain,1,1), experiment.number)
 
-y <- vst(counts, design=design)
+y <- varistran::vst(counts, design=design)
 
-#y <- vst(counts, method="anscombe.nb.simple", dispersion=1)
+#y <- varistran::vst(counts, method="anscombe.nb.simple", dispersion=1)
 
 #library(limma)
 #y <- voom(counts, lib.size=colSums(counts)*calcNormFactors(counts))$E
 
 save_ggplot(
     "biplot",
-    plot_biplot(y, sample_labels=labels, feature_labels=gene_names[good], text_size=0.025) + my_theme,
+    varistran::plot_biplot(
+        y,
+        sample_labels=labels,
+        feature_labels=gene_names[good],
+        text_size=0.025
+        ) + my_theme,
     width=9,height=9
     )
 
@@ -41,6 +46,6 @@ colnames(yy) <- NULL
 rownames(yy) <- NULL
 save_ggplot(
     "biplot-unlabelled",
-    plot_biplot(yy, text_size=0.025) + my_theme,
+    varistran::plot_biplot(yy, text_size=0.025) + my_theme,
     width=9,height=9
     )
