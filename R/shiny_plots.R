@@ -26,8 +26,8 @@ shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
     )
 
     ui <- shiny::tags$div(
-        titlePanel("Stability plot"),
-        numericInput(p("bins"), "Bins", value=20,min=1,max=10000),
+        shiny::titlePanel("Stability plot"),
+        shiny::numericInput(p("bins"), "Bins", value=20,min=1,max=10000),
         plot$component_ui
     )
 
@@ -46,7 +46,6 @@ shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=
     sample_labels <- ensure_reactable(sample_labels)
     feature_labels <- ensure_reactable(feature_labels)
 
-
     plot <- shiny_plot(
         function(env) {
             print(plot_biplot(
@@ -63,9 +62,9 @@ shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=
     )
 
     ui <- shiny::tags$div(
-        titlePanel("Biplot"),
-        numericInput(p("n_features"), "Number of labelled features", 20, min=0, step=1),
-        numericInput(p("balance"), "Feature/sample relative scaling", 0.25, min=0,step=0.05),
+        shiny::titlePanel("Biplot"),
+        shiny::numericInput(p("n_features"), "Number of labelled features", 20, min=0, step=1),
+        shiny::numericInput(p("balance"), "Feature/sample relative scaling", 0.25, min=0,step=0.05),
         plot$component_ui
     )
 

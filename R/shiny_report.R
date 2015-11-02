@@ -15,8 +15,8 @@ shiny_report <- function(y, counts=NULL) {
     ui <- shiny::navlistPanel(
         widths=c(2,10),
         "Varistran",
-        tabPanel("Stability", stability$component_ui),
-        tabPanel("Biplot", biplot$component_ui)
+        shiny::tabPanel("Stability", stability$component_ui),
+        shiny::tabPanel("Biplot", biplot$component_ui)
     )
 
     server <- function(env) {
