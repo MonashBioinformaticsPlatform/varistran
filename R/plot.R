@@ -1,5 +1,3 @@
-
-
 # Partition a vector evenly and calculate means of each partition
 .bin <- function(vec, n) {
     result <- numeric(n)
@@ -39,6 +37,28 @@
 
 
 
+
+
+#' Stability plot.
+#' 
+#' Produce a ggplot object containing a plot of residual standard deviation
+#' against mean count.
+#' 
+#' Genes are partitioned evenly into "bins" bins by average expression level.
+#' Mean residual standard deviation is plotted against mean count.
+#' 
+#' @param y Transformed counts matrix.
+#' @param x Optional, original counts matrix.
+#' @param design Matrix specifying a linear model with which to calculate
+#' residuals.
+#' @param bins Number points in the graph.
+#' @return A ggplot object.
+#' 
+#' This must be print()-ed to actually plot.
+#' @author Paul Harrison
+#' @examples
+#' 
+#' 
 plot_stability <- function(y, x=NULL, design=NULL, bins=20) {
     y <- as.matrix(y)
     
@@ -80,6 +100,46 @@ plot_stability <- function(y, x=NULL, design=NULL, bins=20) {
 }
 
 
+
+
+#' Biplot of expression data
+#' 
+#' Produce a ggplot object containing a biplot of expression data.
+#' 
+#' Biplot based on the Singular Value Decomposition of the matrix x. The
+#' dimensions corresponding to the two largest singular values are shown.
+#' 
+#' Genes are shown in blue and samples in red.
+#' 
+#' The dot product of the gene and sample vectors approximates the difference
+#' from the average expression level of that gene in that sample.
+#' 
+#' Sample points (red) are scaled to have the same variance in the two
+#' dimensions. Therefore the gene points (blue) may have greater variance along
+#' dimension 1 if dimension 1 explains more of the variance than dimension 2.
+#' 
+#' @param x Matrix of expression levels, with features (eg genes) as rows and
+#' samples as columns. For example, you could use the output of varistran::vst
+#' here.
+#' @param sample_labels Sample labels.
+#' @param feature_labels Feature labels.
+#' @param balance Relative scaling of features and samples.
+#' @param n_features Number of extreme features to label.
+#' @param text_size plot_biplot attempts to stop labels from overlapping.
+#' Adjust this so that text just doesn't overlap. Set to zero to allow labels
+#' to completely overlap.
+#' @return A ggplot object.
+#' 
+#' This must be print()-ed to actually plot.
+#' @author Paul Harrison
+#' @examples
+#' 
+#' 
+#' # Assuming counts is a matrix of read counts.
+#' y <- varistran::vst(counts)
+#' print( varistran::plot_biplot(y) )
+#' 
+#' 
 plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=20, balance=0.25, text_size=0.025) {
     x <- as.matrix(x)
     

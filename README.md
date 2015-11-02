@@ -1,6 +1,8 @@
 # Varistran
 
-An R package providing Variance Stabilizing Transformations appropriate for RNA-Seq data.
+Varistran is an R package providing Variance Stabilizing Transformations appropriate for RNA-Seq data.
+
+Varistran is developed by Paul Harrison (paul.harrison@monash.edu, [@paulfharrisson](https://twitter.com/paulfharrison)) for the [Monash Bioinformatics platform](https://platforms.monash.edu/bioinformatics/).
 
 * [Documentation (PDF)](http://rnasystems.erc.monash.edu/doc/varistran.pdf)
 
@@ -18,10 +20,10 @@ devtools::install_github("MonashBioinformaticsPlatform/varistran")
 
 ### Dependencies
 
-Various diagnostic plotting functions in Varistran use `ggplot2`:
+Various diagnostic plotting functions in Varistran use `ggplot2`. Varistran can also produce an interactive `shiny` report.
 
 ```
-install.packages("ggplot2")
+install.packages(c("ggplot2","shiny"))
 ```
 
 By default, library size estimation is by TMM, implemented in edgeR from BioConductor:
@@ -32,6 +34,8 @@ biocLite("edgeR")
 ```
 
 ## Example usage
+
+I expect to keep adding features to Varistran. Therefore, I recommend using its functions via `varistran::` rather than attaching its namespace with `library(varistran)`.
 
 Say you have a count matrix `counts` and a design matrix `design`. To perform a variance stabilizing transformation:
 
@@ -65,8 +69,3 @@ varistran::plot_biplot(y)
 * [Monash Bioinformatics Platform, Monash University](https://platforms.monash.edu/bioinformatics)
 
 * [RNA Systems Laboratory, Monash University](http://rnasystems.erc.monash.edu)
-
-
-
-
-
