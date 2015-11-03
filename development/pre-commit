@@ -2,3 +2,6 @@
 set -eu
 
 R -q -e "devtools::document()"
+
+R CMD Rd2pdf . -o varistran.pdf --force --no-preview
+
