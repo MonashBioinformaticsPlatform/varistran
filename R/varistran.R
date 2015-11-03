@@ -4,7 +4,7 @@
     log2(ab+sqrt(1+ab*ab)) - log2(b) - 1
 }
 
-
+#' @export
 vst.methods <- list(
     naive.poisson = list(
         is.logish        = FALSE,
@@ -47,7 +47,7 @@ vst.methods <- list(
     if (is.null(design))
         design <- matrix(1, ncol=1, nrow=ncol(mat))
 
-    # Residuals, rotated from the subspace orthogonal 
+    # Residuals, rotated from the subspace orthogonal
     # to the linear model that they inhabit (using QR decomposition)
     residuals <- mat %*% MASS::Null(design)
 
@@ -130,6 +130,8 @@ vst.methods <- list(
 #' @author Paul Harrison
 #' @references Anscombe, F.J. (1948) "The transformation of Poisson, binomial,
 #' and negative-binomial data", Biometrika 35 (3-4): 246-254
+#'
+#' @export
 vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NULL, design=NULL) {
     x <- as.matrix(x)
 

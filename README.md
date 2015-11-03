@@ -63,6 +63,14 @@ varistran::plot_biplot(y)
 
 ![Example of a biplot](doc/biplot-example.png)
 
+### Shiny report
+
+Varistran's various diagnostic plots are also available as a Shiny app, which can be launched with:
+
+```
+varistran::shiny_report(y, counts)
+```
+
 
 ## Links
 

@@ -29,10 +29,6 @@ against mean count.
 Genes are partitioned evenly into "bins" bins by average expression level.
 Mean residual standard deviation is plotted against mean count.
 }
-\examples{
-
-
-}
 \author{
 Paul Harrison
 }

@@ -52,7 +52,6 @@ dimension 1 if dimension 1 explains more of the variance than dimension 2.
 y <- varistran::vst(counts)
 print( varistran::plot_biplot(y) )
 
-
 }
 \author{
 Paul Harrison

@@ -8,6 +8,8 @@
 #   which may access reactive objects.
 # Promote an argument to a function if necessary.
 #
+
+#' @export
 ensure_reactable <- function(item) {
     if (is.function(item))
         item
@@ -15,7 +17,25 @@ ensure_reactable <- function(item) {
         function(env) item
 }
 
-
+#' Composable Shiny App.
+#'
+#' Create a Shiny app that can be used immediately, or incorporated into a larger Shiny app.
+#'
+#' Unlike a normal Shiny app, the server function is passed an environment, "env". This contains $input, $output and $server elements conventionally passed to a Shiny server function. However env can also be used to store reactive expressions that other components of a larger app might need to access.
+#'
+#' @param ui UI part of the Shiny app.
+#'
+#' @param server Server part of the Shiny app. This should take a single parameter, env.
+#'
+#' @return A shiny.appobj.
+#'
+#' This object has two additional properties, $component_ui and $component_server.
+#'
+#' A larger composable Shiny app would incorporate $component_ui into its own ui, and make sure to call $component_server(env) from from its own server function.
+#'
+#' @author Paul Harrison
+#'
+#' @export
 composable_shiny_app <- function(ui,server) {
     app <- shiny::shinyApp(
         shiny::fluidPage(ui),
@@ -34,7 +54,7 @@ composable_shiny_app <- function(ui,server) {
     app
 }
 
-
+#' @export
 shiny_plot <- function(callback, width=500, height=500, dlname="plot", prefix="") {
     p <- function(name) paste0(prefix,name)
 

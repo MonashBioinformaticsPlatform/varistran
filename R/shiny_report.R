@@ -3,6 +3,28 @@
 # All of the plots.
 #
 
+#' Shiny report.
+#'
+#' Produce an interactive Shiny report showing diagnostic plots of transformed counts.
+#'
+#' @param y Transformed counts.
+#'
+#' @param counts Optional. Original counts.
+#'
+#' @param prefix Optional, to fascilitate use as a component of a larger Shiny app. Inputs and outputs are given this prefix.
+#'
+#' @return A shiny.appobj.
+#'
+#' Used interactively, the shiny report runs immediately. Otherwise it can be launched by print()-ing it. A call to this function can also be the last line in an app.R file in a Shiny app directory.
+#'
+#' @author Paul Harrison
+#'
+#' @examples
+#'
+#' y <- varistran::vst(counts)
+#' varistran::shiny_report(y, counts)
+#'
+#' @export
 shiny_report <- function(y, counts=NULL, prefix="") {
     p <- function(name) paste0(prefix,name)
 

@@ -2,6 +2,7 @@
 # Shiny wrappers around plotting functions
 #
 
+#' @export
 shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
     p <- function(name) paste0(prefix,name)
 
@@ -39,6 +40,7 @@ shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
 }
 
 
+#' @export
 shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=20, balance=0.25, text_size=0.025, prefix="") {
     p <- function(name) paste0(prefix,name)
 
