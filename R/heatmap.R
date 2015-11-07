@@ -47,7 +47,7 @@ plot_heatmap <- function(
     mean_graph <- rectGrob(
         x=rep(mean_range[1],nrow(y)),
         y=seq_len(nrow(y))-1,
-        width=means-mean_range[1],
+        width=means[row_order$order]-mean_range[1],
         height=rep(1,nrow(y)),
         just=c(0,0),
         default.units="native",

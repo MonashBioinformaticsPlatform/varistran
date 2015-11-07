@@ -98,7 +98,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, units="uni
 
     ui <- shiny::tags$div(
         shiny::titlePanel("Heatmap"),
-        "Features are selected based on variance around their mean expression level.",
+        "Features are selected based on span of expression levels.",
         shiny::numericInput(p("n"), "Numer of features to show", 50, min=10,max=2000,step=10),
         shiny::checkboxInput(p("cluster_samples"), "Cluster samples", FALSE),
         plot$component_ui
@@ -107,10 +107,9 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, units="uni
     server <- function(env) {
         env[[p("grob")]] <- reactive({
             y_val <- as.matrix(y(env))
-            y_centered <- y_val - rowMeans(y_val)
-            y_var <- rowMeans(y_centered*y_centered)
+            y_span <- apply(y_val,1,max) - apply(y_val,1,min)
             selection <- rep(FALSE,nrow(y_val))
-            selection[ order(-y_var)[ seq_len(env$input[[p("n")]]) ] ] <- TRUE
+            selection[ order(-y_span)[ seq_len(env$input[[p("n")]]) ] ] <- TRUE
             plot_heatmap(
                 y=y_val[selection,,drop=FALSE],
                 sample_labels=sample_labels(env)[selection],
