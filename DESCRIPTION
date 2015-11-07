@@ -11,8 +11,11 @@ Maintainer: Paul Harrison <paul.harrison@monash.edu>
 URL: https://github.com/MonashBioinformaticsPlatform/varistran
 Version: 0.1
 License: LGPL-2.1
+Depends:
+    grid
 Suggests:
     edgeR,
     ggplot2,
+    ggdendro,
     shiny
 RoxygenNote: 5.0.0

@@ -4,7 +4,7 @@
 \alias{shiny_report}
 \title{Shiny report.}
 \usage{
-shiny_report(y, counts = NULL, prefix = "")
+shiny_report(y, counts = NULL, units = "log2 count", prefix = "")
 }
 \arguments{
 \item{y}{Transformed counts.}

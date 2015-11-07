@@ -54,6 +54,16 @@ composable_shiny_app <- function(ui,server) {
     app
 }
 
+#' Shiny plot.
+#'
+#' Convert a function that produces a plot into a Shiny app.
+#'
+#' @param callback Function to produce the plot. Takes one argument, "env" (see composable_shiny_app).
+#'
+#' @return A composable shiny.appobj.
+#'
+#' @author Paul Harrison
+#'
 #' @export
 shiny_plot <- function(callback, width=500, height=500, dlname="plot", prefix="") {
     p <- function(name) paste0(prefix,name)

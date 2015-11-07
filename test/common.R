@@ -1,5 +1,7 @@
 
 # Simulate installation
+#devtools::document()
+system("development/pre-commit")
 devtools::load_all(export_all=FALSE)
 detach("package:varistran")
 
