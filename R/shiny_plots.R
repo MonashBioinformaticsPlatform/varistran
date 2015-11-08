@@ -106,10 +106,16 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, units="uni
 
     server <- function(env) {
         env[[p("grob")]] <- reactive({
+            n <- env$input[[p("n")]]
+            if (n > 2000) stop("Drawing large heatmaps uses excessive system resources. Sorry.")
+
             y_val <- as.matrix(y(env))
             y_span <- apply(y_val,1,max) - apply(y_val,1,min)
             selection <- rep(FALSE,nrow(y_val))
-            selection[ order(-y_span)[ seq_len(env$input[[p("n")]]) ] ] <- TRUE
+            selection[ order(-y_span)[ seq_len(n) ] ] <- TRUE
+
+            if (sum(selection) < 1) stop("No features to show.")
+
             plot_heatmap(
                 y=y_val[selection,,drop=FALSE],
                 sample_labels=sample_labels(env)[selection],

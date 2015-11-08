@@ -44,6 +44,7 @@ plot_heatmap <- function(
     heatmap <- heatmap_grob(y_centered[row_order$order,col_order$order,drop=F], signed=TRUE, legend_title=paste0(units,",\ndifference from row mean"))
 
     mean_range <- range(means)
+    if (mean_range[2] == mean_range[1]) mean_range[2] <- mean_range[2]+1
     mean_graph <- rectGrob(
         x=rep(mean_range[1],nrow(y)),
         y=seq_len(nrow(y))-1,
