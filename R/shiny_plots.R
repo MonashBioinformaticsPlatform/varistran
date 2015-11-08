@@ -98,8 +98,8 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, units="uni
 
     ui <- shiny::tags$div(
         shiny::titlePanel("Heatmap"),
-        "Features are selected based on span of expression levels.",
-        shiny::numericInput(p("n"), "Numer of features to show", 50, min=10,max=2000,step=10),
+        shiny::p("Features are selected based on span of expression levels."),
+        shiny::numericInput(p("n"), "Number of features to show", 50, min=10,max=2000,step=10),
         shiny::checkboxInput(p("cluster_samples"), "Cluster samples", FALSE),
         plot$component_ui
     )

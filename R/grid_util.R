@@ -124,7 +124,7 @@ signed_colors <- hsv(
 
 heatmap_grob <- function(data, signed=TRUE, legend_title="") {
     # Flip, to follow common graphing y axis convention
-    data <- data[rev(seq_len(nrow(data))),,drop=F]
+    #data <- data[rev(seq_len(nrow(data))),,drop=F]
 
     if (signed) {
         radius <- max(abs(data))
@@ -136,15 +136,35 @@ heatmap_grob <- function(data, signed=TRUE, legend_title="") {
     }
     scaled <- pmin(pmax(as.integer( (data-range[1])/(range[2]-range[1])*256+1),1),256)
 
-    heatmap <- rasterGrob(
-        matrix(col[scaled],ncol=ncol(data)),
-        width=unit(1,"npc"), height=unit(1,"npc"),
-        interpolate=FALSE)
+    #heatmap <- rasterGrob(
+    #    matrix(col[scaled],ncol=ncol(data)),
+    #    width=unit(1,"npc"), height=unit(1,"npc"),
+    #    interpolate=FALSE)
+    heatmap <- rectGrob(
+        x=rep(seq_len(ncol(data))-1, each=nrow(data)),
+        y=rep(seq_len(nrow(data))-1, ncol(data)),
+        width=1,
+        height=1,
+        just=c(0,0),
+        default.units="native",
+        gp=gpar(col=NA, fill=col[scaled]),
+        vp=viewport(xscale=c(0,ncol(data)),yscale=c(0,nrow(data)))
+    )
 
-    legend_heatmap <- rasterGrob(
-        matrix(col,nrow=1),
-        width=unit(1,"npc"), height=unit(1,"npc"),
-        interpolate=FALSE)
+    #legend_heatmap <- rasterGrob(
+    #    matrix(col,nrow=1),
+    #    width=unit(1,"npc"), height=unit(1,"npc"),
+    #    interpolate=FALSE)
+    legend_heatmap <- rectGrob(
+        x=seq_along(col)-1,
+        y=0,
+        width=1,
+        height=1,
+        just=c(0,0),
+        default.units="native",
+        gp=gpar(col=NA,fill=col),
+        vp=viewport(xscale=c(0,length(col)),yscale=c(0,1))
+    )
 
     axis <- xaxisGrob(
             at=axisTicks(range,log=FALSE,nint=5),

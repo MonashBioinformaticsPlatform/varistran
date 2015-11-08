@@ -11,28 +11,42 @@ shiny_filter <- function(y, counts=NULL, units="log2 counts", prefix="") {
     counts <- ensure_reactable(counts)
 
     ui <- shiny::tags$div(
-        titlePanel("Select and filter"),
-        numericInput(p("min_mean"), "Minimum mean expression level", 0.0),
-        textOutput(p("report"))
+        shiny::tags$h3("Select samples"),
+        shiny::uiOutput(p("sample_selector")),
+        shiny::tags$h3("Filter features"),
+        shiny::numericInput(p("min_mean"), "Minimum mean expression level", 0.0),
+        shiny::textOutput(p("report"))
     )
 
     server <- function(env) {
-        env[[p("filtered")]] <- reactive({
+        env$output[[p("sample_selector")]] <- shiny::renderUI({
+            y_val <- y(env)
+            choices <- seq_len(ncol(y_val))
+            if (!is.null(colnames(y_val)))
+                names(choices) <- colnames(y_val)
+            shiny::selectInput(p("samples"), "Select samples", selected=choices, choices=choices, multiple=TRUE)
+        })
+
+        env[[p("filtered")]] <- shiny::reactive({
             y_val <- y(env)
             counts_val <- counts(env)
-            select <- rowMeans(y_val) >= env$input[[p("min_mean")]]
+            sample_select <- as.numeric(env$input[[p("samples")]])
+            feature_select <- which(
+                rowMeans(y_val[,sample_select,drop=FALSE]) >= env$input[[p("min_mean")]] 
+            )
             list(
-                select=select,
-                y=y_val[select,,drop=FALSE],
-                counts=counts_val[select,,drop=FALSE]
+                sample_select=sample_select,
+                feature_select=feature_select,
+                y=y_val[feature_select,sample_select,drop=FALSE],
+                counts=counts_val[feature_select,sample_select,drop=FALSE]
             )
         })
 
-        env$output[[p("report")]] <- renderText({
+        env$output[[p("report")]] <- shiny::renderText({
             filtered <- env[[p("filtered")]]()
             sprintf("%d of %d features will be used.",
-                sum(filtered$select),
-                length(filtered$select)
+                length(filtered$feature_select),
+                nrow(y(env))
             )
         })
     }
