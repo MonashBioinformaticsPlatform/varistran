@@ -29,7 +29,8 @@ shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
     ui <- shiny::tags$div(
         shiny::titlePanel("Stability plot"),
         shiny::numericInput(p("bins"), "Bins", value=20,min=1,max=10000),
-        plot$component_ui
+        plot$component_ui,
+        parenthetically("This plot is produced by varistran::plot_stability.")
     )
 
     server <- function(env) {
@@ -67,7 +68,8 @@ shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=
         shiny::titlePanel("Biplot"),
         shiny::numericInput(p("n_features"), "Number of labelled features", 20, min=0, step=1),
         shiny::numericInput(p("balance"), "Feature/sample relative scaling", 0.25, min=0,step=0.05),
-        plot$component_ui
+        plot$component_ui,
+        parenthetically("This plot is produced by varistran::plot_biplot.")
     )
 
     server <- function(env) {
@@ -78,13 +80,12 @@ shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=
 }
 
 #' @export
-shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, units="units", prefix="") {
+shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="") {
     p <- function(name) paste0(prefix,name)
 
     y <- ensure_reactable(y)
     sample_labels <- ensure_reactable(sample_labels)
     feature_labels <- ensure_reactable(feature_labels)
-    units <- ensure_reactable(units)
 
     plot <- shiny_plot(
         callback = function(env) {
@@ -101,7 +102,8 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, units="uni
         shiny::p("Features are selected based on span of expression levels."),
         shiny::numericInput(p("n"), "Number of features to show", 50, min=10,max=2000,step=10),
         shiny::checkboxInput(p("cluster_samples"), "Cluster samples", FALSE),
-        plot$component_ui
+        plot$component_ui,
+        parenthetically("This plot is produced by varistran::plot_heatmap.")
     )
 
     server <- function(env) {
@@ -120,8 +122,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, units="uni
                 y=y_val[selection,,drop=FALSE],
                 sample_labels=sample_labels(env)[selection],
                 feature_labels=feature_labels(env)[selection],
-                cluster_samples=env$input[[p("cluster_samples")]],
-                units=units(env)
+                cluster_samples=env$input[[p("cluster_samples")]]
             )
         })
 

@@ -87,7 +87,10 @@ plot_stability <- function(y, x=NULL, design=NULL, bins=20) {
         ggplot2::geom_point(size=3) + ggplot2::geom_line() +
         ggplot2::ylim(0,NA) +
         ggplot2::xlab(x_label) +
-        ggplot2::ylab("residual standard deviation") +
+        ggplot2::ylab(
+            if (ncol(design) > 1) "residual standard deviation"
+            else "standard deviation"
+        ) +
         ggplot2::theme_bw()
 
     if (!is.null(x)) {

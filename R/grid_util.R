@@ -184,3 +184,59 @@ heatmap_grob <- function(data, signed=TRUE, legend_title="") {
         legend=legend
     )
 }
+
+
+#' @export
+shrinktext_grob <- function(label,x,y,just,...) {
+    grob(label=label,x=x,y=y,just=just,...,cl="shrinktext_grob")
+}
+
+#' @export
+widthDetails.shrinktext_grob <- function(grob) {
+    max(stringWidth(grob$label))
+}
+
+#' @export
+drawDetails.shrinktext_grob <- function(grob, recording) {
+    ratio <- convertHeight(unit(1,"native"), "lines", valueOnly=TRUE)
+    cex <- min(1.0, ratio)
+
+    if (cex < 0.2) return()
+
+    grid.text(
+        grob$label,
+        x=grob$x,
+        y=grob$y,
+        just=grob$just,
+        default.units="native",
+        gp=gpar(cex=cex)
+    )
+}
+
+#' @export
+vertical_shrinktext_grob <- function(label,x,y,just,...) {
+    grob(label=label,x=x,y=y,just=just,...,cl="vertical_shrinktext_grob")
+}
+
+#' @export
+heightDetails.vertical_shrinktext_grob <- function(grob) {
+    max(stringWidth(grob$label))
+}
+
+#' @export
+drawDetails.vertical_shrinktext_grob <- function(grob, recording) {
+    ratio <- convertWidth(unit(1,"native"), "lines", valueOnly=TRUE)
+    cex <- min(1.0, ratio)
+
+    if (cex < 0.2) return()
+
+    grid.text(
+        grob$label,
+        x=grob$x,
+        y=grob$y,
+        just=grob$just,
+        default.units="native",
+        rot=90,
+        gp=gpar(cex=cex)
+    )
+}

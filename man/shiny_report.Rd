@@ -4,10 +4,10 @@
 \alias{shiny_report}
 \title{Shiny report.}
 \usage{
-shiny_report(y, counts = NULL, units = "log2 count", prefix = "")
+shiny_report(y, counts = NULL, prefix = "")
 }
 \arguments{
-\item{y}{Transformed counts.}
+\item{y}{A matrix of exprssion levels, such as a transformed counts matrix.}
 
 \item{counts}{Optional. Original counts.}
 

@@ -3,6 +3,10 @@
 # Utility functions for creating composable shiny reports
 #
 
+parenthetically <- function(...) {
+    shiny::div(style="margin-top: 5em; font-size: 75%", ...)
+}
+
 #
 # Shiny apps take most arguments as functions,
 #   which may access reactive objects.

@@ -1,12 +1,28 @@
 
+#' Plot a heatmap.
+#'
+#' Produces a heatmap as a grid grob.
+#'
+#' Clustering is performed using the "seriation" package, and is approximately a Travelling Salesman Problem ordering. If there are many features (more than a couple of thousand) clustering may be slow.
+#'
+#' @param y A matrix of expression levels, such as a transformed counts matrix.
+#' @param cluster_samples Should samples (columns) be clustered?
+#' @param cluster_features Should features (rows) be clustered?
+#' @param sample_labels Names for each sample. If not given and y has column names, these will be used instead.
+#' @param feature_labels Names for each feature. If not given and y has row names, these will be used instead.
+#'
+#' @return A grid grob. print()-ing this value will cause it to be displayed.
+#'
+#' Additionally $info$row_order will contain row ordering and $info$col_order will contain column ordering.
+#' @author Paul Harrison.
+#'
 #' @export
 plot_heatmap <- function(
         y,
         cluster_samples=FALSE,
         cluster_features=TRUE,
         sample_labels=NULL,
-        feature_labels=NULL,
-        units="units") {
+        feature_labels=NULL) {
     y <- as.matrix(y)
 
     if (is.null(sample_labels) && !is.null(colnames(y)))
@@ -41,7 +57,10 @@ plot_heatmap <- function(
 
     col_ordering_grob <- ordering_grob(col_order)
 
-    heatmap <- heatmap_grob(y_centered[row_order$order,col_order$order,drop=F], signed=TRUE, legend_title=paste0(units,",\ndifference from row mean"))
+    heatmap <- heatmap_grob(
+        y_centered[row_order$order,col_order$order,drop=F],
+        signed=TRUE,
+        legend_title=paste0("difference from\nrow mean"))
 
     mean_range <- range(means)
     if (mean_range[2] == mean_range[1]) mean_range[2] <- mean_range[2]+1
@@ -62,22 +81,19 @@ plot_heatmap <- function(
     )
     mean_label <- textGrob("row\nmean")
 
-    feature_label_grob <- textGrob(
+    feature_label_grob <- shrinktext_grob(
         feature_labels[row_order$order],
         x=rep(0,nrow(y)),
         y=seq_len(nrow(y))-0.5,
         just=c(0,0.5),
-        default.units="native",
         vp=viewport(xscale=c(0,1),yscale=c(0,nrow(y)))
     )
 
-    sample_label_grob <- textGrob(
+    sample_label_grob <- vertical_shrinktext_grob(
         sample_labels[col_order$order],
         x=seq_len(ncol(y))-0.5,
         y=rep(1,ncol(y)),
         just=c(1,0.5),
-        rot=90,
-        default.units="native",
         vp=viewport(xscale=c(0,ncol(y)),yscale=c(0,1))
     )
 

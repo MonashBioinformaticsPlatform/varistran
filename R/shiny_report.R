@@ -32,7 +32,7 @@ shiny_filter <- function(y, counts=NULL, units="log2 counts", prefix="") {
             counts_val <- counts(env)
             sample_select <- as.numeric(env$input[[p("samples")]])
             feature_select <- which(
-                rowMeans(y_val[,sample_select,drop=FALSE]) >= env$input[[p("min_mean")]] 
+                rowMeans(y_val[,sample_select,drop=FALSE]) >= env$input[[p("min_mean")]]
             )
             list(
                 sample_select=sample_select,
@@ -58,7 +58,7 @@ shiny_filter <- function(y, counts=NULL, units="log2 counts", prefix="") {
 #'
 #' Produce an interactive Shiny report showing diagnostic plots of transformed counts.
 #'
-#' @param y Transformed counts.
+#' @param y A matrix of exprssion levels, such as a transformed counts matrix.
 #'
 #' @param counts Optional. Original counts.
 #'
@@ -76,7 +76,7 @@ shiny_filter <- function(y, counts=NULL, units="log2 counts", prefix="") {
 #' varistran::shiny_report(y, counts)
 #'
 #' @export
-shiny_report <- function(y, counts=NULL, units="log2 count", prefix="") {
+shiny_report <- function(y, counts=NULL, prefix="") {
     p <- function(name) paste0(prefix,name)
 
     y <- ensure_reactable(y)
@@ -88,15 +88,21 @@ shiny_report <- function(y, counts=NULL, units="log2 count", prefix="") {
 
     stability <- shiny_stability(fy, fcounts, prefix=p("stability_"))
     biplot <- shiny_biplot(fy, prefix=p("biplot_"))
-    heatmap <- shiny_heatmap(fy, units=units, prefix=p("heatmap_"))
+    heatmap <- shiny_heatmap(fy, prefix=p("heatmap_"))
 
-    ui <- shiny::navlistPanel(
-        widths=c(2,10),
-        "Varistran",
-        shiny::tabPanel("Select and filter", filter$component_ui),
-        shiny::tabPanel("Stability", stability$component_ui),
-        shiny::tabPanel("Biplot", biplot$component_ui),
-        shiny::tabPanel("Heatmap", heatmap$component_ui)
+    ui <- shiny::div(
+        shiny::div(
+            style="font-size: 150%; color: #bbbbbb; text-align: right; letter-spacing: 0.25em;",
+            "Varistran"
+        ),
+        shiny::navlistPanel(
+            widths=c(2,10),
+            well=FALSE,
+            shiny::tabPanel("Select and filter", filter$component_ui),
+            shiny::tabPanel("Stability", stability$component_ui),
+            shiny::tabPanel("Biplot", biplot$component_ui),
+            shiny::tabPanel("Heatmap", heatmap$component_ui)
+        )
     )
 
     server <- function(env) {
