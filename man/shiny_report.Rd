@@ -10,12 +10,18 @@ shiny_report(y = NULL, counts = NULL, sample_labels = NULL,
 \arguments{
 \item{y}{A matrix of exprssion levels, such as a transformed counts matrix.}
 
-\item{counts}{Optional. Original counts.}
+\item{counts}{Original counts.}
 
-\item{prefix}{Optional, to fascilitate use as a component of a larger Shiny app. Inputs and outputs are given this prefix.}
+\item{sample_labels}{Optional. Sample names.}
+
+\item{feature_labels}{Optional. Feature names.}
+
+\item{prefix}{Optional, to facilitate use as a component of a larger Shiny app. Inputs and outputs are given this prefix.}
 }
 \value{
 A shiny.appobj.
+
+Either y or counts or both must be given.
 
 Used interactively, the shiny report runs immediately. Otherwise it can be launched by print()-ing it. A call to this function can also be the last line in an app.R file in a Shiny app directory.
 }
