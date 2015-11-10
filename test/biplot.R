@@ -1,9 +1,6 @@
 
 source("test/common.R")
 
-library("Biobase")
-library("biomaRt")
-
 bottomly.eset <- load_bottomly()
 
 if (!("gene_names" %in% ls())) {

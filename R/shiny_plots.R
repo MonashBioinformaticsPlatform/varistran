@@ -120,7 +120,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
 
             plot_heatmap(
                 y=y_val[selection,,drop=FALSE],
-                sample_labels=sample_labels(env)[selection],
+                sample_labels=sample_labels(env),
                 feature_labels=feature_labels(env)[selection],
                 cluster_samples=env$input[[p("cluster_samples")]]
             )

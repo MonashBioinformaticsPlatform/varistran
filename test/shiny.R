@@ -6,7 +6,15 @@ library("Biobase")
 library("biomaRt")
 
 bottomly.eset <- load_bottomly()
+bottomly.gene.names <- load_bottomly_gene_names(bottomly.eset)
 counts <- exprs(bottomly.eset)
-y <- varistran::vst(counts)
 
-print( varistran::shiny_report(y, counts=counts) )
+strain <- phenoData(bottomly.eset)$strain
+experiment.number <- factor( phenoData(bottomly.eset)$experiment.number )
+design <- model.matrix(~ strain + experiment.number)
+labels <- paste0(substr(strain,1,1), experiment.number)
+
+
+#y <- varistran::vst(counts)
+
+print( varistran::shiny_report(counts=counts, sample_labels=labels, feature_labels=bottomly.gene.names) )

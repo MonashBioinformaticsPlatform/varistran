@@ -7,7 +7,8 @@ detach("package:varistran")
 
 library("ggplot2")
 library("scales")
-
+library("Biobase")
+library("biomaRt")
 
 if (!dir.exists("test_output"))
     dir.create("test_output")
@@ -22,6 +23,22 @@ load_bottomly <- function() {
 
     bottomly.eset
 }
+
+load_bottomly_gene_names <- function(bottomly.eset) {
+    if (!file.exists("test_output/bottomly_biomart.RData")) {
+        #ensembl <- useMart("ensembl")
+        ensembl <- useMart("ENSEMBL_MART_ENSEMBL", host="www.ensembl.org")
+        mouse_ensembl <- useDataset("mmusculus_gene_ensembl", mart=ensembl)
+        bottomly.bm <- getBM(attributes=c("ensembl_gene_id", "external_gene_name"), filters="ensembl_gene_id", values=rownames(bottomly.eset), mart=mouse_ensembl)
+        save(bottomly.bm, file="test_output/bottomly_biomart.RData")
+    }
+
+    load("test_output/bottomly_biomart.RData")
+    bottomly.bm$external_gene_name[
+        match(rownames(bottomly.eset),bottomly.bm$ensembl_gene_id)
+    ]
+}
+
 
 
 save_plot <- function(prefix, func, width=4,height=3.5) {

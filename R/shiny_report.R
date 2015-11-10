@@ -3,12 +3,48 @@
 # All of the plots.
 #
 
+# Perform or report on a variance stabilizing transformation
+#
 #' @export
-shiny_filter <- function(y, counts=NULL, units="log2 counts", prefix="") {
+shiny_vst <- function(y=NULL, counts=NULL, prefix="") {
     p <- function(name) paste0(prefix,name)
 
     y <- ensure_reactable(y)
     counts <- ensure_reactable(counts)
+
+    ui <- shiny::div(
+        shiny::h3("Transformation"),
+        shiny::uiOutput(p("report"))
+    )
+
+    server <- function(env) {
+        env[[p("y")]] <- shiny::reactive({
+            y_val <- y(env)
+            counts_val <- counts(env)
+            if (is.null(y_val))
+                y_val <- vst(counts_val)
+            y_val
+        })
+
+        env$output[[p("report")]] <- shiny::renderUI({
+            y <- env[[p("y")]]()
+            dispersion <- attr(y,"dispersion")
+
+            div(sprintf("Estimated dispersion is %.4f.", dispersion))
+        })
+    }
+
+    composable_shiny_app(ui, server)
+}
+
+#' @export
+shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL, prefix="") {
+    p <- function(name) paste0(prefix,name)
+
+    y <- ensure_reactable(y)
+    counts <- ensure_reactable(counts)
+    sample_labels <- ensure_reactable(sample_labels)
+    feature_labels <- ensure_reactable(feature_labels)
 
     ui <- shiny::tags$div(
         shiny::tags$h3("Select samples"),
@@ -21,8 +57,11 @@ shiny_filter <- function(y, counts=NULL, units="log2 counts", prefix="") {
     server <- function(env) {
         env$output[[p("sample_selector")]] <- shiny::renderUI({
             y_val <- y(env)
+            sample_labels_val <- sample_labels(env)
             choices <- seq_len(ncol(y_val))
-            if (!is.null(colnames(y_val)))
+            if (!is.null(sample_labels_val))
+                names(choices) <- sample_labels_val
+            else if (!is.null(colnames(y_val)))
                 names(choices) <- colnames(y_val)
             shiny::selectInput(p("samples"), "Select samples", selected=choices, choices=choices, multiple=TRUE)
         })
@@ -38,7 +77,9 @@ shiny_filter <- function(y, counts=NULL, units="log2 counts", prefix="") {
                 sample_select=sample_select,
                 feature_select=feature_select,
                 y=y_val[feature_select,sample_select,drop=FALSE],
-                counts=counts_val[feature_select,sample_select,drop=FALSE]
+                counts=counts_val[feature_select,sample_select,drop=FALSE],
+                sample_labels=sample_labels(env)[sample_select],
+                feature_labels=feature_labels(env)[feature_select]
             )
         })
 
@@ -76,19 +117,26 @@ shiny_filter <- function(y, counts=NULL, units="log2 counts", prefix="") {
 #' varistran::shiny_report(y, counts)
 #'
 #' @export
-shiny_report <- function(y, counts=NULL, prefix="") {
+shiny_report <- function(y=NULL, counts=NULL, sample_labels=NULL, feature_labels=NULL, prefix="") {
     p <- function(name) paste0(prefix,name)
 
     y <- ensure_reactable(y)
     counts <- ensure_reactable(counts)
+    sample_labels <- ensure_reactable(sample_labels)
+    feature_labels <- ensure_reactable(feature_labels)
 
-    filter <- shiny_filter(y, counts, prefix=p("filter_"))
+    transform <- shiny_vst(y, counts, prefix=p("transform_"))
+    ty <- function(env) env[[p("transform_y")]]()
+
+    filter <- shiny_filter(ty, counts, sample_labels, feature_labels, prefix=p("filter_"))
     fy <- function(env) env[[p("filter_filtered")]]()$y
     fcounts <- function(env) env[[p("filter_filtered")]]()$counts
+    fsample_labels <- function(env) env[[p("filter_filtered")]]()$sample_labels
+    ffeature_labels <- function(env) env[[p("filter_filtered")]]()$feature_labels
 
     stability <- shiny_stability(fy, fcounts, prefix=p("stability_"))
-    biplot <- shiny_biplot(fy, prefix=p("biplot_"))
-    heatmap <- shiny_heatmap(fy, prefix=p("heatmap_"))
+    biplot <- shiny_biplot(fy, sample_labels=fsample_labels, feature_labels=ffeature_labels,  prefix=p("biplot_"))
+    heatmap <- shiny_heatmap(fy, sample_labels=fsample_labels, feature_labels=ffeature_labels,  prefix=p("heatmap_"))
 
     ui <- shiny::div(
         shiny::div(
@@ -98,6 +146,7 @@ shiny_report <- function(y, counts=NULL, prefix="") {
         shiny::navlistPanel(
             widths=c(2,10),
             well=FALSE,
+            #shiny::tabPanel("Transform", transform$component_ui),
             shiny::tabPanel("Select and filter", filter$component_ui),
             shiny::tabPanel("Stability", stability$component_ui),
             shiny::tabPanel("Biplot", biplot$component_ui),
@@ -106,6 +155,7 @@ shiny_report <- function(y, counts=NULL, prefix="") {
     )
 
     server <- function(env) {
+        transform$component_server(env)
         filter$component_server(env)
         stability$component_server(env)
         biplot$component_server(env)
