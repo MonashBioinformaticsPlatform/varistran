@@ -17,5 +17,6 @@ Suggests:
     edgeR,
     ggplot2,
     ggdendro,
-    shiny
+    shiny,
+    seriation
 RoxygenNote: 5.0.0

@@ -3,6 +3,12 @@
 # grid graphics utility functions
 #
 
+# This is necessary because we are providing new methods for S3 generics
+# defined by grid.
+#
+#' @import grid
+
+
 .default <- function(a,b) if (is.null(a)) b else a
 
 #

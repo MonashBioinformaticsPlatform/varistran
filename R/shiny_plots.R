@@ -27,7 +27,7 @@ shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
     )
 
     ui <- shiny::tags$div(
-        shiny::titlePanel("Stability plot"),
+        shiny::h3("Stability plot"),
         shiny::numericInput(p("bins"), "Bins", value=20,min=1,max=10000),
         plot$component_ui,
         parenthetically("This plot is produced by varistran::plot_stability.")
@@ -65,7 +65,7 @@ shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=
     )
 
     ui <- shiny::tags$div(
-        shiny::titlePanel("Biplot"),
+        shiny::h3("Biplot"),
         shiny::numericInput(p("n_features"), "Number of labelled features", 20, min=0, step=1),
         shiny::numericInput(p("balance"), "Feature/sample relative scaling", 0.25, min=0,step=0.05),
         plot$component_ui,
@@ -98,7 +98,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
     )
 
     ui <- shiny::tags$div(
-        shiny::titlePanel("Heatmap"),
+        shiny::h3("Heatmap"),
         shiny::p("Features are selected based on span of expression levels."),
         shiny::numericInput(p("n"), "Number of features to show", 50, min=10,max=2000,step=10),
         shiny::checkboxInput(p("cluster_samples"), "Cluster samples", FALSE),
