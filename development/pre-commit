@@ -3,4 +3,3 @@ set -eu
 
 R -q -e "devtools::document()"
 
-which latex && R CMD Rd2pdf . -o varistran.pdf --force --no-preview
