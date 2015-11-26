@@ -75,7 +75,7 @@ shiny_plot <- function(callback, width=500, height=500, dlname="plot", prefix=""
     ui <- shiny::tags$div(
         shiny::fluidRow(
           shiny::column(3, shiny::numericInput(p("width"), "Plot width", width, min=100, max=10000, step=50)),
-          shiny::column(3, shiny::numericInput(p("height"), "Plot height", height, width, min=100, max=10000, step=50)),
+          shiny::column(3, shiny::numericInput(p("height"), "Plot height", height, min=100, max=10000, step=50)),
           shiny::column(4, shiny::tags$label("Download"), shiny::tags$br(),
               shiny::downloadButton(p("pdf"), "PDF"),
               shiny::downloadButton(p("eps"), "EPS"))
