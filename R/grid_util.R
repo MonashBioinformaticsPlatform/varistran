@@ -4,7 +4,8 @@
 #
 
 #' @importFrom grid drawDetails
-
+#' @importFrom grid heightDetails
+#' @importFrom grid widthDetails
 
 
 .default <- function(a,b) if (is.null(a)) b else a
