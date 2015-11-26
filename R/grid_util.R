@@ -3,6 +3,10 @@
 # grid graphics utility functions
 #
 
+#' @importFrom grid drawDetails
+
+
+
 .default <- function(a,b) if (is.null(a)) b else a
 
 #
