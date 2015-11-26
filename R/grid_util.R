@@ -5,6 +5,10 @@
 
 #' @import grid
 
+.onLoad <- function(...) {
+    library(grid)
+}
+
 
 .default <- function(a,b) if (is.null(a)) b else a
 
