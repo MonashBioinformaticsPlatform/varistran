@@ -29,8 +29,19 @@ shiny_vst <- function(y=NULL, counts=NULL, prefix="") {
         env$output[[p("report")]] <- shiny::renderUI({
             y <- env[[p("y")]]()
             dispersion <- attr(y,"dispersion")
+            cpm <- attr(y,"cpm")
 
-            div(sprintf("Estimated dispersion is %.4f.", dispersion))
+            if (is.null(cpm))
+                units <- "Units for expression levels are unknown."
+            else if (cpm)
+                units <- "Units for expression levels are log2 Reads Per Million."
+            else
+                units <- "Units for expression levels are log2 read count."
+
+            shiny::div(
+                shiny::p(units),
+                shiny::p(sprintf("Estimated dispersion is %.4f.", dispersion))
+            )
         })
     }
 
@@ -152,7 +163,7 @@ shiny_report <- function(y=NULL, counts=NULL, sample_labels=NULL, feature_labels
         shiny::navlistPanel(
             widths=c(2,10),
             well=FALSE,
-            #shiny::tabPanel("Transform", transform$component_ui),
+            shiny::tabPanel("Transform", transform$component_ui),
             shiny::tabPanel("Select and filter", filter$component_ui),
             shiny::tabPanel("Stability", stability$component_ui),
             shiny::tabPanel("Biplot", biplot$component_ui),

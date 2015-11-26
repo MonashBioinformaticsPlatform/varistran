@@ -11,9 +11,9 @@ dispersion <- 0.1
 dfs <- list()
 
 funcs <- list(
-    "log(x+c)" = varistran::vst.methods$anscombe.nb.simple$vst,
-    "Anscombe" = varistran::vst.methods$anscombe.nb$vst,
-    "Naive" = varistran::vst.methods$naive.nb$vst,
+    "log(x+c)" = varistran::vst_methods$anscombe.nb.simple$vst,
+    "Anscombe" = varistran::vst_methods$anscombe.nb$vst,
+    "Naive" = varistran::vst_methods$naive.nb$vst,
     "log(x)" = function(x, dispersion) log2(x)
 )
 

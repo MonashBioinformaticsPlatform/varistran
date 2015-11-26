@@ -1,11 +1,11 @@
 # asinh(ab) / log(2) + const, behaving as log2(a) in the limit as a -> large
-.log2ish.asinh <- function(a,b) {
+.log2ish_asinh <- function(a,b) {
     ab <- a * b
     log2(ab+sqrt(1+ab*ab)) - log2(b) - 1
 }
 
 #' @export
-vst.methods <- list(
+vst_methods <- list(
     naive.poisson = list(
         is.logish        = FALSE,
         needs.dispersion = FALSE,
@@ -16,7 +16,7 @@ vst.methods <- list(
         is.logish        = TRUE,
         needs.dispersion = TRUE,
         vst              = function(x, dispersion)
-            .log2ish.asinh(sqrt(x),sqrt(dispersion)) * 2.0
+            .log2ish_asinh(sqrt(x),sqrt(dispersion)) * 2.0
     )
     ,
     anscombe.poisson = list(
@@ -37,13 +37,13 @@ vst.methods <- list(
         is.logish        = TRUE,
         needs.dispersion = TRUE,
         vst              = function(x, dispersion)
-            .log2ish.asinh(sqrt(x+0.375),sqrt(1/(1/dispersion-0.75))) * 2.0
+            .log2ish_asinh(sqrt(x+0.375),sqrt(1/(1/dispersion-0.75))) * 2.0
     )
 )
 
 
 
-.dispersion.score <- function(mat, design=NULL) {
+.dispersion_score <- function(mat, design=NULL) {
     if (is.null(design))
         design <- matrix(1, ncol=1, nrow=ncol(mat))
 
@@ -58,12 +58,12 @@ vst.methods <- list(
 }
 
 
-.optimal.dispersion <- function(x, method="anscombe.nb", lib.size=NULL, design=NULL) {
+.optimal_dispersion <- function(x, method="anscombe.nb", lib.size=NULL, design=NULL) {
     x <- x[ rowMeans(x) >= 5, ]
 
     optimize(
          function(d) {
-             .dispersion.score(
+             .dispersion_score(
                  vst(x,method=method,lib.size=lib.size,dispersion=d),
                  design=design)
          },
@@ -135,7 +135,7 @@ vst.methods <- list(
 vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NULL, design=NULL) {
     x <- as.matrix(x)
 
-    method.info <- vst.methods[[method]]
+    method.info <- vst_methods[[method]]
     is.null(method.info) && stop("Unknown method")
 
     if (is.null(lib.size)) {
@@ -148,7 +148,7 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
 
     if (method.info$needs.dispersion) {
         if (is.null(dispersion)) {
-            dispersion <- .optimal.dispersion(x,method=method,lib.size=lib.size,design=design)
+            dispersion <- .optimal_dispersion(x,method=method,lib.size=lib.size,design=design)
             cat("Dispersion estimated as ",dispersion,"\n",sep="")
         }
 
