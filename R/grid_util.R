@@ -5,6 +5,8 @@
 
 #' @import grid
 
+# This is the only way I could find to ensure grid is available to varistran functions
+# if they are invoked directly with varistran::... without library being called first.
 .onLoad <- function(...) {
     library(grid)
 }
