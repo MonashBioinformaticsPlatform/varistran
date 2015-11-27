@@ -95,6 +95,10 @@ ordering_grob <- function(ordering, transpose=FALSE, mirror=FALSE, hint_size=uni
     yscale <- range(y0,y1)
     width <- unit(1,"null")
     height <- hint_size
+    
+    # Allow zero width dendrogram
+    if (yscale[1] == yscale[2])
+        yscale <- yscale + c(-1,1)
 
     if (mirror) {
         yscale <- c(yscale[2],yscale[1])
@@ -134,24 +138,27 @@ signed_colors <- hsv(
     v=1,
     s=abs(seq(-1,1,length.out=256)))
 
-heatmap_grob <- function(data, signed=TRUE, legend_title="") {
-    # Flip, to follow common graphing y axis convention
-    #data <- data[rev(seq_len(nrow(data))),,drop=F]
 
+#' @export
+heatmap_grob <- function(data, signed=TRUE, legend_title="") {
     if (signed) {
-        radius <- max(abs(data))
+        radius <- max(abs(data), na.rm=TRUE)
         range <- c(-radius, radius)
         col <- signed_colors
     } else {
-        range <- c(0, max(data))
+        range <- c(0, max(data, na.rm=TRUE))
         col <- unsigned_colors
     }
+    
+    # Avoid divide by zero
+    if (range[1] == range[2])
+        range <- range + c(-1,1)
+    
     scaled <- pmin(pmax(as.integer( (data-range[1])/(range[2]-range[1])*256+1),1),256)
+    
+    fill <- col[scaled]
+    fill[ is.na(fill) ] <- "#888888"
 
-    #heatmap <- rasterGrob(
-    #    matrix(col[scaled],ncol=ncol(data)),
-    #    width=unit(1,"npc"), height=unit(1,"npc"),
-    #    interpolate=FALSE)
     heatmap <- rectGrob(
         x=rep(seq_len(ncol(data))-1, each=nrow(data)),
         y=rep(seq_len(nrow(data))-1, ncol(data)),
@@ -159,14 +166,10 @@ heatmap_grob <- function(data, signed=TRUE, legend_title="") {
         height=1,
         just=c(0,0),
         default.units="native",
-        gp=gpar(col=NA, fill=col[scaled]),
+        gp=gpar(col=NA, fill=fill),
         vp=viewport(xscale=c(0,ncol(data)),yscale=c(0,nrow(data)))
     )
 
-    #legend_heatmap <- rasterGrob(
-    #    matrix(col,nrow=1),
-    #    width=unit(1,"npc"), height=unit(1,"npc"),
-    #    interpolate=FALSE)
     legend_heatmap <- rectGrob(
         x=seq_along(col)-1,
         y=0,
@@ -203,10 +206,12 @@ shrinktext_grob <- function(label,x,y,just,...) {
     grob(label=label,x=x,y=y,just=just,...,cl="shrinktext_grob")
 }
 
+
 #' @export
 widthDetails.shrinktext_grob <- function(grob) {
     max(stringWidth(grob$label))
 }
+
 
 #' @export
 drawDetails.shrinktext_grob <- function(grob, recording) {
@@ -225,15 +230,18 @@ drawDetails.shrinktext_grob <- function(grob, recording) {
     )
 }
 
+
 #' @export
 vertical_shrinktext_grob <- function(label,x,y,just,...) {
     grob(label=label,x=x,y=y,just=just,...,cl="vertical_shrinktext_grob")
 }
 
+
 #' @export
 heightDetails.vertical_shrinktext_grob <- function(grob) {
     max(stringWidth(grob$label))
 }
+
 
 #' @export
 drawDetails.vertical_shrinktext_grob <- function(grob, recording) {

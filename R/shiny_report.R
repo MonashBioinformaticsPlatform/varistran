@@ -163,6 +163,7 @@ shiny_report <- function(y=NULL, counts=NULL, sample_labels=NULL, feature_labels
         shiny::navlistPanel(
             widths=c(2,10),
             well=FALSE,
+            selected="Select and filter",
             shiny::tabPanel("Transform", transform$component_ui),
             shiny::tabPanel("Select and filter", filter$component_ui),
             shiny::tabPanel("Stability", stability$component_ui),

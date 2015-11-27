@@ -43,13 +43,17 @@ plot_heatmap <- function(
     feature_labels[is.na(feature_labels)] <- ""
 
 
-    means <- rowMeans(y)
+    means <- rowMeans(y, na.rm=TRUE)
     y_centered <- y - means
-
-    y_scaled <- y_centered / sqrt(rowMeans(y_centered*y_centered))
+    
+    y_scaled <- y_centered / sqrt(rowMeans(y_centered*y_centered, na.rm=TRUE))
+    y_scaled[ is.na(y_scaled) ] <- 0.0
+    
     row_order <- make_ordering(y_scaled, enable=cluster_features)
 
-    col_order <- make_ordering(t(y_centered), enable=cluster_samples)
+    y_centered_clean <- y_centered
+    y_centered_clean[ is.na(y_centered_clean) ] <- 0.0
+    col_order <- make_ordering(t(y_centered_clean), enable=cluster_samples)
 
     pad <- 0.25
 
