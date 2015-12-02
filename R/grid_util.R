@@ -128,11 +128,13 @@ ordering_grob <- function(ordering, transpose=FALSE, mirror=FALSE, hint_size=uni
 }
 
 
+#' @export
 unsigned_colors <- hsv(
     h=seq(0.95,1.15, length.out=256)%%1.0,
     v=seq(0,1, length.out=256)**0.5,
     s=seq(1,0,length.out=256)**0.5)
 
+#' @export
 signed_colors <- hsv(
     h=(sign(seq(-1.0,1.0, length.out=256))*0.2+0.8)%%1.0,
     v=1,

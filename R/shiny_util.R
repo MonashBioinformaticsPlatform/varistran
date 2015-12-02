@@ -3,6 +3,7 @@
 # Utility functions for creating composable shiny reports
 #
 
+#' @export
 parenthetically <- function(...) {
     shiny::div(style="margin-top: 5em; font-size: 75%", ...)
 }

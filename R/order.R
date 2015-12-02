@@ -3,7 +3,7 @@
 # Represent an ordering, primarily for heatmaps
 #
 
-
+#' @export
 dendrogram_paths <- function(dend) {
    if (is.leaf(dend)) {
        ''
