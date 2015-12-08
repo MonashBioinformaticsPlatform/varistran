@@ -59,7 +59,12 @@ vst_methods <- list(
 
 
 .optimal_dispersion <- function(x, method="anscombe.nb", lib.size=NULL, design=NULL) {
-    x <- x[ rowMeans(x) >= 5, ]
+    x <- x[rowMeans(x) >= 5,,drop=FALSE]
+
+    if (nrow(x) == 0 || ncol(x) == 0) {
+        warning("Insufficient data to estimate dispersion, default value used.")
+        return(1.0)
+    }
 
     optimize(
          function(d) {
@@ -141,6 +146,9 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
     if (is.null(lib.size)) {
         lib.size <- colSums(x) * edgeR::calcNormFactors(x)
     }
+
+    # Avoid division by zero for empty sample
+    lib.size <- pmax(lib.size, 1)
 
     mean.size <- mean(lib.size)
 
