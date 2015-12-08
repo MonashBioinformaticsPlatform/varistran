@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+development/make_pdf
+sudo cp varistran.pdf /data/www/doc
