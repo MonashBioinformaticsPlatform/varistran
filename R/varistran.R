@@ -143,6 +143,11 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
     method.info <- vst_methods[[method]]
     is.null(method.info) && stop("Unknown method")
 
+    # Empty matrix, do nothing
+    if (nrow(x) == 0 || ncol(x) == 0) {
+        return(x)
+    }
+    
     if (is.null(lib.size)) {
         lib.size <- colSums(x) * edgeR::calcNormFactors(x)
     }
@@ -164,7 +169,7 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
     } else {
         result <- method.info$vst(x.norm)
     }
-
+    
     if (cpm) {
         method.info$is.logish ||
             stop("Counts Per Million is not meaningful with this transform, use cpm=FALSE")
