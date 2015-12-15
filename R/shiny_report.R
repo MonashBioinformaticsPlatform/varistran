@@ -60,7 +60,7 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
     ui <- shiny::uiOutput(p("ui"))
 
     server <- function(env) {
-        env$output[[p("ui")]] <- shiny::renderUI(withProgress(message="Loading", {
+        env$output[[p("ui")]] <- shiny::renderUI(shiny::withProgress(message="Loading", {
             y_val <- y(env)
             counts_val <- counts(env)
             sample_labels_val <- sample_labels(env)

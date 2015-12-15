@@ -91,7 +91,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
         callback = function(env) {
             print(env[[p("grob")]]())
         },
-        width=500,
+        width=700,
         height=700,
         dlname="heatmap",
         prefix=p("plot_")
@@ -107,7 +107,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
     )
 
     server <- function(env) {
-        env[[p("grob")]] <- reactive(withProgress(message="Plotting", {
+        env[[p("grob")]] <- shiny::reactive(shiny::withProgress(message="Plotting", {
             n <- env$input[[p("n")]]
             if (n > 2000) stop("Drawing large heatmaps uses excessive system resources. Sorry.")
 
