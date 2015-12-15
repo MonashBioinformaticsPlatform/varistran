@@ -107,7 +107,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
     )
 
     server <- function(env) {
-        env[[p("grob")]] <- reactive({
+        env[[p("grob")]] <- reactive(withProgress(message="Plotting", {
             n <- env$input[[p("n")]]
             if (n > 2000) stop("Drawing large heatmaps uses excessive system resources. Sorry.")
 
@@ -124,7 +124,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
                 feature_labels=feature_labels(env)[selection],
                 cluster_samples=env$input[[p("cluster_samples")]]
             )
-        })
+        }))
 
         plot$component_server(env)
     }

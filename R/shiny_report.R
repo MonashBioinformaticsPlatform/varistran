@@ -57,26 +57,38 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
     sample_labels <- ensure_reactable(sample_labels)
     feature_labels <- ensure_reactable(feature_labels)
 
-    ui <- shiny::tags$div(
-        shiny::tags$h3("Select samples"),
-        shiny::uiOutput(p("sample_selector")),
-        shiny::tags$h3("Filter features"),
-        shiny::numericInput(p("min_count"), "Minimum mean count", 5),
-        shiny::numericInput(p("min_expression"), "Minimum mean expression level", 0.0),
-        shiny::textOutput(p("report"))
-    )
+    ui <- shiny::uiOutput(p("ui"))
 
     server <- function(env) {
-        env$output[[p("sample_selector")]] <- shiny::renderUI({
+        env$output[[p("ui")]] <- shiny::renderUI(withProgress(message="Loading", {
             y_val <- y(env)
+            counts_val <- counts(env)
             sample_labels_val <- sample_labels(env)
             choices <- seq_len(ncol(y_val))
             if (!is.null(sample_labels_val))
                 names(choices) <- sample_labels_val
             else if (!is.null(colnames(y_val)))
                 names(choices) <- colnames(y_val)
-            shiny::selectInput(p("samples"), "Select samples", selected=choices, choices=choices, multiple=TRUE)
-        })
+            
+            if (is.null(counts_val)) {
+                counts_input <- ""
+                what <- "expression level"
+            } else {
+                counts_input <- shiny::numericInput(p("min_count"), "Minimum mean count", 5)
+                what <- "transformed count"
+            }
+                    
+            shiny::tags$div(
+                shiny::tags$h3("Select samples"),
+                shiny::selectInput(p("samples"), "Select samples", 
+                    selected=choices, choices=choices, multiple=TRUE),
+                shiny::tags$h3("Filter features"),
+                counts_input,
+                shiny::numericInput(p("min_expression"), 
+                    paste0("Minimum mean ",what), min(y_val, 0.0)),
+                shiny::textOutput(p("report"))
+            )
+        }))
 
         env[[p("filtered")]] <- shiny::reactive({
             y_val <- y(env)
