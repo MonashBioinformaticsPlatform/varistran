@@ -61,7 +61,8 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
         shiny::tags$h3("Select samples"),
         shiny::uiOutput(p("sample_selector")),
         shiny::tags$h3("Filter features"),
-        shiny::numericInput(p("min_mean"), "Minimum mean expression level", 0.0),
+        shiny::numericInput(p("min_count"), "Minimum mean count", 5),
+        shiny::numericInput(p("min_expression"), "Minimum mean expression level", 0.0),
         shiny::textOutput(p("report"))
     )
 
@@ -82,8 +83,16 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
             counts_val <- counts(env)
             sample_select <- as.numeric(env$input[[p("samples")]])
             feature_select <- which(
-                rowMeans(y_val[,sample_select,drop=FALSE]) >= env$input[[p("min_mean")]]
+                rowMeans(y_val[,sample_select,drop=FALSE]) >= env$input[[p("min_expression")]]
             )
+            
+            
+            if (!is.null(counts_val)) {
+                feature_select <- intersect(feature_select,which(
+                    rowMeans(counts_val[,sample_select,drop=FALSE]) >= env$input[[p("min_count")]]
+                ))
+            }
+            
             list(
                 sample_select=sample_select,
                 feature_select=feature_select,
