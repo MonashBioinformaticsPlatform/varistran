@@ -7,12 +7,16 @@
 #' @export
 vst_methods <- list(
     naive.poisson = list(
+        description      = "Naive Poisson Variance Stabilizing Transformation.",
+        units            = "sqrt",
         is.logish        = FALSE,
         needs.dispersion = FALSE,
         vst              = function(x) sqrt(x)
     )
     ,
     naive.nb = list(
+        description      = "Naive negative binomial Variance Stabilizing Transformation.",
+        units            = "log2",
         is.logish        = TRUE,
         needs.dispersion = TRUE,
         vst              = function(x, dispersion)
@@ -20,6 +24,8 @@ vst_methods <- list(
     )
     ,
     anscombe.poisson = list(
+        description      = "Anscombe's Variance Stabilizing Transformation for the Poisson distribution.",
+        units            = "sqrt",
         is.logish        = FALSE,
         needs.dispersion = FALSE,
         vst              = function(x)
@@ -27,6 +33,8 @@ vst_methods <- list(
     )
     ,
     anscombe.nb.simple = list(
+        description      = "Anscombe's simplified Variance Stabilizing Transformation for the negative binomial distribution.",
+        units            = "log2",
         is.logish        = TRUE,
         needs.dispersion = TRUE,
         vst              = function(x, dispersion)
@@ -34,6 +42,8 @@ vst_methods <- list(
     )
     ,
     anscombe.nb = list(
+        description      = "Anscombe's Variance Stabilizing Transformation for the negative binomial distribution.",
+        units            = "log2",
         is.logish        = TRUE,
         needs.dispersion = TRUE,
         vst              = function(x, dispersion)
@@ -148,8 +158,15 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
         return(x)
     }
     
+    true.lib.size <- colSums(x)
+    
     if (is.null(lib.size)) {
-        lib.size <- colSums(x) * edgeR::calcNormFactors(x)
+        lib.size <- true.lib.size * edgeR::calcNormFactors(x)
+        lib.size.method <- "TMM normalization"
+    } else if (all(lib.size == true.lib.size)) {
+        lib.size.method <- "no adjustment"
+    } else {
+        lib.size.method <- "unknown"
     }
 
     # Avoid division by zero for empty sample
@@ -183,6 +200,8 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
         rownames(result) <- rownames(x)
 
     attr(result, "lib.size") <- lib.size
+    attr(result, "true.lib.size") <- true.lib.size
+    attr(result, "lib.size.method") <- lib.size.method
     attr(result, "cpm") <- cpm
     attr(result, "method") <- method
     if (method.info$needs.dispersion)
@@ -190,3 +209,50 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
 
     result
 }
+
+
+#' Advise how VST will transform data
+#'
+#' @param what Either the output of a call to vst() or the name of a VST method (see vst() help).
+#'
+#' @return A data frame giving an indication of how an average sample will be transformed.
+#'
+#' The column "twofold_step" shows the step from the previous to current row. With a log2 transformation this would be uniformly 1, but with a VST and small counts the step is less than 1. This therefore provides advice on how compacted the VST is near zero-count, as compared to a log2 transformation.
+#'
+#' Note that the results given are for an average sample. Where library sizes differ wildly, the VST may perform poorly.
+#'
+#' @export
+vst_advice <- function(what="anscombe.nb", dispersion=NULL, cpm=FALSE, lib.size=NULL) {
+    if (!is.character(what)) {
+        (is.null(dispersion) && is.null(lib.size)) || 
+            stop("Extra parameters not needed")
+        
+        method <- attr(what,"method")
+        dispersion <- attr(what,"dispersion")
+        cpm <- attr(what,"cpm")
+        lib.size <- mean(attr(what,"lib.size"))
+    } else {
+        method <- what
+    }
+
+    method.info <- vst_methods[[method]]
+    is.null(method.info) && stop("Unknown method")
+    
+    method.info$needs.dispersion && is.null(dispersion) && stop("dispersion needed")
+    
+    cpm && is.null(lib.size) && stop("lib.size needed")
+
+    count <- cbind(c(0, 2**(0:12)))
+
+    y <- vst(count, method=method,dispersion=dispersion,cpm=cpm,lib.size=lib.size)
+
+    step <- rep(NA, nrow(count))
+    step[3:nrow(count)] <- y[3:nrow(count),1] - y[2:(nrow(count)-1),1]
+
+    data.frame(
+        count=count[,1], 
+        transformed_count=y[,1],
+        twofold_step=step)
+}
+
+

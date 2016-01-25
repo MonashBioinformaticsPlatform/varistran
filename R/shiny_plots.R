@@ -30,6 +30,13 @@ shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
         shiny::h3("Stability plot"),
         shiny::numericInput(p("bins"), "Bins", value=20,min=1,max=10000),
         plot$component_ui,
+        shiny::p(
+            "This is a diagnostic plot for the variance stabilizing transformation. ",
+            "It shows the amount of noise in the transformed data ",
+            "across different expression levels. ",
+            "If the transformation has been successful, ",
+            "this should be close to a flat line."
+            ),
         parenthetically("This plot is produced by varistran::plot_stability.")
     )
 

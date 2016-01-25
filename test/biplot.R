@@ -3,13 +3,14 @@ source("test/common.R")
 
 bottomly.eset <- load_bottomly()
 
-if (!("gene_names" %in% ls())) {
-    ensembl <- useMart("ensembl")
-    mouse_ensembl <- useDataset("mmusculus_gene_ensembl", mart=ensembl)
-    result <- getBM(attributes=c("ensembl_gene_id", "external_gene_name"), filters="ensembl_gene_id", values=rownames(bottomly.eset), mart=mouse_ensembl)
-    rownames(result) <- result$ensembl_gene_id
-    gene_names <- result[rownames(bottomly.eset), "external_gene_name"]
-}
+gene_names <- load_bottomly_gene_names(bottomly.eset)
+#if (!("gene_names" %in% ls())) {
+#    ensembl <- useMart("ensembl")
+#    mouse_ensembl <- useDataset("mmusculus_gene_ensembl", mart=ensembl)
+#    result <- getBM(attributes=c("ensembl_gene_id", "external_gene_name"), filters="ensembl_gene_id", values=rownames(bottomly.eset), mart=mouse_ensembl)
+#    rownames(result) <- result$ensembl_gene_id
+#    gene_names <- result[rownames(bottomly.eset), "external_gene_name"]
+#}
 
 counts <- exprs(bottomly.eset)
 good <- rowSums(counts) >= 1

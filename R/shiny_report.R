@@ -28,20 +28,64 @@ shiny_vst <- function(y=NULL, counts=NULL, prefix="") {
 
         env$output[[p("report")]] <- shiny::renderUI({
             y <- env[[p("y")]]()
-            dispersion <- attr(y,"dispersion")
-            cpm <- attr(y,"cpm")
+            
+            if (!is.null(attr(y,"method"))) {
+                dispersion <- attr(y,"dispersion")
+                description <- vst_methods[[attr(y,"method")]]$description
+                units <- vst_methods[[attr(y,"method")]]$units
+                cpm <- attr(y,"cpm")
+                if (cpm)
+                    units <- paste0("Units for transformed counts are ",units,
+                                    " Reads Per Million.")
+                else
+                    units <- paste0("Units for transformed counts are ",units," read count.")
+                
+                libs <- data.frame(
+                    Sample = colnames(y),
+                    "True library size" = attr(y,"true.lib.size"),
+                    "Adjusted library size" = attr(y,"lib.size"),
+                    check.names=F
+                    )
+            
+                advice <- vst_advice(y)
+                colnames(advice) <- c("Count","Transformed count","2-fold step")
+                
+                advice_html <- list(                    
+                    shiny::p(description),
+                    shiny::p(units),
+                    shiny::p(sprintf("Estimated dispersion is %.4f.", dispersion)),
+                    
+                    shiny::h4("Library sizes"),
+                    shiny::renderTable(libs, include.rownames=F, digits=c(0,0,0,0)),
+                    shiny::p(paste0("Library size adjustment method: ",
+                        attr(y,"lib.size.method"))),
+                    
+                    shiny::h4("Transformation"),
+                    shiny::renderTable(advice, include.rownames=F, digits=c(0,0,2,2)),
+                    shiny::p(                        
+                        "The column \"2-fold step\" shows the difference in transformed ",
+                        "count from the previous row. If a simple log2 transformation were ",
+                        " used this would be uniformly 1, however a variance stabilizing ",
+                        "transformation makes this smaller for counts close to zero."
+                        ),
+                    shiny::p(
+                        "Note that values shown are for a sample with average adjusted library size sample."
+                        ),
+                    
+                    parenthetically(
+                        "Variance stabilizing transformation is performed ",
+                        "by varistran::vst. ",
+                        "Transformed values table produced ",
+                        "by varistran::vst_advice."
+                        )
+                    )
+            } else {
+                advice_html <- list(
+                    shiny::p("Any transformation not by Varistran, details unknown.")
+                    )
+            }
 
-            if (is.null(cpm))
-                units <- "Units for expression levels are unknown."
-            else if (cpm)
-                units <- "Units for expression levels are log2 Reads Per Million."
-            else
-                units <- "Units for expression levels are log2 read count."
-
-            shiny::div(
-                shiny::p(units),
-                shiny::p(sprintf("Estimated dispersion is %.4f.", dispersion))
-            )
+            do.call(shiny::div, advice_html)
         })
     }
 

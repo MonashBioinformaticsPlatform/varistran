@@ -15,6 +15,10 @@ design <- model.matrix(~ strain + experiment.number)
 labels <- paste0(substr(strain,1,1), experiment.number)
 
 
-#y <- varistran::vst(counts)
-
-print( varistran::shiny_report(counts=counts, sample_labels=labels, feature_labels=bottomly.gene.names) )
+print( 
+    varistran::shiny_report(
+        #y=varistran::vst(counts, method="anscombe.poisson"),
+        #y=varistran::vst(counts)[,],
+        counts=counts, 
+        sample_labels=labels, 
+        feature_labels=bottomly.gene.names))
