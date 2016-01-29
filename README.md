@@ -2,7 +2,7 @@
 
 Varistran is an R package providing a Variance Stabilizing Transformation appropriate for RNA-Seq data, and a variety of diagnostic plots based on such transformation.
 
-* [Online demo](http://rnasystems.erc.monash.edu:3838/2015/demo-varistran)
+* [Online demo](http://rnasystems.erc.monash.edu:3838/pfh/2015/demo-varistran)
 
 Varistran is developed by Paul Harrison (paul.harrison@monash.edu, [@paulfharrisson](https://twitter.com/paulfharrison)) for the [Monash Bioinformatics platform](https://platforms.monash.edu/bioinformatics/).
 
@@ -73,7 +73,7 @@ Varistran's various diagnostic plots are also available as a Shiny app, which ca
 varistran::shiny_report(y, counts)
 ```
 
-* [Online demo](http://rnasystems.erc.monash.edu:3838/2015/demo-varistran)
+* [Online demo](http://rnasystems.erc.monash.edu:3838/pfh/2015/demo-varistran)
 
 
 ## Links
