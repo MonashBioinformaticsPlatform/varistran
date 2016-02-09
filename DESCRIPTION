@@ -15,10 +15,12 @@ Depends:
     grid
 Enhances: 
     grid
-Suggests:
-    edgeR,
+Imports:
     ggplot2,
     ggdendro,
     shiny,
     seriation
+Suggests:
+    edgeR
 RoxygenNote: 5.0.1
+
