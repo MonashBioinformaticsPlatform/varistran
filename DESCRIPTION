@@ -13,8 +13,7 @@ Version: 0.1
 License: LGPL-2.1
 Depends:
     grid
-Enhances: 
-    grid
+Enhances: grid
 Imports:
     ggplot2,
     ggdendro,
@@ -22,5 +21,4 @@ Imports:
     seriation
 Suggests:
     edgeR
-RoxygenNote: 5.0.1
-
+RoxygenNote: 5.0.0
