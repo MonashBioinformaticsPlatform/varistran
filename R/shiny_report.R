@@ -6,11 +6,12 @@
 # Perform or report on a variance stabilizing transformation
 #
 #' @export
-shiny_vst <- function(y=NULL, counts=NULL, prefix="") {
+shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
     p <- function(name) paste0(prefix,name)
 
     y <- ensure_reactable(y)
     counts <- ensure_reactable(counts)
+    sample_labels <- ensure_reactable(sample_labels)
 
     ui <- shiny::div(
         shiny::h3("Transformation"),
@@ -28,6 +29,12 @@ shiny_vst <- function(y=NULL, counts=NULL, prefix="") {
 
         env$output[[p("report")]] <- shiny::renderUI({
             y <- env[[p("y")]]()
+
+            sample_labels_val <- sample_labels(env)
+            if (is.null(sample_labels_val))
+                sample_labels_val <- colnames(y)
+            if (is.null(sample_labels_val))
+                sample_labels_val <- as.character(seq_len(ncol(y)))
             
             if (!is.null(attr(y,"method"))) {
                 dispersion <- attr(y,"dispersion")
@@ -41,7 +48,7 @@ shiny_vst <- function(y=NULL, counts=NULL, prefix="") {
                     units <- paste0("Units for transformed counts are ",units," read count.")
                 
                 libs <- data.frame(
-                    Sample = colnames(y),
+                    Sample = sample_labels_val,
                     "True library size" = attr(y,"true.lib.size"),
                     "Adjusted library size" = attr(y,"lib.size"),
                     check.names=F
@@ -207,7 +214,7 @@ shiny_report <- function(y=NULL, counts=NULL, sample_labels=NULL, feature_labels
     sample_labels <- ensure_reactable(sample_labels)
     feature_labels <- ensure_reactable(feature_labels)
 
-    transform <- shiny_vst(y, counts, prefix=p("transform_"))
+    transform <- shiny_vst(y, counts, sample_labels, prefix=p("transform_"))
     ty <- function(env) env[[p("transform_y")]]()
 
     filter <- shiny_filter(ty, counts, sample_labels, feature_labels, prefix=p("filter_"))

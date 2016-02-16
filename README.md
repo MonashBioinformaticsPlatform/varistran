@@ -22,7 +22,7 @@ devtools::install_github("MonashBioinformaticsPlatform/varistran")
 
 ### Dependencies
 
-Various diagnostic plotting functions in Varistran use `grid`, `ggplot2` and `ggdendro`. Varistran can also produce an interactive `shiny` report. `seriation` is used for heatmaps.
+Various diagnostic plotting functions in Varistran use `grid`, `ggplot2`, and `ggdendro`. Varistran can also produce an interactive `shiny` report. `seriation` is used for heatmaps.
 
 ```
 install.packages(c("grid","ggplot2","ggdendro","seriation","shiny"))
