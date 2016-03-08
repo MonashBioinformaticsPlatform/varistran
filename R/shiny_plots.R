@@ -48,6 +48,43 @@ shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
 }
 
 
+#' Shiny wrapper for limma's MDS plot
+#'
+#' @export
+shiny_mds_plot <- function(x, sample_labels=NULL, prefix="") {
+    p <- function(name) paste0(prefix,name)
+
+    x <- ensure_reactable(x)
+    sample_labels <- ensure_reactable(sample_labels)
+    
+    plot <- shiny_plot(
+        function(env) {
+            x_val <- x(env)
+            sample_labels_val <- sample_labels(env)
+            
+            if (!is.null(sample_labels_val))
+                colnames(x_val) <- sample_labels_val
+        
+            limma::plotMDS(x_val, env$input[[p("genes")]])
+        },
+        prefix = paste0(prefix,"plot_")
+    )
+    
+    ui <- shiny::div(
+        shiny::h3("limma MDS plot"),
+        shiny::numericInput(p("genes"), "Use this many top genes", value=500, min=1,max=20000),
+        plot$component_ui,
+        parenthetically("This plot is produced by limma::plotMDS. Gene selection is \"pairwise\".")
+    )
+    
+    server <- function(env) {
+        plot$component_server(env)
+    }
+    
+    composable_shiny_app(ui, server)
+}
+
+
 #' @export
 shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=20, balance=0.25, text_size=0.025, prefix="") {
     p <- function(name) paste0(prefix,name)

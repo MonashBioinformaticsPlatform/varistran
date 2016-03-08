@@ -21,6 +21,7 @@ Imports:
     shiny,
     seriation
 Suggests:
-    edgeR
+    edgeR,
+    limma
 RoxygenNote: 5.0.1
 
