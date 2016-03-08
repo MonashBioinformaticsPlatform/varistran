@@ -7,36 +7,59 @@
 }
 
 
-# Stack some labels
-.stack_labels <- function(df, text_size) {
-    df$vjust <- ifelse(df$y<0,1.5,-0.5)
-    width <- nchar(df$label) * text_size * 0.6
+.stack_labels_positive <- function(df, text_size) {
+    width <- nchar(df$label) * text_size * 0.7
     df$left <- df$x - width*0.5
     df$right <- df$x + width*0.5
-    df$yoff <- df$y
-
-    stack_order <- order(abs(df$y))
-    for(i in seq_along(stack_order)) {
-       soi <- stack_order[i]
-       for(j in seq_len(i-1)) {
-           soj <- stack_order[j]
-           if (df$vjust[soi] == df$vjust[soj] &&
-               df$left[soj] < df$right[soi] &&
-               df$left[soi] < df$right[soj]) {
-               if (df$y[soi]<0) {
-                   df$yoff[soi] <- min(df$yoff[soi], df$yoff[soj]-text_size)
-               } else {
-                   df$yoff[soi] <- max(df$yoff[soi], df$yoff[soj]+text_size)
-               }
-           }
-       }
+    df <- df[order(df$y),,drop=F]
+    
+    yoff <- df$y
+    for(i in seq_len(nrow(df))) {
+        obstacles <- seq_len(i-1)
+        options <- yoff[obstacles] + text_size
+        options <- options[options > df$y[i]]
+        options <- sort(c(df$y[i], options))
+        for(y in options) {
+            good <- T
+            for(j in obstacles)
+                if (df$left[j] < df$right[i] &&
+                    df$left[i] < df$right[j] &&
+                    yoff[j] < y+text_size*0.999 &&
+                    y < yoff[j]+text_size*0.999 
+                    )
+                    good <- F
+            
+            if (good) {
+                yoff[i] <- y
+                break
+            }
+        }
     }
-
+    
+    df$yoff <- yoff
     df
 }
 
-
-
+# Stack up some labels
+.stack_labels <- function(df, text_size) {
+    top <- df$y>0
+    
+    top_rows <- df[top,,drop=F]
+    top_rows$vjust <- -0.5
+    top_rows <- .stack_labels_positive(top_rows, text_size)
+    
+    bottom_rows <- df[!top,,drop=F]
+    bottom_rows$vjust <- 1.5
+    bottom_rows$y <- -bottom_rows$y
+    bottom_rows <- .stack_labels_positive(bottom_rows, text_size)
+    bottom_rows$y <- -bottom_rows$y
+    bottom_rows$yoff <- -bottom_rows$yoff
+    
+    rbind(
+        top_rows,
+        bottom_rows
+    )
+}
 
 
 #' Stability plot.
@@ -227,15 +250,24 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
         to_label <- .stack_labels(to_label, scaled_text_size)
 
         result <- result +
-            ggplot2::geom_segment(data=to_label, ggplot2::aes(x=x,y=y,xend=x,yend=yoff), alpha=0.2)
+            ggplot2::geom_segment(
+                data=to_label, 
+                ggplot2::aes(x=x,y=y,xend=x,yend=yoff), 
+                alpha=0.2)
 
         if (any(to_label$is_feature))
             result <- result +
-                ggplot2::geom_text(data=to_label[to_label$is_feature,],ggplot2::aes(label=label,y=yoff,vjust=vjust), alpha=0.333)
+                ggplot2::geom_text(
+                    data=to_label[to_label$is_feature,],
+                    ggplot2::aes(label=label,y=yoff,vjust=vjust),
+                    size=4,alpha=0.5)
 
         if (any(!to_label$is_feature))
             result <- result +
-                ggplot2::geom_text(data=to_label[!to_label$is_feature,],ggplot2::aes(label=label,y=yoff,vjust=vjust))
+                ggplot2::geom_text(
+                    data=to_label[!to_label$is_feature,],
+                    ggplot2::aes(label=label,y=yoff,vjust=vjust),
+                    size=4)
 
         ylow <- min(ylow,min(to_label$yoff)-scaled_text_size)
         yhigh <- max(yhigh,max(to_label$yoff)+scaled_text_size)

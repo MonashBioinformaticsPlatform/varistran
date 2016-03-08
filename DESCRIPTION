@@ -13,8 +13,7 @@ Version: 0.1
 License: LGPL-2.1
 Depends:
     grid
-Enhances: 
-    grid
+Enhances: grid
 Imports:
     ggplot2,
     ggdendro,
@@ -24,4 +23,3 @@ Suggests:
     edgeR,
     limma
 RoxygenNote: 5.0.1
-
