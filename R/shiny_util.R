@@ -65,12 +65,14 @@ composable_shiny_app <- function(ui,server) {
 #'
 #' @param callback Function to produce the plot. Takes one argument, "env" (see composable_shiny_app).
 #'
+#' Extra arguments are passed on to plotOutput, for example brushing options.
+#'
 #' @return A composable shiny.appobj.
 #'
 #' @author Paul Harrison
 #'
 #' @export
-shiny_plot <- function(callback, width=500, height=500, dlname="plot", prefix="") {
+shiny_plot <- function(callback, width=500, height=500, dlname="plot", prefix="", ...) {
     p <- function(name) paste0(prefix,name)
 
     ui <- shiny::tags$div(
@@ -81,7 +83,7 @@ shiny_plot <- function(callback, width=500, height=500, dlname="plot", prefix=""
               shiny::downloadButton(p("pdf"), "PDF"),
               shiny::downloadButton(p("eps"), "EPS"))
         ),
-        shiny::plotOutput(p("plot"), width="auto", height="auto")
+        shiny::plotOutput(p("plot"), width="auto", height="auto", ...)
     )
 
     server <- function(env) {

@@ -5,10 +5,12 @@
 \title{Shiny plot.}
 \usage{
 shiny_plot(callback, width = 500, height = 500, dlname = "plot",
-  prefix = "")
+  prefix = "", ...)
 }
 \arguments{
-\item{callback}{Function to produce the plot. Takes one argument, "env" (see composable_shiny_app).}
+\item{callback}{Function to produce the plot. Takes one argument, "env" (see composable_shiny_app).
+
+Extra arguments are passed on to plotOutput, for example brushing options.}
 }
 \value{
 A composable shiny.appobj.
