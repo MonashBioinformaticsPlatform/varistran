@@ -204,14 +204,17 @@ heatmap_grob <- function(data, signed=TRUE, legend_title="") {
 
 
 #' @export
-shrinktext_grob <- function(label,x,y,just,...) {
-    grob(label=label,x=x,y=y,just=just,...,cl="shrinktext_grob")
+shrinktext_grob <- function(label,x,y,just,max_width=20,...) {
+    if (is.numeric(max_width))
+        max_width <- unit(max_width, "lines")
+
+    grob(label=label,x=x,y=y,just=just,shrinktext_max_width=max_width,...,cl="shrinktext_grob")
 }
 
 
 #' @export
 widthDetails.shrinktext_grob <- function(grob) {
-    max(stringWidth(grob$label))
+    min(grob$shrinktext_max_width, max(stringWidth(grob$label)))
 }
 
 
