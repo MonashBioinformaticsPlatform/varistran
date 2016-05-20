@@ -2,22 +2,37 @@
 % Please edit documentation in R/shiny_util.R
 \name{shiny_plot}
 \alias{shiny_plot}
+\alias{shiny_plot_server}
+\alias{shiny_plot_ui}
 \title{Shiny plot.}
 \usage{
 shiny_plot(callback, width = 500, height = 500, dlname = "plot",
   prefix = "", ...)
+
+shiny_plot_ui(id, width = 500, height = 500, ...)
+
+shiny_plot_server(input, output, session, callback, dlname = "plot")
 }
 \arguments{
-\item{callback}{Function to produce the plot. Takes one argument, "env" (see composable_shiny_app).
+\item{callback}{Function to produce the plot. In shiny_plot, this takes one argument, "env" (see composable_shiny_app). In shiny_plot_server, it takes no arguements.}
 
-Extra arguments are passed on to plotOutput, for example brushing options.}
+\item{...}{Extra arguments to shiny_plot and shiny_plot_ui are passed on to plotOutput, for example brushing options.}
 }
 \value{
-A composable shiny.appobj.
+shiny_plot() returns a composable shiny.appobj.
 }
 \description{
 Convert a function that produces a plot into a Shiny app.
 }
+\details{
+shiny_plot is the varistran-style composable app object. shiny_plot_ui and shiny_plot_server are appropriate for the normal Shiny module system.
+}
+\section{Functions}{
+\itemize{
+\item \code{shiny_plot_ui}: UI part of Shiny module.
+
+\item \code{shiny_plot_server}: server part of Shiny module, to be invoked from a server function with callModule.
+}}
 \author{
 Paul Harrison
 }

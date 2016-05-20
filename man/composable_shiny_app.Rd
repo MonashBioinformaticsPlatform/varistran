@@ -4,7 +4,7 @@
 \alias{composable_shiny_app}
 \title{Composable Shiny App.}
 \usage{
-composable_shiny_app(ui, server)
+composable_shiny_app(ui, server, title = NULL)
 }
 \arguments{
 \item{ui}{UI part of the Shiny app.}
@@ -17,6 +17,8 @@ A shiny.appobj.
 This object has two additional properties, $component_ui and $component_server.
 
 A larger composable Shiny app would incorporate $component_ui into its own ui, and make sure to call $component_server(env) from from its own server function.
+
+Note that Shiny now has its own system for creating Shiny "modules". Varistran components will be converted to also support this style over time. shiny_plot already supports this.
 }
 \description{
 Create a Shiny app that can be used immediately, or incorporated into a larger Shiny app.

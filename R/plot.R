@@ -260,7 +260,7 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
                 ggplot2::geom_text(
                     data=to_label[to_label$is_feature,],
                     ggplot2::aes(label=label,y=yoff,vjust=vjust),
-                    size=4,alpha=0.5)
+                    size=4,alpha=1/3)
 
         if (any(!to_label$is_feature))
             result <- result +
