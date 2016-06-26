@@ -12,7 +12,7 @@
     df$left <- df$x - width*0.5
     df$right <- df$x + width*0.5
     df <- df[order(df$y),,drop=F]
-    
+
     yoff <- df$y
     for(i in seq_len(nrow(df))) {
         obstacles <- seq_len(i-1)
@@ -25,17 +25,17 @@
                 if (df$left[j] < df$right[i] &&
                     df$left[i] < df$right[j] &&
                     yoff[j] < y+text_size*0.999 &&
-                    y < yoff[j]+text_size*0.999 
+                    y < yoff[j]+text_size*0.999
                     )
                     good <- F
-            
+
             if (good) {
                 yoff[i] <- y
                 break
             }
         }
     }
-    
+
     df$yoff <- yoff
     df
 }
@@ -43,18 +43,18 @@
 # Stack up some labels
 .stack_labels <- function(df, text_size) {
     top <- df$y>0
-    
+
     top_rows <- df[top,,drop=F]
     top_rows$vjust <- -0.5
     top_rows <- .stack_labels_positive(top_rows, text_size)
-    
+
     bottom_rows <- df[!top,,drop=F]
     bottom_rows$vjust <- 1.5
     bottom_rows$y <- -bottom_rows$y
     bottom_rows <- .stack_labels_positive(bottom_rows, text_size)
     bottom_rows$y <- -bottom_rows$y
     bottom_rows$yoff <- -bottom_rows$yoff
-    
+
     rbind(
         top_rows,
         bottom_rows
@@ -89,7 +89,7 @@ plot_stability <- function(y, x=NULL, design=NULL, bins=20) {
         x_data <- rowMeans(x)
         x_label <- "mean count"
     } else {
-        x_data <- rank(rowSums(y), ties="first")
+        x_data <- rank(rowSums(y), ties.method="first")
         x_label <- "rank by mean expression"
     }
 
@@ -106,7 +106,7 @@ plot_stability <- function(y, x=NULL, design=NULL, bins=20) {
         x=.bin(x_data[reorder], bins)
     )
 
-    result <- ggplot2::ggplot(df, ggplot2::aes(x=x,y=rsd)) +
+    result <- ggplot2::ggplot(df, ggplot2::aes_string(x="x",y="rsd")) +
         ggplot2::geom_point(size=3) + ggplot2::geom_line() +
         ggplot2::ylim(0,NA) +
         ggplot2::xlab(x_label) +
@@ -218,7 +218,7 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
         stringsAsFactors = FALSE
     )
 
-    result <- ggplot2::ggplot(features, ggplot2::aes(x=x,y=y)) +
+    result <- ggplot2::ggplot(features, ggplot2::aes_string(x="x",y="y")) +
         ggplot2::coord_fixed() +
         ggplot2::geom_point(size=1.5, color="#0088ff") +
         ggplot2::geom_point(size=3,data=samples,color="red") +
@@ -251,22 +251,22 @@ plot_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=2
 
         result <- result +
             ggplot2::geom_segment(
-                data=to_label, 
-                ggplot2::aes(x=x,y=y,xend=x,yend=yoff), 
+                data=to_label,
+                ggplot2::aes_string(x="x",y="y",xend="x",yend="yoff"),
                 alpha=0.2)
 
         if (any(to_label$is_feature))
             result <- result +
                 ggplot2::geom_text(
                     data=to_label[to_label$is_feature,],
-                    ggplot2::aes(label=label,y=yoff,vjust=vjust),
+                    ggplot2::aes_string(label="label",y="yoff",vjust="vjust"),
                     size=4,alpha=1/3)
 
         if (any(!to_label$is_feature))
             result <- result +
                 ggplot2::geom_text(
                     data=to_label[!to_label$is_feature,],
-                    ggplot2::aes(label=label,y=yoff,vjust=vjust),
+                    ggplot2::aes_string(label="label",y="yoff",vjust="vjust"),
                     size=4)
 
         ylow <- min(ylow,min(to_label$yoff)-scaled_text_size)

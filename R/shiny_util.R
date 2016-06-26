@@ -31,7 +31,7 @@ ensure_reactive <- function(item) {
     if ("reactive" %in% class(item))
         item
     else
-        reactive(item)
+        shiny::reactive(item)
 }
 
 
@@ -76,7 +76,7 @@ composable_shiny_app <- function(ui,server, title=NULL) {
 
 
 
-# 
+#
 # Shiny plot
 #
 
@@ -99,8 +99,8 @@ shiny_plot <- function(callback, width=500, height=500, dlname="plot", prefix=""
     composable_shiny_app(
         shiny_plot_ui(prefix, width=width, height=height, ...),
         function(env) {
-            callback_no_env <- function() callback(env) 
-            callModule(shiny_plot_server, prefix, callback_no_env, dlname, session=env$session)
+            callback_no_env <- function() callback(env)
+            shiny::callModule(shiny_plot_server, prefix, callback_no_env, dlname, session=env$session)
         }
     )
 }
@@ -109,8 +109,8 @@ shiny_plot <- function(callback, width=500, height=500, dlname="plot", prefix=""
 #' @describeIn shiny_plot UI part of Shiny module.
 #' @export
 shiny_plot_ui <- function(id, width=500, height=500, ...) {
-    ns <- NS(id)
-    
+    ns <- shiny::NS(id)
+
     shiny::tagList(
         shiny::fluidRow(
           shiny::column(3, shiny::numericInput(ns("width"), "Plot width", width, min=100, max=10000, step=50)),
@@ -132,7 +132,7 @@ shiny_plot_server <- function(input, output, session, callback, dlname="plot") {
         width=function() input$width,
         height=function() input$height
     )
-    
+
     output$pdf <- shiny::downloadHandler(
         paste0(dlname,".pdf"),
         function(filename) {
@@ -141,7 +141,7 @@ shiny_plot_server <- function(input, output, session, callback, dlname="plot") {
             dev.off()
         }
     )
-    
+
     output$eps <- shiny::downloadHandler(
         paste0(dlname,".eps"),
         function(filename) {
@@ -151,7 +151,7 @@ shiny_plot_server <- function(input, output, session, callback, dlname="plot") {
             dev.off()
         }
     )
-    
+
     output$png <- shiny::downloadHandler(
         paste0(dlname,".png"),
         function(filename) {
@@ -161,4 +161,3 @@ shiny_plot_server <- function(input, output, session, callback, dlname="plot") {
         }
     )
 }
-

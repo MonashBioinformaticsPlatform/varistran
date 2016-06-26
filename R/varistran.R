@@ -1,3 +1,10 @@
+
+# Imports
+#
+#' @importFrom grDevices axisTicks dev.off pdf png postscript
+#' @importFrom stats as.dendrogram dist hclust is.leaf optimize order.dendrogram sd
+
+
 # asinh(ab) / log(2) + const, behaving as log2(a) in the limit as a -> large
 .log2ish_asinh <- function(a,b) {
     ab <- a * b
@@ -157,9 +164,9 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
     if (nrow(x) == 0 || ncol(x) == 0) {
         return(x)
     }
-    
+
     true.lib.size <- colSums(x)
-    
+
     if (is.null(lib.size)) {
         lib.size <- true.lib.size * edgeR::calcNormFactors(x)
         lib.size.method <- "TMM normalization"
@@ -186,7 +193,7 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
     } else {
         result <- method.info$vst(x.norm)
     }
-    
+
     if (cpm) {
         method.info$is.logish ||
             stop("Counts Per Million is not meaningful with this transform, use cpm=FALSE")
@@ -224,9 +231,9 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
 #' @export
 vst_advice <- function(what="anscombe.nb", dispersion=NULL, cpm=FALSE, lib.size=NULL) {
     if (!is.character(what)) {
-        (is.null(dispersion) && is.null(lib.size)) || 
+        (is.null(dispersion) && is.null(lib.size)) ||
             stop("Extra parameters not needed")
-        
+
         method <- attr(what,"method")
         dispersion <- attr(what,"dispersion")
         cpm <- attr(what,"cpm")
@@ -237,9 +244,9 @@ vst_advice <- function(what="anscombe.nb", dispersion=NULL, cpm=FALSE, lib.size=
 
     method.info <- vst_methods[[method]]
     is.null(method.info) && stop("Unknown method")
-    
+
     method.info$needs.dispersion && is.null(dispersion) && stop("dispersion needed")
-    
+
     cpm && is.null(lib.size) && stop("lib.size needed")
 
     count <- cbind(c(0, 2**(0:12)))
@@ -250,9 +257,7 @@ vst_advice <- function(what="anscombe.nb", dispersion=NULL, cpm=FALSE, lib.size=
     step[3:nrow(count)] <- y[3:nrow(count),1] - y[2:(nrow(count)-1),1]
 
     data.frame(
-        count=count[,1], 
+        count=count[,1],
         transformed_count=y[,1],
         twofold_step=step)
 }
-
-

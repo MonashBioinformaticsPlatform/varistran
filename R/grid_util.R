@@ -95,7 +95,7 @@ ordering_grob <- function(ordering, transpose=FALSE, mirror=FALSE, hint_size=uni
     yscale <- range(y0,y1)
     width <- unit(1,"null")
     height <- hint_size
-    
+
     # Allow zero width dendrogram
     if (yscale[1] == yscale[2])
         yscale <- yscale + c(-1,1)
@@ -151,13 +151,13 @@ heatmap_grob <- function(data, signed=TRUE, legend_title="") {
         range <- c(0, max(data, na.rm=TRUE))
         col <- unsigned_colors
     }
-    
+
     # Avoid divide by zero
     if (range[1] == range[2])
         range <- range + c(-1,1)
-    
+
     scaled <- pmin(pmax(as.integer( (data-range[1])/(range[2]-range[1])*256+1),1),256)
-    
+
     fill <- col[scaled]
     fill[ is.na(fill) ] <- "#888888"
 

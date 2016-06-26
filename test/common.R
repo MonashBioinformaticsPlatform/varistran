@@ -53,7 +53,6 @@ save_plot <- function(prefix, func, width=4,height=3.5) {
     png(filename, width=width, height=height, units="in", res=300)
     func()
     dev.off()
-
 }
 
 

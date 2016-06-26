@@ -13,8 +13,8 @@ Version: 0.1
 License: LGPL-2.1
 Depends:
     grid
-Enhances: grid
 Imports:
+    MASS,
     ggplot2,
     ggdendro,
     shiny,

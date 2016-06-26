@@ -57,7 +57,7 @@ An appropraite dispersion is estimated with the aid of the design matrix. (If om
 varistran::plot_stability(y, counts, design=design)
 ```
 
-`plot_biplot` provides a two-dimensional overview of your samples and genes using Principle Components Analysis (similar to `plotMDS` in limma):
+`plot_biplot` provides a two-dimensional overview of your samples and genes using Principle Components Analysis (similar concept to `plotMDS` in limma):
 
 ```
 varistran::plot_biplot(y)
@@ -65,12 +65,20 @@ varistran::plot_biplot(y)
 
 ![Example of a biplot](doc/biplot-example.png)
 
+`plot_heatmap` draws a heatmap.
+
 ### Shiny report
 
 Varistran's various diagnostic plots are also available as a Shiny app, which can be launched with:
 
 ```
 varistran::shiny_report(y, counts)
+```
+
+If `y` is not given it is calculated with `varistran::vst(counts)`.
+
+```
+varistran::shiny_report(counts=counts)
 ```
 
 * [Online demo](http://rnasystems.erc.monash.edu:3838/pfh/2015/demo-varistran)
