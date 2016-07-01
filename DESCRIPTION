@@ -5,7 +5,8 @@ Description: Transform RNA-Seq count data so that variance due to biological
     noise plus its count-based nature is stable across genes with different
     average expression levels. This takes the form of a log transformation which is
     moderated for low counts. Transforming data in this way makes many statistical
-    and machine learning techniques applicable.
+    and machine learning techniques applicable. A Shiny report function showing
+    diagnostic plots based on the transformed data is also provided.
 Author: Paul Harrison
 Maintainer: Paul Harrison <paul.harrison@monash.edu>
 URL: https://github.com/MonashBioinformaticsPlatform/varistran

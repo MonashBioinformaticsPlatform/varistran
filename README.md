@@ -65,9 +65,12 @@ varistran::plot_stability(y, counts, design=design)
 varistran::plot_biplot(y)
 ```
 
-<img src="doc/biplot-example.png" height="200">
+<img src="doc/biplot-example.png" height="300">
 
 `plot_heatmap` draws a heatmap.
+
+<img src="doc/heatmap-example.png" height="300">
+
 
 ### Shiny report
 
