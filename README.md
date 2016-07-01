@@ -6,7 +6,7 @@ Varistran is an R package providing a Variance Stabilizing Transformation approp
 
 * [A slideshow describing Varistran](http://rnasystems.erc.monash.edu:3838/pfh/2016/varistran/)
 
-* [Documentation (PDF)](http://rnasystems.erc.monash.edu/doc/varistran.pdf)
+* [Package documentation (PDF)](http://rnasystems.erc.monash.edu/doc/varistran.pdf)
 
 * [Poster for ABACBS 2015](doc/varistran-poster-abacbs-2015.pdf) [(on F1000, doi: 10.7490/f1000research.1110757.1)](http://f1000research.com/posters/4-1041)
 
@@ -65,7 +65,7 @@ varistran::plot_stability(y, counts, design=design)
 varistran::plot_biplot(y)
 ```
 
-![Example of a biplot](doc/biplot-example.png)
+<img src="doc/biplot-example.png" height="200">
 
 `plot_heatmap` draws a heatmap.
 
