@@ -18,28 +18,23 @@ Varistran is most easily installed from GitHub using devtools:
 
 ```
 install.packages("devtools")
-
 devtools::install_github("MonashBioinformaticsPlatform/varistran")
 ```
 
 ### Dependencies
 
-Various diagnostic plotting functions in Varistran use `grid`, `ggplot2`, and `ggdendro`. Varistran can also produce an interactive `shiny` report. `seriation` is used for heatmaps.
-
-```
-install.packages(c("grid","ggplot2","ggdendro","seriation","shiny"))
-```
-
-By default, library size estimation is by TMM, implemented in edgeR from BioConductor:
+By default, library size estimation is by TMM, implemented in edgeR from BioConductor. You will need to install this manually if you haven't already:
 
 ```
 source("http://bioconductor.org/biocLite.R")
 biocLite("edgeR")
 ```
 
+Varistran also uses various CRAN packages, which will be installed automatically using the `devtools::install_github` method above. Refer to the DESCRIPTION file for the full list of dependencies.
+
 ## Example usage
 
-I expect to keep adding features to Varistran. Therefore, I recommend using its functions via `varistran::` rather than attaching its namespace with `library(varistran)`.
+I intend to keep adding features to Varistran. Therefore, I recommend using its functions via `varistran::` rather than attaching its namespace with `library(varistran)`.
 
 Say you have a count matrix `counts` and a design matrix `design`. To perform a variance stabilizing transformation:
 
