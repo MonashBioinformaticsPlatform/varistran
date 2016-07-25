@@ -45,11 +45,11 @@
     top <- df$y>0
 
     top_rows <- df[top,,drop=F]
-    top_rows$vjust <- -0.5
+    top_rows$vjust <- rep(-0.5, nrow(top_rows))
     top_rows <- .stack_labels_positive(top_rows, text_size)
 
     bottom_rows <- df[!top,,drop=F]
-    bottom_rows$vjust <- 1.5
+    bottom_rows$vjust <- rep(1.5, nrow(bottom_rows))
     bottom_rows$y <- -bottom_rows$y
     bottom_rows <- .stack_labels_positive(bottom_rows, text_size)
     bottom_rows$y <- -bottom_rows$y
