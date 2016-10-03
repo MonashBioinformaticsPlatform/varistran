@@ -168,7 +168,12 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
     true.lib.size <- colSums(x)
 
     if (is.null(lib.size)) {
-        lib.size <- true.lib.size * edgeR::calcNormFactors(x)
+        # edgeR dies on zero library size
+        good <- true.lib.size > 0
+        norm.factors <- rep(1,length(good))
+        norm.factors[good] <- edgeR::calcNormFactors(x[,good,drop=FALSE])
+        
+        lib.size <- true.lib.size * norm.factors
         lib.size.method <- "TMM normalization"
     } else if (all(lib.size == true.lib.size)) {
         lib.size.method <- "no adjustment"
