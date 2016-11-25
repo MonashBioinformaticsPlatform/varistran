@@ -64,7 +64,8 @@ plot_heatmap <- function(
     heatmap <- heatmap_grob(
         y_centered[row_order$order,col_order$order,drop=F],
         signed=TRUE,
-        legend_title=paste0("difference from\nrow mean"))
+        legend_title=paste0("difference from\nrow mean"),
+        vp_name="heatmap")
 
     mean_range <- range(means)
     if (mean_range[2] == mean_range[1]) mean_range[2] <- mean_range[2]+1

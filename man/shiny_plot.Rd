@@ -6,7 +6,7 @@
 \alias{shiny_plot_ui}
 \title{Shiny plot.}
 \usage{
-shiny_plot(callback, width = 500, height = 500, dlname = "plot",
+shiny_plot(callback = NULL, width = 500, height = 500, dlname = "plot",
   prefix = "", ...)
 
 shiny_plot_ui(id, width = 500, height = 500, ...)

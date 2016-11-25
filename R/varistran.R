@@ -3,6 +3,7 @@
 #
 #' @importFrom grDevices axisTicks dev.off pdf png postscript
 #' @importFrom stats as.dendrogram dist hclust is.leaf optimize order.dendrogram sd
+#' @importFrom graphics par
 
 
 # asinh(ab) / log(2) + const, behaving as log2(a) in the limit as a -> large

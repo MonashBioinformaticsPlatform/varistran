@@ -4,12 +4,17 @@
 \alias{composable_shiny_app}
 \title{Composable Shiny App.}
 \usage{
-composable_shiny_app(ui, server, title = NULL)
+composable_shiny_app(ui, server, title = NULL, enableBookmarking = "server",
+  output = NULL)
 }
 \arguments{
 \item{ui}{UI part of the Shiny app.}
 
 \item{server}{Server part of the Shiny app. This should take a single parameter, env.}
+
+\item{enableBookmarking}{Parameter passed to shinyApp. A bookmark button is displayed unless enableBookmarking is "disable".}
+
+\item{output}{Name in env that will contain a reactive value that produces an output (eg for use as a gadget).}
 }
 \value{
 A shiny.appobj.

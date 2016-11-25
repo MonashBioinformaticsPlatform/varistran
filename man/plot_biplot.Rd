@@ -48,7 +48,9 @@ dimension 1 if dimension 1 explains more of the variance than dimension 2.
 \examples{
 
 
-# Assuming counts is a matrix of read counts.
+# Generate some random data.
+counts <- matrix(rnbinom(1000, size=1/0.01, mu=100), ncol=10)
+
 y <- varistran::vst(counts)
 print( varistran::plot_biplot(y) )
 

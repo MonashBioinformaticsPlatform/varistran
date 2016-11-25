@@ -24,20 +24,20 @@
 #
 
 #' @export
-heightDetails.varistran_grob <- function(grob) {
-    .default(grob$height_hint, grid::unit(1,"null"))
+heightDetails.varistran_grob <- function(x) {
+    .default(x$height_hint, grid::unit(1,"null"))
 }
 
 #' @export
-widthDetails.varistran_grob <- function(grob) {
-    .default(grob$width_hint, grid::unit(1,"null"))
+widthDetails.varistran_grob <- function(x) {
+    .default(x$width_hint, grid::unit(1,"null"))
 }
 
 #' @export
-print.varistran_grob <- function(grob, newpage=TRUE) {
+print.varistran_grob <- function(x, newpage=TRUE, ...) {
     if (newpage)
         grid::grid.newpage()
-    grid::grid.draw(grob)
+    grid::grid.draw(x)
 }
 
 #' Make a grob better.
@@ -142,7 +142,7 @@ signed_colors <- hsv(
 
 
 #' @export
-heatmap_grob <- function(data, signed=TRUE, legend_title="") {
+heatmap_grob <- function(data, signed=TRUE, legend_title="", vp_name=NULL) {
     if (signed) {
         radius <- max(abs(data), na.rm=TRUE)
         range <- c(-radius, radius)
@@ -169,7 +169,7 @@ heatmap_grob <- function(data, signed=TRUE, legend_title="") {
         just=c(0,0),
         default.units="native",
         gp=gpar(col=NA, fill=fill),
-        vp=viewport(xscale=c(0,ncol(data)),yscale=c(0,nrow(data)))
+        vp=viewport(xscale=c(0,ncol(data)),yscale=c(0,nrow(data)), name=vp_name)
     )
 
     legend_heatmap <- rectGrob(
@@ -213,23 +213,23 @@ shrinktext_grob <- function(label,x,y,just,max_width=20,...) {
 
 
 #' @export
-widthDetails.shrinktext_grob <- function(grob) {
-    min(grob$shrinktext_max_width, max(stringWidth(grob$label)))
+widthDetails.shrinktext_grob <- function(x) {
+    min(x$shrinktext_max_width, max(stringWidth(x$label)))
 }
 
 
 #' @export
-drawDetails.shrinktext_grob <- function(grob, recording) {
+drawDetails.shrinktext_grob <- function(x, recording) {
     ratio <- convertHeight(unit(1,"native"), "lines", valueOnly=TRUE)
     cex <- min(1.0, ratio)
 
     if (cex < 0.2) return()
 
     grid.text(
-        grob$label,
-        x=grob$x,
-        y=grob$y,
-        just=grob$just,
+        x$label,
+        x=x$x,
+        y=x$y,
+        just=x$just,
         default.units="native",
         gp=gpar(cex=cex)
     )
@@ -243,23 +243,23 @@ vertical_shrinktext_grob <- function(label,x,y,just,...) {
 
 
 #' @export
-heightDetails.vertical_shrinktext_grob <- function(grob) {
-    max(stringWidth(grob$label))
+heightDetails.vertical_shrinktext_grob <- function(x) {
+    max(stringWidth(x$label))
 }
 
 
 #' @export
-drawDetails.vertical_shrinktext_grob <- function(grob, recording) {
+drawDetails.vertical_shrinktext_grob <- function(x, recording) {
     ratio <- convertWidth(unit(1,"native"), "lines", valueOnly=TRUE)
     cex <- min(1.0, ratio)
 
     if (cex < 0.2) return()
 
     grid.text(
-        grob$label,
-        x=grob$x,
-        y=grob$y,
-        just=grob$just,
+        x$label,
+        x=x$x,
+        y=x$y,
+        just=x$just,
         default.units="native",
         rot=90,
         gp=gpar(cex=cex)

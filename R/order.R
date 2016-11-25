@@ -21,9 +21,14 @@ dendrogram_paths <- function(dend) {
 make_ordering <- function(mat, enable=TRUE, fast=FALSE) {
     # Note: paths are given ordered by order
 
-    # Assume each row has been centered on zero
     # Fill in NAs
-    mat[is.na(mat)] <- 0.0
+    fillin <- !is.finite(mat)
+    if (any(fillin)) {
+        filler <- matrix(rowMeans(mat, na.rm=TRUE), nrow=nrow(mat),ncol=ncol(mat))
+        mat[fillin] <- filler[fillin]
+        mat[!is.finite(mat)] <- mean(mat)
+        mat[!is.finite(mat)] <- 0.0
+    }
     
     if (nrow(mat) < 3 || !enable) {
         list(

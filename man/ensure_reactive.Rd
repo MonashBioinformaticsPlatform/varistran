@@ -4,7 +4,8 @@
 \alias{ensure_reactive}
 \title{Make a value reactive if it is not already reactive.}
 \usage{
-ensure_reactive(item)
+ensure_reactive(item, name = NULL, env = NULL, default = function()
+  stop("Missing ", name))
 }
 \description{
 This is used to allow parameters to Shiny functions to be optionally reactive.

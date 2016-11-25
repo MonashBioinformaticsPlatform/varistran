@@ -30,8 +30,12 @@ Produce an interactive Shiny report showing diagnostic plots of transformed coun
 }
 \examples{
 
+# Generate some random data.
+counts <- matrix(rnbinom(1000, size=1/0.01, mu=100), ncol=10)
+
 y <- varistran::vst(counts)
-varistran::shiny_report(y, counts)
+if (interactive())
+    varistran::shiny_report(y, counts)
 
 }
 \author{

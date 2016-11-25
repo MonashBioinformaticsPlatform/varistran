@@ -7,19 +7,19 @@
 #
 #' @export
 shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
-    p <- function(name) paste0(prefix,name)
+    ns <- shiny::NS(prefix)
 
     y <- ensure_reactable(y)
     counts <- ensure_reactable(counts)
     sample_labels <- ensure_reactable(sample_labels)
 
-    ui <- shiny::div(
+    ui <- function(request) shiny::div(
         shiny::h3("Transformation"),
-        shiny::uiOutput(p("report"))
+        shiny::uiOutput(ns("report"))
     )
 
     server <- function(env) {
-        env[[p("y")]] <- shiny::reactive({
+        env[[ns("y")]] <- shiny::reactive({
             y_val <- y(env)
             counts_val <- counts(env)
             if (is.null(y_val))
@@ -27,8 +27,8 @@ shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
             y_val
         })
 
-        env$output[[p("report")]] <- shiny::renderUI({
-            y <- env[[p("y")]]()
+        env$output[[ns("report")]] <- shiny::renderUI({
+            y <- env[[ns("y")]]()
 
             sample_labels_val <- sample_labels(env)
             if (is.null(sample_labels_val))
@@ -101,17 +101,17 @@ shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
 
 #' @export
 shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL, prefix="") {
-    p <- function(name) paste0(prefix,name)
+    ns <- shiny::NS(prefix)
 
     y <- ensure_reactable(y)
     counts <- ensure_reactable(counts)
     sample_labels <- ensure_reactable(sample_labels)
     feature_labels <- ensure_reactable(feature_labels)
 
-    ui <- shiny::uiOutput(p("ui"))
+    ui <- function(request) shiny::uiOutput(ns("ui"))
 
     server <- function(env) {
-        env[[p("vars")]] <- shiny::reactive(shiny::withProgress(message="Loading", {
+        env[[ns("vars")]] <- shiny::reactive(shiny::withProgress(message="Loading", {
             y_val <- y(env)
             counts_val <- counts(env)
             sample_labels_val <- sample_labels(env)
@@ -129,19 +129,19 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
                 counts_input <- ""
                 what <- "expression level"
             } else {
-                counts_input <- shiny::numericInput(p("min_count"), "Minimum mean count", default_min_count)
+                counts_input <- shiny::numericInput(ns("min_count"), "Minimum mean count", default_min_count)
                 what <- "transformed count"
             }
             
             ui <- shiny::tags$div(
                 shiny::tags$h3("Select samples"),
-                shiny::selectInput(p("samples"), "Select samples", 
+                shiny::selectInput(ns("samples"), "Select samples", 
                     selected=default_samples, choices=choices, multiple=TRUE),
                 shiny::tags$h3("Filter features"),
                 counts_input,
-                shiny::numericInput(p("min_expression"), 
+                shiny::numericInput(ns("min_expression"), 
                     paste0("Minimum mean ",what), default_min_expression),
-                shiny::textOutput(p("report"))
+                shiny::textOutput(ns("report"))
             )
             
             list(
@@ -154,23 +154,23 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
             )
         }))
         
-        env$output[[p("ui")]] <- shiny::renderUI({ env[[p("vars")]]()$ui })
+        env$output[[ns("ui")]] <- shiny::renderUI({ env[[ns("vars")]]()$ui })
 
-        env[[p("filtered")]] <- shiny::reactive({
-            vars <- env[[p("vars")]]()
+        env[[ns("filtered")]] <- shiny::reactive({
+            vars <- env[[ns("vars")]]()
             y_val <- vars$y
             counts_val <- vars$counts
             
             # Might not exist if tab hasn't been viewed :-(
-            samples_val <- env$input[[p("samples")]]
+            samples_val <- env$input[[ns("samples")]]
             if (is.null(samples_val))
                 samples_val <- vars$default_samples
             
-            min_expression_val <- env$input[[p("min_expression")]]
+            min_expression_val <- env$input[[ns("min_expression")]]
             if (is.null(min_expression_val))
                 min_expression_val <- vars$default_min_expression
                 
-            min_count_val <- env$input[[p("min_count")]]
+            min_count_val <- env$input[[ns("min_count")]]
             if (is.null(min_count_val))
                 min_count_val <- vars$default_min_count
             
@@ -195,8 +195,8 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
             )
         })
 
-        env$output[[p("report")]] <- shiny::renderText({
-            filtered <- env[[p("filtered")]]()
+        env$output[[ns("report")]] <- shiny::renderText({
+            filtered <- env[[ns("filtered")]]()
             sprintf("%d of %d features will be used.",
                 length(filtered$feature_select),
                 nrow(y(env))
@@ -231,56 +231,78 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
 #'
 #' @examples
 #'
+#' # Generate some random data.
+#' counts <- matrix(rnbinom(1000, size=1/0.01, mu=100), ncol=10)
+#'
 #' y <- varistran::vst(counts)
-#' varistran::shiny_report(y, counts)
+#' if (interactive())
+#'     varistran::shiny_report(y, counts)
 #'
 #' @export
 shiny_report <- function(y=NULL, counts=NULL, sample_labels=NULL, feature_labels=NULL, prefix="") {
-    p <- function(name) paste0(prefix,name)
+    ns <- shiny::NS(prefix)
 
     y <- ensure_reactable(y)
     counts <- ensure_reactable(counts)
     sample_labels <- ensure_reactable(sample_labels)
     feature_labels <- ensure_reactable(feature_labels)
 
-    transform <- shiny_vst(y, counts, sample_labels, prefix=p("transform_"))
-    ty <- function(env) env[[p("transform_y")]]()
+    transform <- shiny_vst(y, counts, sample_labels, prefix=ns("transform"))
+    ty <- function(env) env[[ns("transform-y")]]()
 
-    filter <- shiny_filter(ty, counts, sample_labels, feature_labels, prefix=p("filter_"))
-    fy <- function(env) env[[p("filter_filtered")]]()$y
-    fcounts <- function(env) env[[p("filter_filtered")]]()$counts
-    fsample_labels <- function(env) env[[p("filter_filtered")]]()$sample_labels
-    ffeature_labels <- function(env) env[[p("filter_filtered")]]()$feature_labels
+    filter <- shiny_filter(ty, counts, sample_labels, feature_labels, prefix=ns("filter"))
+    fy <- function(env) env[[ns("filter-filtered")]]()$y
+    fcounts <- function(env) env[[ns("filter-filtered")]]()$counts
+    fsample_labels <- function(env) env[[ns("filter-filtered")]]()$sample_labels
+    ffeature_labels <- function(env) env[[ns("filter-filtered")]]()$feature_labels
 
-    stability <- shiny_stability(fy, fcounts, prefix=p("stability_"))
-    mds_plot <- shiny_mds_plot(fy, sample_labels=fsample_labels, prefix="mds_")
-    biplot <- shiny_biplot(fy, sample_labels=fsample_labels, feature_labels=ffeature_labels,  prefix=p("biplot_"))
-    heatmap <- shiny_heatmap(fy, sample_labels=fsample_labels, feature_labels=ffeature_labels,  prefix=p("heatmap_"))
+    stability <- shiny_stability(fy, fcounts, prefix=ns("stability"))
+    mds_plot <- shiny_mds_plot(fy, sample_labels=fsample_labels, prefix=ns("mds"))
+    biplot <- shiny_biplot(fy, sample_labels=fsample_labels, feature_labels=ffeature_labels,  prefix=ns("biplot"))
+    heatmap <- shiny_heatmap(fy, sample_labels=fsample_labels, feature_labels=ffeature_labels,  prefix=ns("heatmap"))
 
     panels <- list(
-            shiny::tabPanel("Transform", transform$component_ui),
-            shiny::tabPanel("Select and filter", filter$component_ui),
-            shiny::tabPanel("Stability", stability$component_ui),
-            shiny::tabPanel("MDS plot", mds_plot$component_ui),
-            shiny::tabPanel("Biplot", biplot$component_ui),
-            shiny::tabPanel("Heatmap", heatmap$component_ui)
+            function(request) shiny::tabPanel("Transform", transform$component_ui(request)),
+            function(request) shiny::tabPanel("Select and filter", filter$component_ui(request)),
+            function(request) shiny::tabPanel("Stability", stability$component_ui(request)),
+            function(request) shiny::tabPanel("MDS plot", mds_plot$component_ui(request)),
+            function(request) shiny::tabPanel("Biplot", biplot$component_ui(request)),
+            function(request) shiny::tabPanel("Heatmap", heatmap$component_ui(request))
     )
 
-    ui <- shiny::div(
+    ui <- function(request) shiny::div(
         shiny::div(
             style="font-size: 150%; color: #bbbbbb; text-align: right; letter-spacing: 0.25em;",
             "Varistran"
         ),
-        do.call(shiny::navlistPanel, c(list(widths=c(2,10),well=FALSE), panels))
+        do.call(shiny::navlistPanel, 
+            c(list(widths=c(2,10),well=FALSE), 
+              lapply(panels, call_ui, request)
+            )) 
     )
 
     server <- function(env) {
+        e <- function(name) env[[ns(name)]]()
+    
         transform$component_server(env)
         filter$component_server(env)
         stability$component_server(env)
         mds_plot$component_server(env)
         biplot$component_server(env)
         heatmap$component_server(env)
+        
+        
+        env[[ns("columns")]] <- shiny::reactive({
+            e("filter-filtered")$sample_select
+        })
+        
+        env[[ns("rows")]] <- shiny::reactive({
+            e("filter-filtered")$feature_select
+        })
+        
+        env[[ns("rows-selected")]] <- shiny::reactive({
+            e("rows")[ e("heatmap-selected") ]
+        })
     }
 
     app <- composable_shiny_app(ui, server)
