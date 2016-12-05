@@ -10,6 +10,9 @@
 #' @param cluster_features Should features (rows) be clustered?
 #' @param sample_labels Names for each sample. If not given and y has column names, these will be used instead.
 #' @param feature_labels Names for each feature. If not given and y has row names, these will be used instead.
+#' @param baseline Baseline level for each row, to be subtracted when drawing the heatmap colors. If omitted, the row mean will be used.
+#' @param baseline_label Text description of what the baseline is.
+#' @param scale_label Text description of what the heatmap colors represent (after baseline is subtracted).
 #'
 #' @return A grid grob. print()-ing this value will cause it to be displayed.
 #'
@@ -22,7 +25,10 @@ plot_heatmap <- function(
         cluster_samples=FALSE,
         cluster_features=TRUE,
         sample_labels=NULL,
-        feature_labels=NULL) {
+        feature_labels=NULL,
+        baseline=NULL,
+        baseline_label="row\nmean",
+        scale_label="difference from\nrow mean") {
     y <- as.matrix(y)
 
     if (is.null(sample_labels) && !is.null(colnames(y)))
@@ -42,8 +48,11 @@ plot_heatmap <- function(
 
     feature_labels[is.na(feature_labels)] <- ""
 
-
-    means <- rowMeans(y, na.rm=TRUE)
+    if (!is.null(baseline))
+        means <- baseline
+    else
+        means <- rowMeans(y, na.rm=TRUE)
+        
     y_centered <- y - means
     
     y_scaled <- y_centered / sqrt(rowMeans(y_centered*y_centered, na.rm=TRUE))
@@ -64,7 +73,7 @@ plot_heatmap <- function(
     heatmap <- heatmap_grob(
         y_centered[row_order$order,col_order$order,drop=F],
         signed=TRUE,
-        legend_title=paste0("difference from\nrow mean"),
+        legend_title=paste0(scale_label),
         vp_name="heatmap")
 
     mean_range <- range(means)
@@ -84,7 +93,7 @@ plot_heatmap <- function(
         vp=viewport(width=1,height=0,y=1,xscale=mean_range),
         gp=gpar(cex=0.75)
     )
-    mean_label <- textGrob("row\nmean")
+    mean_label <- textGrob(baseline_label)
 
     feature_label_grob <- shrinktext_grob(
         feature_labels[row_order$order],

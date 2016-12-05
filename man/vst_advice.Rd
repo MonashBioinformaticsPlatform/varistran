@@ -9,6 +9,12 @@ vst_advice(what = "anscombe.nb", dispersion = NULL, cpm = FALSE,
 }
 \arguments{
 \item{what}{Either the output of a call to vst() or the name of a VST method (see vst() help).}
+
+\item{dispersion}{As per vst().}
+
+\item{cpm}{As per vst().}
+
+\item{lib.size}{As per vst().}
 }
 \value{
 A data frame giving an indication of how an average sample will be transformed.

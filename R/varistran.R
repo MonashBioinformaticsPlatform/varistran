@@ -228,6 +228,12 @@ vst <- function(x, method="anscombe.nb", lib.size=NULL, cpm=FALSE, dispersion=NU
 #'
 #' @param what Either the output of a call to vst() or the name of a VST method (see vst() help).
 #'
+#' @param dispersion As per vst().
+#'
+#' @param cpm As per vst().
+#'
+#' @param lib.size As per vst().
+#'
 #' @return A data frame giving an indication of how an average sample will be transformed.
 #'
 #' The column "twofold_step" shows the step from the previous to current row. With a log2 transformation this would be uniformly 1, but with a VST and small counts the step is less than 1. This therefore provides advice on how compacted the VST is near zero-count, as compared to a log2 transformation.

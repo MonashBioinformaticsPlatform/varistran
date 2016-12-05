@@ -6,7 +6,15 @@
 \usage{
 call_ui(ui, request)
 }
+\arguments{
+\item{ui}{A UI object, or preferably a function(request) to produce a UI object.}
+
+\item{request}{A request object to be passed to ui, if it is a function.}
+}
+\value{
+A UI object.
+}
 \description{
-This is used to support older UI code which doesn't wrap UI in function(request) { ... }.
+This is used to support older Shiny UI code which doesn't wrap UI in function(request) { ... }.
 }
 

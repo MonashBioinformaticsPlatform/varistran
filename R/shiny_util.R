@@ -29,6 +29,16 @@ ensure_reactable <- function(item, env_name=NULL) {
 #'
 #' This is used to allow parameters to Shiny functions to be optionally reactive.
 #'
+#' @param item Thing to ensure reactive, either an already reactive value, or a plain value, or NULL.
+#'
+#' @param name If item is NULL, env[[name]]() will be used.
+#'
+#' @param env If item is NULL, env[[name]]() will be used.
+#'
+#' @param default If item is NULL, and name is not in env, this reactive value will be used.
+#'
+#' @return A Shiny reactive value.
+#'
 #' @export
 ensure_reactive <- function(item, name=NULL, env=NULL, default=function() stop("Missing ",name)) {
     if (is.null(item) && !is.null(env))
@@ -47,7 +57,13 @@ ensure_reactive <- function(item, name=NULL, env=NULL, default=function() stop("
 
 #' Call object with "request" if it is callable.
 #'
-#' This is used to support older UI code which doesn't wrap UI in function(request) { ... }.
+#' This is used to support older Shiny UI code which doesn't wrap UI in function(request) { ... }.
+#'
+#' @param ui A UI object, or preferably a function(request) to produce a UI object.
+#'
+#' @param request A request object to be passed to ui, if it is a function.
+#'
+#' @return A UI object.
 #'
 #' @export
 call_ui <- function(ui, request) {
@@ -70,6 +86,8 @@ call_ui <- function(ui, request) {
 #' @param ui UI part of the Shiny app.
 #'
 #' @param server Server part of the Shiny app. This should take a single parameter, env.
+#'
+#' @param title Title of the app.
 #'
 #' @param enableBookmarking Parameter passed to shinyApp. A bookmark button is displayed unless enableBookmarking is "disable".
 #'

@@ -7,6 +7,18 @@
 ensure_reactive(item, name = NULL, env = NULL, default = function()
   stop("Missing ", name))
 }
+\arguments{
+\item{item}{Thing to ensure reactive, either an already reactive value, or a plain value, or NULL.}
+
+\item{name}{If item is NULL, env[[name]]() will be used.}
+
+\item{env}{If item is NULL, env[[name]]() will be used.}
+
+\item{default}{If item is NULL, and name is not in env, this reactive value will be used.}
+}
+\value{
+A Shiny reactive value.
+}
 \description{
 This is used to allow parameters to Shiny functions to be optionally reactive.
 }

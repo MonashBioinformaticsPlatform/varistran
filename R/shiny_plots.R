@@ -202,8 +202,8 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
                 return( integer(0) )
         
             brush <- env$input[[ns("brush")]]
-            grob <- isolate( e("grob") )
-            selection <- isolate( e("selection") )
+            grob <- shiny::isolate( e("grob") )
+            selection <- shiny::isolate( e("selection") )
             
             n <- length(selection)
             from <- max(1, min(n, floor(brush$ymin*n+1.5)))
