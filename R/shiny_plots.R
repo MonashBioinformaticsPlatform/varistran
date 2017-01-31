@@ -133,7 +133,9 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
 
     plot <- shiny_plot(
         callback = function(env) shiny::withProgress(message="Plotting", {
-            print(env[[ns("grob")]]())
+            plot.new()
+        
+            print(env[[ns("grob")]](), newpage=FALSE)
             
             # Configure base graphics to match heatmap
             seekViewport("heatmap")
