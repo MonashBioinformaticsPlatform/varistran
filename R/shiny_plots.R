@@ -2,6 +2,18 @@
 # Shiny wrappers around plotting functions
 #
 
+#' Shiny wrapper for plot_stability
+#'
+#' @param y Transformed matrix.
+#'
+#' @param x Untransformed matrix.
+#'
+#' @param design Design matrix.
+#'
+#' @param bins Number of bins.
+#'
+#' @param prefix Prefix for variables in environment for composable shiny app.
+#'
 #' @export
 shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
     ns <- shiny::NS(prefix)
@@ -50,6 +62,12 @@ shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
 
 #' Shiny wrapper for limma's MDS plot
 #'
+#' @param x Transformed matrix.
+#'
+#' @param sample_labels Sample labels.
+#'
+#' @param prefix Prefix for variables in environment for composable shiny app.
+#'
 #' @export
 shiny_mds_plot <- function(x, sample_labels=NULL, prefix="") {
     ns <- shiny::NS(prefix)
@@ -85,6 +103,22 @@ shiny_mds_plot <- function(x, sample_labels=NULL, prefix="") {
 }
 
 
+#' Shiny wrapper for plot_biplot
+#'
+#' @param x Transformed matrix.
+#'
+#' @param sample_labels Sample labels.
+#'
+#' @param feature_labels Feature labels.
+#'
+#' @param n_features Number of features to label, by default.
+#'
+#' @param balance Relative scaling of samples and features, by default.
+#'
+#' @param text_size Text size in plot.
+#'
+#' @param prefix Prefix for variables in environment for composable shiny app.
+#'
 #' @export
 shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=20, balance=0.25, text_size=0.025, prefix="") {
     ns <- shiny::NS(prefix)
@@ -123,6 +157,16 @@ shiny_biplot <- function(x, sample_labels=NULL, feature_labels=NULL, n_features=
     composable_shiny_app(ui, server)
 }
 
+#' Shiny wrapper for plot_heatmap
+#'
+#' @param y Transformed matrix.
+#'
+#' @param sample_labels Sample labels.
+#'
+#' @param feature_labels Feature labels.
+#'
+#' @param prefix Prefix for variables in environment for composable shiny app.
+#'
 #' @export
 shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="") {
     ns <- shiny::NS(prefix)

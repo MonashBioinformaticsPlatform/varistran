@@ -16,7 +16,23 @@ shiny_plot_server(input, output, session, callback, dlname = "plot")
 \arguments{
 \item{callback}{Function to produce the plot. In shiny_plot, this takes one argument, "env" (see composable_shiny_app). In shiny_plot_server, it takes no arguements.}
 
+\item{width}{Default plot width.}
+
+\item{height}{Default plot height.}
+
+\item{dlname}{Filename (without extension) if plot is downloaded.}
+
+\item{prefix}{Prefix for variables in environment for composable shiny app.}
+
 \item{...}{Extra arguments to shiny_plot and shiny_plot_ui are passed on to plotOutput, for example brushing options.}
+
+\item{id}{Id for shiny module.}
+
+\item{input}{Supplied by shiny::callModule.}
+
+\item{output}{Supplied by shiny::callModule.}
+
+\item{session}{Supplied by shiny::callModule.}
 }
 \value{
 shiny_plot() returns a composable shiny.appobj.

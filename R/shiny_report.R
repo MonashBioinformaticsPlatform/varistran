@@ -3,8 +3,16 @@
 # All of the plots.
 #
 
-# Perform or report on a variance stabilizing transformation
-#
+#' Shiny component to describe the output of a call to vst.
+#'
+#' @param y Transformed matrix.
+#'
+#' @param counts Counts matrix to transform.
+#'
+#' @param sample_labels Sample labels.
+#'
+#' @param prefix Prefix for variables in environment for composable shiny app.
+#'
 #' @export
 shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
     ns <- shiny::NS(prefix)
@@ -99,6 +107,18 @@ shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
     composable_shiny_app(ui, server)
 }
 
+#' Shiny component to filter rows and columns a matrix.
+#'
+#' @param y Transformed matrix.
+#'
+#' @param counts Original count matrix if available.
+#'
+#' @param sample_labels Sample labels.
+#'
+#' @param feature_labels Feature labels.
+#'
+#' @param prefix Prefix for variables in environment for composable shiny app.
+#'
 #' @export
 shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL, prefix="") {
     ns <- shiny::NS(prefix)
@@ -206,6 +226,7 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
 
     composable_shiny_app(ui, server)
 }
+
 
 #' Shiny report.
 #'

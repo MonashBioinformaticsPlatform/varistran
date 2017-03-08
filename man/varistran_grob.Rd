@@ -7,6 +7,15 @@
 varistran_grob(grob, width = unit(1, "null"), height = unit(1, "null"),
   pad = 0)
 }
+\arguments{
+\item{grob}{to wrap.}
+
+\item{width}{Size hint.}
+
+\item{height}{Size hint.}
+
+\item{pad}{Padding to place around \code{grob}.}
+}
 \description{
 Give a grob a margin, and size hints for layout, and make it print()-able.
 }

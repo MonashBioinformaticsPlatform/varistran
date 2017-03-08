@@ -3,7 +3,6 @@
 # Utility functions for creating composable shiny reports
 #
 
-#' @export
 parenthetically <- function(...) {
     shiny::div(style="margin-top: 5em; font-size: 75%", ...)
 }
@@ -14,6 +13,14 @@ parenthetically <- function(...) {
 # Promote an argument to a function if necessary.
 #
 
+#' Flexible specification of parameters to shiny apps.
+#'
+#' Make a function to retrieve a parameter from an environment if not explicitly specified, and if it is not already such a function.
+#'
+#' @param item Thing to ensure is "reactable".
+#'
+#' @param env_name Name of variable in environment to retrieve value from, if \code{item} is NULL.
+#'
 #' @export
 ensure_reactable <- function(item, env_name=NULL) {
     if (!is.null(env_name) && is.null(item))
@@ -135,7 +142,11 @@ composable_shiny_app <- function(ui, server, title=NULL, enableBookmarking="serv
 
 
 
-#' Run a composable shiny app as a gadget
+#' Run a composable shiny app as a gadget.
+#'
+#' @param app A composable shiny app.
+#'
+#' @param viewer Passed to \code{shiny::runGadget}, controls presentation of the app.
 #'
 #' @export
 run_as_gadget <- function(app, viewer=shiny::dialogViewer("Gadget")) {
@@ -180,7 +191,23 @@ run_as_gadget <- function(app, viewer=shiny::dialogViewer("Gadget")) {
 #'
 #' @param callback Function to produce the plot. In shiny_plot, this takes one argument, "env" (see composable_shiny_app). In shiny_plot_server, it takes no arguements.
 #'
+#' @param width Default plot width.
+#'
+#' @param height Default plot height.
+#'
+#' @param dlname Filename (without extension) if plot is downloaded.
+#'
+#' @param prefix Prefix for variables in environment for composable shiny app.
+#'
 #' @param ... Extra arguments to shiny_plot and shiny_plot_ui are passed on to plotOutput, for example brushing options.
+#'
+#' @param id Id for shiny module.
+#'
+#' @param input Supplied by shiny::callModule.
+#'
+#' @param output Supplied by shiny::callModule.
+#'
+#' @param session Supplied by shiny::callModule.
 #'
 #' @return shiny_plot() returns a composable shiny.appobj.
 #'

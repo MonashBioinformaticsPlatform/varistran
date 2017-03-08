@@ -2,10 +2,19 @@
 % Please edit documentation in R/grid_util.R
 \name{ordering_grob}
 \alias{ordering_grob}
-\title{orderingGrob}
+\title{Grob to display an ordering as a dendrogram.}
 \usage{
 ordering_grob(ordering, transpose = FALSE, mirror = FALSE,
   hint_size = unit(5, "lines"))
+}
+\arguments{
+\item{ordering}{An ordering produced by the \code{make_ordering} function.}
+
+\item{transpose}{Show a horizontal rather than a vertical dendrogram.}
+
+\item{mirror}{Should the leaves point left rather than right (down rather than up if \code{transpose=TRUE})?}
+
+\item{hint_size}{Width (height if \code{transpose=TRUE}).}
 }
 \description{
 Display the dendrogram of an ordering, as a grid grob.

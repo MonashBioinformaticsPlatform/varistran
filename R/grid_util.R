@@ -48,6 +48,14 @@ print.varistran_grob <- function(x, newpage=TRUE, ...) {
 #'
 #' Give a grob a margin, and size hints for layout, and make it print()-able.
 #'
+#' @param grob to wrap.
+#'
+#' @param width Size hint.
+#' 
+#' @param height Size hint.
+#'
+#' @param pad Padding to place around \code{grob}.
+#'
 #' @export
 varistran_grob <- function(
         grob,
@@ -78,9 +86,17 @@ varistran_grob <- function(
     )
 }
 
-#' orderingGrob
+#' Grob to display an ordering as a dendrogram.
 #'
 #' Display the dendrogram of an ordering, as a grid grob.
+#'
+#' @param ordering An ordering produced by the \code{make_ordering} function.
+#'
+#' @param transpose Show a horizontal rather than a vertical dendrogram.
+#'
+#' @param mirror Should the leaves point left rather than right (down rather than up if \code{transpose=TRUE})?
+#'
+#' @param hint_size Width (height if \code{transpose=TRUE}).
 #'
 #' @seealso \code{\link{make_ordering}}
 #'
@@ -132,19 +148,35 @@ ordering_grob <- function(ordering, transpose=FALSE, mirror=FALSE, hint_size=uni
 }
 
 
+#' A palette from cool to hot.
+#'
 #' @export
 unsigned_colors <- hsv(
     h=seq(0.95,1.15, length.out=256)%%1.0,
     v=seq(0,1, length.out=256)**0.5,
     s=seq(1,0,length.out=256)**0.5)
 
+
+#' A red-blue palette suitable for signed data.
+#'
 #' @export
 signed_colors <- hsv(
     h=(sign(seq(-1.0,1.0, length.out=256))*0.2+0.8)%%1.0,
     v=1,
     s=abs(seq(-1,1,length.out=256)))
 
-
+#' A grob for heatmaps.
+#'
+#' @param data Matrix of data to display.
+#'
+#' @param signed Should a signed palette be used?
+#'
+#' @param legend_title Title for legend grob.
+#'
+#' @param vp_name Viewport name for heatmap grob. This is useful if you will need to refer to the grob later, for example for interaction.
+#'
+#' @return A list containing a heatmap grob and associated legend grob.
+#'
 #' @export
 heatmap_grob <- function(data, signed=TRUE, legend_title="", vp_name=NULL) {
     if (signed) {
@@ -206,7 +238,20 @@ heatmap_grob <- function(data, signed=TRUE, legend_title="", vp_name=NULL) {
     )
 }
 
-
+#' A collection of horizontal labels which shrink if they get too small.
+#'
+#' @param label Vector of labels.
+#'
+#' @param x Vector of x positions.
+#'
+#' @param y Vector of y positions.
+#'
+#' @param just Text justification.
+#'
+#' @param max_width Maximum width of labels (defaults to units of lines).
+#'
+#' @param ... Further arguments to \code{grob}.
+#'
 #' @export
 shrinktext_grob <- function(label,x,y,just,max_width=20,...) {
     if (is.numeric(max_width))
@@ -240,6 +285,18 @@ drawDetails.shrinktext_grob <- function(x, recording) {
 }
 
 
+#' A collection of vertical labels which shrink if they get too small.
+#'
+#' @param label Vector of labels.
+#'
+#' @param x Vector of x positions.
+#'
+#' @param y Vector of y positions.
+#'
+#' @param just Text justification.
+#'
+#' @param ... Further arguments to \code{grob}.
+#'
 #' @export
 vertical_shrinktext_grob <- function(label,x,y,just,...) {
     grob(label=label,x=x,y=y,just=just,...,cl="vertical_shrinktext_grob")

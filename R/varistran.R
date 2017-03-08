@@ -3,7 +3,7 @@
 #
 #' @importFrom grDevices axisTicks dev.off pdf png postscript
 #' @importFrom stats as.dendrogram dist hclust is.leaf optimize order.dendrogram sd
-#' @importFrom graphics par
+#' @importFrom graphics par plot.new
 
 
 # asinh(ab) / log(2) + const, behaving as log2(a) in the limit as a -> large
@@ -12,7 +12,6 @@
     log2(ab+sqrt(1+ab*ab)) - log2(b) - 1
 }
 
-#' @export
 vst_methods <- list(
     naive.poisson = list(
         description      = "Naive Poisson Variance Stabilizing Transformation.",

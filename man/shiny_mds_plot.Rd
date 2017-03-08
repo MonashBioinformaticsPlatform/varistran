@@ -6,6 +6,13 @@
 \usage{
 shiny_mds_plot(x, sample_labels = NULL, prefix = "")
 }
+\arguments{
+\item{x}{Transformed matrix.}
+
+\item{sample_labels}{Sample labels.}
+
+\item{prefix}{Prefix for variables in environment for composable shiny app.}
+}
 \description{
 Shiny wrapper for limma's MDS plot
 }

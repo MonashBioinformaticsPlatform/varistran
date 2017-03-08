@@ -3,7 +3,6 @@
 # Represent an ordering, primarily for heatmaps
 #
 
-#' @export
 dendrogram_paths <- function(dend) {
    if (is.leaf(dend)) {
        ''
@@ -16,7 +15,16 @@ dendrogram_paths <- function(dend) {
    }
 }
 
-
+#' Make an object representing an ordering, usually from a hierarchical clustering.
+#' 
+#' Performs hierarchical clustering, and then further refines the order using the seriation library.
+#'
+#' @param mat Matrix suitably transformed so distances between rows are meaningful.
+#'
+#' @param enable If false, don't perform clustering.
+#'
+#' @param fast If true, just order rows with a simple one dimensional PCA.
+#'
 #' @export
 make_ordering <- function(mat, enable=TRUE, fast=FALSE) {
     # Note: paths are given ordered by order
@@ -57,3 +65,4 @@ make_ordering <- function(mat, enable=TRUE, fast=FALSE) {
              paths = dendrogram_paths(dend_mat))
     }
 }
+
