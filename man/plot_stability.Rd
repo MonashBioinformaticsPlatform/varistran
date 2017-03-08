@@ -32,4 +32,3 @@ Mean residual standard deviation is plotted against mean count.
 \author{
 Paul Harrison
 }
-

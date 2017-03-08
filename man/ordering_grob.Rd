@@ -13,4 +13,3 @@ Display the dendrogram of an ordering, as a grid grob.
 \seealso{
 \code{\link{make_ordering}}
 }
-

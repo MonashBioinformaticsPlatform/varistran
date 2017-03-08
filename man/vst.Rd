@@ -67,11 +67,10 @@ If "design" also isn't given, a linear model containing only an intercept
 term is used. This may lead to an over-estimate of the dispersion, so do
 give a design if possible.
 }
-\author{
-Paul Harrison
-}
 \references{
 Anscombe, F.J. (1948) "The transformation of Poisson, binomial,
 and negative-binomial data", Biometrika 35 (3-4): 246-254
 }
-
+\author{
+Paul Harrison
+}

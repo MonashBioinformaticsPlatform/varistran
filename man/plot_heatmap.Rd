@@ -39,4 +39,3 @@ Clustering is performed using the "seriation" package, and is approximately a Tr
 \author{
 Paul Harrison.
 }
-

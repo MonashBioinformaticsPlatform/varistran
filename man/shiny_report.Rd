@@ -41,4 +41,3 @@ if (interactive())
 \author{
 Paul Harrison
 }
-

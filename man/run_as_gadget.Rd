@@ -9,4 +9,3 @@ run_as_gadget(app, viewer = shiny::dialogViewer("Gadget"))
 \description{
 Run a composable shiny app as a gadget
 }
-

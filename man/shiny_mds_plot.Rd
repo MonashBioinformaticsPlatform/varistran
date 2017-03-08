@@ -9,4 +9,3 @@ shiny_mds_plot(x, sample_labels = NULL, prefix = "")
 \description{
 Shiny wrapper for limma's MDS plot
 }
-

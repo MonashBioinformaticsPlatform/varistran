@@ -26,4 +26,3 @@ Note that the results given are for an average sample. Where library sizes diffe
 \description{
 Advise how VST will transform data
 }
-

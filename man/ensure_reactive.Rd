@@ -22,4 +22,3 @@ A Shiny reactive value.
 \description{
 This is used to allow parameters to Shiny functions to be optionally reactive.
 }
-

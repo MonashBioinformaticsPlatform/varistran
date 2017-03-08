@@ -58,4 +58,3 @@ print( varistran::plot_biplot(y) )
 \author{
 Paul Harrison
 }
-

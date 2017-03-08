@@ -36,4 +36,3 @@ Unlike a normal Shiny app, the server function is passed an environment, "env". 
 \author{
 Paul Harrison
 }
-

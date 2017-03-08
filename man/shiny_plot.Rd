@@ -2,8 +2,8 @@
 % Please edit documentation in R/shiny_util.R
 \name{shiny_plot}
 \alias{shiny_plot}
-\alias{shiny_plot_server}
 \alias{shiny_plot_ui}
+\alias{shiny_plot_server}
 \title{Shiny plot.}
 \usage{
 shiny_plot(callback = NULL, width = 500, height = 500, dlname = "plot",
@@ -33,7 +33,7 @@ shiny_plot is the varistran-style composable app object. shiny_plot_ui and shiny
 
 \item \code{shiny_plot_server}: server part of Shiny module, to be invoked from a server function with callModule.
 }}
+
 \author{
 Paul Harrison
 }
-
