@@ -2,11 +2,11 @@
 
 Varistran is an R package providing a Variance Stabilizing Transformation appropriate for RNA-Seq data, and a variety of diagnostic plots based on such transformation.
 
+* [Function reference](http://logarithmic.net/varistran/reference/index.html)
+
 * [Online demo](http://rnasystems.erc.monash.edu:3838/pfh/2015/demo-varistran)
 
 * [A slideshow describing Varistran](http://rnasystems.erc.monash.edu:3838/pfh/2016/varistran/)
-
-* [Function reference](http://logarithmic.net/varistran/reference/index.html)
 
 * [Poster for ABACBS 2015](doc/varistran-poster-abacbs-2015.pdf) [(on F1000, doi: 10.7490/f1000research.1110757.1)](http://f1000research.com/posters/4-1041)
 
@@ -44,7 +44,7 @@ y <- varistran::vst(counts, design=design)
 
 By default, Anscombe's variance stabilizing transformation for the negative binomial distribution is used. This behaves like log2 for large counts (log2 Counts-Per-Million if `cpm=T` is given).
 
-An appropraite dispersion is estimated with the aid of the design matrix. (If omitted, this defaults to a column of ones, for blind estimation of the dispersion. This might slightly over-estimate the dispersion. A third possibility is to estimate the dispersion with edgeR.)
+An appropraite dispersion is estimated with the aid of the design matrix. If omitted, this defaults to a column of ones, for blind estimation of the dispersion. This might slightly over-estimate the dispersion. A third possibility is to estimate the dispersion with edgeR.
 
 ### Diagnostic plots
 
@@ -84,7 +84,7 @@ varistran::shiny_report(counts=counts)
 * [Online demo](http://rnasystems.erc.monash.edu:3838/pfh/2015/demo-varistran)
 
 
-### Tests
+## Test suite
 
 After downloading the source code, a suite of tests can be run with:
 
@@ -100,3 +100,5 @@ Outputs are places in a directory called `test_output`.
 * [Monash Bioinformatics Platform, Monash University](https://platforms.monash.edu/bioinformatics)
 
 * [RNA Systems Laboratory, Monash University](http://rnasystems.erc.monash.edu)
+
+
