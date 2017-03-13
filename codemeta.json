@@ -1,0 +1,23 @@
+{
+  "@context": "https://raw.githubusercontent.com/mbjones/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "0000-0002-3980-268X",
+      "@type": "Person",
+      "email": "paul.harrison@monash.edu",
+      "name": "Paul Harrison",
+      "affiliation": "Monash Bioinformatics Platform, Monash University"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/MonashBioinformaticsPlatform/varistran",
+  "datePublished": "2017-03-13",
+  "dateModified": "2017-03-13",
+  "dateCreated": "2017-03-13",
+  "description": "Anscombe's variance stabilizing transformation for RNA-seq gene expression data.",
+  "keywords": "RNA-seq, gene expression, variance stabilizing transformation, R package",
+  "license": "LGPL v2.1",
+  "title": "Varistran",
+  "version": "v1.0.1"
+}

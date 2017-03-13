@@ -1,7 +1,7 @@
 ---
 title: "Varistran: Anscombe's variance stabilizing transformation for RNA-seq gene expression data"
 tags:
-  - RNA-Seq
+  - RNA-seq
   - gene expression
   - variance stabilizing transformation
   - R package
