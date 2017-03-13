@@ -1,10 +1,9 @@
 
 # Simulate installation
-#if (!("installed" %in% commandArgs(trailingOnly=TRUE))) {
-#    system("development/pre-commit")
-#    devtools::load_all(export_all=FALSE)
-#    detach("package:varistran")
-#}
+if (!("installed" %in% commandArgs(trailingOnly=TRUE))) {
+    devtools::load_all(export_all=FALSE)
+    detach("package:varistran")
+}
 
 library("ggplot2")
 library("scales")
