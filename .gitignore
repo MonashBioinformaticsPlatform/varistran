@@ -21,6 +21,6 @@ vignettes/*.pdf
 test_output/
 
 # generated documentation
-varistran.pdf
+docs
 .Rproj.user
 

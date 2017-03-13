@@ -1,0 +1,24 @@
+
+templates:
+  params:
+    bootswatch: cerulean
+
+navbar:
+    right:
+    - icon: fa-github
+      href: https://github.com/MonashBioinformaticsPlatform/varistran
+
+reference:
+  - title: Main functions
+    contents:
+      - vst
+      - shiny_report
+
+  - title: Support functions
+    contents:
+      - matches("")
+    exclude:
+      - vst
+      - shiny_report
+
+

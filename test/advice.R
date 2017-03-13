@@ -1,4 +1,3 @@
-
 source("test/common.R")
 
 bottomly.eset <- load_bottomly()

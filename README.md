@@ -6,7 +6,7 @@ Varistran is an R package providing a Variance Stabilizing Transformation approp
 
 * [A slideshow describing Varistran](http://rnasystems.erc.monash.edu:3838/pfh/2016/varistran/)
 
-* [Package documentation (PDF)](http://rnasystems.erc.monash.edu/doc/varistran.pdf)
+* [Function reference](http://logarithmic.net/varistran/reference/index.html)
 
 * [Poster for ABACBS 2015](doc/varistran-poster-abacbs-2015.pdf) [(on F1000, doi: 10.7490/f1000research.1110757.1)](http://f1000research.com/posters/4-1041)
 
@@ -82,6 +82,17 @@ varistran::shiny_report(counts=counts)
 ```
 
 * [Online demo](http://rnasystems.erc.monash.edu:3838/pfh/2015/demo-varistran)
+
+
+### Tests
+
+After downloading the source code, a suite of tests can be run with:
+
+```
+make test
+```
+
+Outputs are places in a directory called `test_output`.
 
 
 ## Links
