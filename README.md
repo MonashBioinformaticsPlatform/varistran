@@ -92,7 +92,7 @@ After downloading the source code, a suite of tests can be run with:
 make test
 ```
 
-Outputs are places in a directory called `test_output`.
+Outputs are placed in a directory called `test_output`.
 
 
 ## Links
