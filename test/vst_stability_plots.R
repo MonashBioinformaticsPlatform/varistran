@@ -126,6 +126,7 @@ if (T) {
     counts <- exprs(bottomly.eset)
     counts <- counts[rowSums(counts) >= 1, ]
     strain <- phenoData(bottomly.eset)$strain
+    strain <- gsub("/", "_", strain)
     experiment.number <- factor( phenoData(bottomly.eset)$experiment.number )
     design <- model.matrix(~ strain + experiment.number)
 
