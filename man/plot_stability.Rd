@@ -28,6 +28,8 @@ against mean count.
 \details{
 Genes are partitioned evenly into "bins" bins by average expression level.
 Mean residual standard deviation is plotted against mean count.
+
+If the variance stabilizing transformation has been successful, this plot should be close to a horizontal line. However it is normal for the standard deviation to drop off for counts below 5.
 }
 \author{
 Paul Harrison

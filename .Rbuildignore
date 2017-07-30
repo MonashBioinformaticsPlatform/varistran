@@ -1,0 +1,14 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^Makefile$
+^development$
+^doc$
+^test$
+^test_output$
+^paper
+^_pkgdown.yml$
+^index.md$
+^codemeta.json$
+^docs$
+^varistran.sublime-
+

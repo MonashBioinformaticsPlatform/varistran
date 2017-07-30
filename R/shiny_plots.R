@@ -47,7 +47,8 @@ shiny_stability <- function(y, x=NULL, design=NULL, bins=20, prefix="") {
             "It shows the amount of noise in the transformed data ",
             "across different expression levels. ",
             "If the transformation has been successful, ",
-            "this should be close to a flat line."
+            "this should be close to a flat line.",
+            "However the standard deviation will usually drop off for mean counts below 5."
             ),
         parenthetically("This plot is produced by varistran::plot_stability.")
     )
