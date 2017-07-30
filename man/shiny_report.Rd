@@ -2,7 +2,7 @@
 % Please edit documentation in R/shiny_report.R
 \name{shiny_report}
 \alias{shiny_report}
-\title{Shiny report.}
+\title{Shiny report}
 \usage{
 shiny_report(y = NULL, counts = NULL, sample_labels = NULL,
   feature_labels = NULL, prefix = "")
@@ -31,7 +31,8 @@ Produce an interactive Shiny report showing diagnostic plots of transformed coun
 \examples{
 
 # Generate some random data.
-counts <- matrix(rnbinom(1000, size=1/0.01, mu=100), ncol=10)
+means <- runif(100,min=0,max=1000)
+counts <- matrix(rnbinom(1000, size=1/0.01, mu=rep(means,10)), ncol=10)
 
 y <- varistran::vst(counts)
 if (interactive())

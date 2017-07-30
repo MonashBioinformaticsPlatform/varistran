@@ -6,7 +6,8 @@
 \usage{
 plot_heatmap(y, cluster_samples = FALSE, cluster_features = TRUE,
   sample_labels = NULL, feature_labels = NULL, baseline = NULL,
-  baseline_label = "row\\nmean", scale_label = "difference from\\nrow mean")
+  baseline_label = "row\\nmean", scale_label = "difference from\\nrow mean",
+  n = Inf)
 }
 \arguments{
 \item{y}{A matrix of expression levels, such as a transformed counts matrix.}
@@ -24,6 +25,8 @@ plot_heatmap(y, cluster_samples = FALSE, cluster_features = TRUE,
 \item{baseline_label}{Text description of what the baseline is.}
 
 \item{scale_label}{Text description of what the heatmap colors represent (after baseline is subtracted).}
+
+\item{n}{Show only this many rows. Rows are selected in order of greatest span of expression level.}
 }
 \value{
 A grid grob. print()-ing this value will cause it to be displayed.

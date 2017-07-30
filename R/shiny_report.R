@@ -228,7 +228,7 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
 }
 
 
-#' Shiny report.
+#' Shiny report
 #'
 #' Produce an interactive Shiny report showing diagnostic plots of transformed counts.
 #'
@@ -253,7 +253,8 @@ shiny_filter <- function(y, counts=NULL, sample_labels=NULL, feature_labels=NULL
 #' @examples
 #'
 #' # Generate some random data.
-#' counts <- matrix(rnbinom(1000, size=1/0.01, mu=100), ncol=10)
+#' means <- runif(100,min=0,max=1000)
+#' counts <- matrix(rnbinom(1000, size=1/0.01, mu=rep(means,10)), ncol=10)
 #'
 #' y <- varistran::vst(counts)
 #' if (interactive())

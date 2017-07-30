@@ -13,6 +13,7 @@
 #' @param baseline Baseline level for each row, to be subtracted when drawing the heatmap colors. If omitted, the row mean will be used.
 #' @param baseline_label Text description of what the baseline is.
 #' @param scale_label Text description of what the heatmap colors represent (after baseline is subtracted).
+#' @param n Show only this many rows. Rows are selected in order of greatest span of expression level.
 #'
 #' @return A grid grob. print()-ing this value will cause it to be displayed.
 #'
@@ -28,7 +29,8 @@ plot_heatmap <- function(
         feature_labels=NULL,
         baseline=NULL,
         baseline_label="row\nmean",
-        scale_label="difference from\nrow mean") {
+        scale_label="difference from\nrow mean",
+        n=Inf) {
     y <- as.matrix(y)
 
     if (is.null(sample_labels) && !is.null(colnames(y)))
@@ -52,7 +54,20 @@ plot_heatmap <- function(
         means <- baseline
     else
         means <- rowMeans(y, na.rm=TRUE)
-        
+
+
+    # Show only a subset of rows, if desired
+    if (n < nrow(y)) {    
+        y_span <- apply(y,1,max) - apply(y,1,min)
+        selection <- rep(FALSE,nrow(y))
+        selection[ order(-y_span)[ seq_len(n) ] ] <- TRUE
+
+        y <- y[selection,,drop=FALSE]
+        feature_labels <- feature_labels[selection]
+        means <- means[selection]
+    }
+
+
     y_centered <- y - means
     
     y_scaled <- y_centered / sqrt(rowMeans(y_centered*y_centered, na.rm=TRUE))

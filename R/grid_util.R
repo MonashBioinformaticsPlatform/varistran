@@ -105,7 +105,7 @@ ordering_grob <- function(ordering, transpose=FALSE, mirror=FALSE, hint_size=uni
     if (is.null(ordering$dendrogram))
         return(nullGrob())
 
-    dd <- ggdendro::dendro_data(ordering$dendrogram)
+    dd <- dendro_data(ordering$dendrogram)
     dds <- dd$segments
     x0 <- dd$segments$x
     x1 <- dd$segments$xend

@@ -67,6 +67,18 @@ If "design" also isn't given, a linear model containing only an intercept
 term is used. This may lead to an over-estimate of the dispersion, so do
 give a design if possible.
 }
+\examples{
+
+# Generate some random data.
+means <- runif(100,min=0,max=1000)
+counts <- matrix(rnbinom(1000, size=1/0.01, mu=rep(means,10)), ncol=10)
+
+y <- varistran::vst(counts)
+
+# Information about the transformation
+varistran::vst_advice(y)
+
+}
 \references{
 Anscombe, F.J. (1948) "The transformation of Poisson, binomial,
 and negative-binomial data", Biometrika 35 (3-4): 246-254

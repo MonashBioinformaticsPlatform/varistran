@@ -10,19 +10,21 @@ Description: Transform RNA-Seq count data so that variance due to biological
 Authors@R: person("Paul", "Harrison", email = "paul.harrison@monash.edu", role = c("aut", "cre"))
 Maintainer: Paul Harrison <paul.harrison@monash.edu>
 URL: https://github.com/MonashBioinformaticsPlatform/varistran
-Version: 1.0.1
+Version: 1.0.2
 License: LGPL-2.1 | file LICENSE
 Depends:
     grid
 Imports:
     MASS,
     ggplot2,
-    ggdendro,
     shiny,
     miniUI,
     seriation,
     gridBase
 Suggests:
     edgeR,
-    limma
+    limma,
+    DESeq2,
+    biomaRt,
+    NBPSeq
 RoxygenNote: 6.0.1

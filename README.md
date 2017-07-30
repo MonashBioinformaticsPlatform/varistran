@@ -36,6 +36,23 @@ Varistran also uses various CRAN packages, which will be installed automatically
 
 I intend to keep adding features to Varistran. Therefore, I recommend using its functions via `varistran::` rather than attaching its namespace with `library(varistran)`.
 
+The examples below use the [Bottomly dataset](http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bottomly_eset.RData) available from [ReCount](http://bowtie-bio.sourceforge.net/recount/).
+
+```
+library(Biobase)
+
+download.file("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bottomly_eset.RData", 
+              "bottomly_eset.RData")
+
+load("bottomly_eset.RData")
+
+counts <- exprs(bottomly.eset)
+
+strain <- phenoData(bottomly.eset)$strain
+experiment.number <- factor( phenoData(bottomly.eset)$experiment.number )
+design <- model.matrix(~ strain + experiment.number)
+```
+
 Say you have a count matrix `counts` and a design matrix `design`. To perform a variance stabilizing transformation:
 
 ```
@@ -48,7 +65,7 @@ An appropraite dispersion is estimated with the aid of the design matrix. If omi
 
 ### Diagnostic plots
 
-`plot_stability` allows assessment of how well the variance has been stabilized:
+`plot_stability` allows assessment of how well the variance has been stabilized. Ideally this will produce a horizontal line, but counts below 5 will always show a drop off in variance.
 
 ```
 varistran::plot_stability(y, counts, design=design)
@@ -63,6 +80,10 @@ varistran::plot_biplot(y)
 <img src="doc/biplot-example.png" height="300">
 
 `plot_heatmap` draws a heatmap.
+
+```
+varistran::plot_heatmap(y, n=50)
+```
 
 <img src="doc/heatmap-example.png" height="300">
 
@@ -86,7 +107,7 @@ varistran::shiny_report(counts=counts)
 
 ## Test suite
 
-After downloading the source code, a suite of tests can be run with:
+Download the source code, and ensure that the Bioconductor packages in the "Suggests:" field of the DESCRIPTION file are installed. Then a suite of tests can be run with:
 
 ```
 make test
