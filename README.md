@@ -117,9 +117,9 @@ Outputs are placed in a directory called `test_output`.
 
 Sources of data used in these tests are:
 
-* The [Bottomly dataset](http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bottomly_eset.RData) from [ReCount](http://bowtie-bio.sourceforge.net/recount/).
+* The [Bottomly dataset](http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bottomly_eset.RData) from [ReCount](http://bowtie-bio.sourceforge.net/recount/) (Frazee, Langmead and Leek, 2011).
 
-* The "arab" dataset provided in the [NBPSeq package](https://cran.rstudio.com/web/packages/NBPSeq/index.html).
+* The "arab" dataset provided in the [NBPSeq package](https://cran.rstudio.com/web/packages/NBPSeq/index.html) (Di et al, 2011).
 
 * Simulated data following negative binomial distributions.
 
@@ -128,9 +128,9 @@ Dispersion estimates are compared to those calculated by the [edgeR biocnoductor
 
 ## Supporting/contributing
 
-Please email questions about using this software to the author [paul.harrison@monash.edu](email:paul.harrison@monash.edu).
+Please email questions about using this software to the author, <paul.harrison@monash.edu>.
 
-Please file bug reports and feature requests by [filing a bug report](https://github.com/MonashBioinformaticsPlatform/varistran/issues), or by [contacting the author](email:paul.harrison@monash.edu).
+Please file bug reports and feature requests by [filing a bug report](https://github.com/MonashBioinformaticsPlatform/varistran/issues), or by contacting the author.
 
 Pull requests gratefully considered.
 
@@ -145,6 +145,10 @@ Pull requests gratefully considered.
 ## References
 
 Anscombe, Francis J. 1948. "The Transformation of Poisson, Binomial and Negative-Binomial Data." *Biometrika* 35 (3/4): 246–54.
+
+Di, Yamming, Daniel W. Schafer, Jason S. Cumbie and Jeff H. Chang. 2011. "The NBP Negative Binomial Model for Assessing Differential Gene Expression from RNA-Seq" *Statistical Applications in Genetics and Molecular Biology* 10 (1). doi:10.2202/1544-6115.1637
+
+Frazee, Alyssa C., Ben Langmead and Jeffrey T. Leek. 2011. "ReCount: A multi-experiment resource of analysis-ready RNA-seq gene count datasets." *BMC Bioinformatics* 12: 449. doi:10.1186/1471-2105-12-449
 
 Love, Michael I., Wolfgang Huber and Simon Anders. 2014. "Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2." *Genome Biology* 15 (12): 550. doi:10.1186/s13059-014-0550-8
 
