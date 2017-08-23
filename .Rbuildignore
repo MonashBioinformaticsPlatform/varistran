@@ -12,3 +12,4 @@
 ^docs$
 ^varistran.sublime-
 
+^_pkgdown\.yml$
