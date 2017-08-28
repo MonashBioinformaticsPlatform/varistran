@@ -145,7 +145,7 @@ Pull requests gratefully considered.
 
 ## Citing Varistran
 
-Please cite:
+To cite this R package, use:
 
 > Harrison, Paul F. 2017. "Varistran: Anscombe's variance stabilizing transformation for RNA-seq gene expression data." *The Journal of Open Source Software* 2 (16). [doi:10.21105/joss.00257](http://dx.doi.org/10.21105/joss.00257)
 
