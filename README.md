@@ -143,6 +143,13 @@ Pull requests gratefully considered.
 * [RNA Systems Laboratory, Monash University](http://rnasystems.erc.monash.edu)
 
 
+## Citing Varistran
+
+Please cite:
+
+> Harrison, Paul F. 2017. "Varistran: Anscombe's variance stabilizing transformation for RNA-seq gene expression data." *The Journal of Open Source Software* 2 (16). [doi:10.21105/joss.00257](http://dx.doi.org/10.21105/joss.00257)
+
+
 ## References
 
 Anscombe, Francis J. 1948. "The Transformation of Poisson, Binomial and Negative-Binomial Data." *Biometrika* 35 (3/4): 246–54.
