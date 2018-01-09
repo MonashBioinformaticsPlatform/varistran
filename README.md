@@ -12,6 +12,8 @@ Varistran is an R package providing a Variance Stabilizing Transformation approp
 
 Varistran is developed by Paul Harrison (paul.harrison@monash.edu, [@paulfharrisson](https://twitter.com/paulfharrison)) for the [Monash Bioinformatics platform](https://platforms.monash.edu/bioinformatics/).
 
+<a href="https://platforms.monash.edu/bioinformatics/"><img src="MBP-logo.png"></a>
+
 ## Install
 
 Varistran is most easily installed from GitHub using devtools:
