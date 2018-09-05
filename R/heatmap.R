@@ -3,9 +3,15 @@
 #'
 #' Produces a heatmap as a grid grob.
 #'
-#' Clustering is performed using the "seriation" package, and is approximately a Travelling Salesman Problem ordering. If there are many features (more than a couple of thousand) clustering may be slow.
+#' This heatmap differs from other heatmaps in R in the method of clustering used:
 #'
-#' @param y A matrix of expression levels, such as a transformed counts matrix.
+#' 1. The distances used are cosine distances (i.e. the magnitude of log fold changes is not important, only the pattern).
+#'
+#' 2. \code{hclust()} is used to produce a clustering, as normal.
+#'
+#' 3. Branches in the hierarchical clustering are flipped to minimize sharp changes between neighbours, using the seriation package's OLO (Optimal Leaf Ordering) method.
+#'
+#' @param y A matrix of expression levels, such as a transformed counts matrix as produced by \code{varistran::vst}.
 #' @param cluster_samples Should samples (columns) be clustered?
 #' @param cluster_features Should features (rows) be clustered?
 #' @param sample_labels Names for each sample. If not given and y has column names, these will be used instead.
@@ -19,6 +25,15 @@
 #'
 #' Additionally $info$row_order will contain row ordering and $info$col_order will contain column ordering.
 #' @author Paul Harrison.
+#'
+#' @examples
+#'
+#' # Generate some random data.
+#' counts <- matrix(rnbinom(1000, size=1/0.01, mu=100), ncol=10)
+#'
+#' y <- varistran::vst(counts, cpm=TRUE)
+#' print( varistran::plot_heatmap(y, n=20) )
+#'
 #'
 #' @export
 plot_heatmap <- function(
