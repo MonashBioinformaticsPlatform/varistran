@@ -1,4 +1,11 @@
 
+1.0.3
+=====
+
+Increase robustness of heatmap to missing values.
+
+Baseline plot is not shown in heatmap if all zero.
+
 1.0.2
 =====
 

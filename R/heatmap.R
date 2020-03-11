@@ -58,7 +58,8 @@ plot_heatmap <- function(
 
     # Show only a subset of rows, if desired
     if (n < nrow(y)) {    
-        y_span <- apply(y,1,max) - apply(y,1,min)
+        y_span <- apply(y,1,max,-Inf,na.rm=TRUE) - apply(y,1,min,Inf,na.rm=TRUE)
+        y_span[ !is.finite(y_span) ] <- -Inf
         selection <- rep(FALSE,nrow(y))
         selection[ order(-y_span)[ seq_len(n) ] ] <- TRUE
 
@@ -91,25 +92,40 @@ plot_heatmap <- function(
         legend_title=paste0(scale_label),
         vp_name="heatmap")
 
-    mean_range <- range(means)
-    if (mean_range[2] == mean_range[1]) mean_range[2] <- mean_range[2]+1
-    mean_graph <- rectGrob(
-        x=rep(mean_range[1],nrow(y)),
-        y=seq_len(nrow(y))-1,
-        width=means[row_order$order]-mean_range[1],
-        height=rep(1,nrow(y)),
-        just=c(0,0),
-        default.units="native",
-        vp=viewport(xscale=mean_range,yscale=c(0,nrow(y)))
-    )
-    mean_axis <- xaxisGrob(
-        at=axisTicks(mean_range,log=FALSE,nint=3),
-        label=TRUE,
-        vp=viewport(width=1,height=0,y=1,xscale=mean_range),
-        gp=gpar(cex=0.75)
-    )
-    mean_label <- textGrob(baseline_label)
-
+    mean_range <- range(means, na.rm=TRUE)
+    
+    need_means <- mean_range[1] != 0 || mean_range[2] != 0
+    
+    if (mean_range[2] == mean_range[1]) 
+        mean_range[2] <- mean_range[2]+1
+    
+    if (need_means) {
+        mean_graph <- rectGrob(
+            x=rep(mean_range[1],nrow(y)),
+            y=seq_len(nrow(y))-1,
+            width=means[row_order$order]-mean_range[1],
+            height=rep(1,nrow(y)),
+            just=c(0,0),
+            default.units="native",
+            vp=viewport(xscale=mean_range,yscale=c(0,nrow(y)))
+        )
+        mean_axis <- xaxisGrob(
+            at=axisTicks(mean_range,log=FALSE,nint=3),
+            label=TRUE,
+            vp=viewport(width=1,height=0,y=1,xscale=mean_range),
+            gp=gpar(cex=0.75)
+        )
+        mean_label <- textGrob(baseline_label)
+        mean_width <- unit(3,"lines")
+        mean_pad <- pad
+    } else {
+        mean_graph <- textGrob("")
+        mean_axis <- textGrob("")
+        mean_label <- textGrob("")
+        mean_width <- unit(0,"lines")
+        mean_pad <- 0
+    }
+    
     feature_label_grob <- shrinktext_grob(
         feature_labels[row_order$order],
         x=rep(0,nrow(y)),
@@ -129,15 +145,15 @@ plot_heatmap <- function(
     frame <- frameGrob(layout=grid.layout(nrow=3,ncol=4))
 
     frame <- packGrob(frame, varistran_grob(col_ordering_grob,height="inherit",pad=pad), row=1,col=2)
-    frame <- packGrob(frame, varistran_grob(mean_label,height="inherit",pad=pad), row=1,col=3)
+    frame <- packGrob(frame, varistran_grob(mean_label,height="inherit",pad=mean_pad), row=1,col=3)
 
     frame <- packGrob(frame, varistran_grob(row_ordering_grob,width="inherit",pad=pad), row=2,col=1)
     frame <- packGrob(frame, varistran_grob(heatmap$heatmap,pad=pad), row=2, col=2)
-    frame <- packGrob(frame, varistran_grob(mean_graph,width=unit(3,"lines"),pad=pad), row=2,col=3)
+    frame <- packGrob(frame, varistran_grob(mean_graph,width=mean_width,pad=mean_pad), row=2,col=3)
     frame <- packGrob(frame, varistran_grob(feature_label_grob,width="inherit",pad=pad), row=2,col=4)
 
     frame <- packGrob(frame, varistran_grob(sample_label_grob,height="inherit",pad=pad), row=3,col=2)
-    frame <- packGrob(frame, varistran_grob(mean_axis,height=unit(3,"lines"),pad=pad), row=3,col=3)
+    frame <- packGrob(frame, varistran_grob(mean_axis,height=unit(3,"lines"),pad=mean_pad), row=3,col=3)
 
     outer <- frameGrob()
     outer <- packGrob(outer, varistran_grob(frame), row=1,col=1)
