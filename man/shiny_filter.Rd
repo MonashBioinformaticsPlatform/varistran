@@ -4,8 +4,13 @@
 \alias{shiny_filter}
 \title{Shiny component to filter rows and columns a matrix.}
 \usage{
-shiny_filter(y, counts = NULL, sample_labels = NULL,
-  feature_labels = NULL, prefix = "")
+shiny_filter(
+  y,
+  counts = NULL,
+  sample_labels = NULL,
+  feature_labels = NULL,
+  prefix = ""
+)
 }
 \arguments{
 \item{y}{Transformed matrix.}

@@ -4,8 +4,14 @@
 \alias{vst}
 \title{Variance Stabilizing Transformation}
 \usage{
-vst(x, method = "anscombe.nb", lib.size = NULL, cpm = FALSE,
-  dispersion = NULL, design = NULL)
+vst(
+  x,
+  method = "anscombe.nb",
+  lib.size = NULL,
+  cpm = FALSE,
+  dispersion = NULL,
+  design = NULL
+)
 }
 \arguments{
 \item{x}{A matrix of counts. Rows are genes (or other features), and columns

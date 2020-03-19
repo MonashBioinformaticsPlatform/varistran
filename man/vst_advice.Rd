@@ -4,8 +4,12 @@
 \alias{vst_advice}
 \title{Advise how VST will transform data}
 \usage{
-vst_advice(what = "anscombe.nb", dispersion = NULL, cpm = FALSE,
-  lib.size = NULL)
+vst_advice(
+  what = "anscombe.nb",
+  dispersion = NULL,
+  cpm = FALSE,
+  lib.size = NULL
+)
 }
 \arguments{
 \item{what}{Either the output of a call to vst() or the name of a VST method (see vst() help).}

@@ -4,8 +4,13 @@
 \alias{shiny_report}
 \title{Shiny report}
 \usage{
-shiny_report(y = NULL, counts = NULL, sample_labels = NULL,
-  feature_labels = NULL, prefix = "")
+shiny_report(
+  y = NULL,
+  counts = NULL,
+  sample_labels = NULL,
+  feature_labels = NULL,
+  prefix = ""
+)
 }
 \arguments{
 \item{y}{A matrix of exprssion levels, such as a transformed counts matrix.}

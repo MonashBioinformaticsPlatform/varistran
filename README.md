@@ -10,7 +10,11 @@ Varistran is an R package providing a Variance Stabilizing Transformation approp
 
 * [Poster for ABACBS 2015](doc/varistran-poster-abacbs-2015.pdf) [(on F1000, doi: 10.7490/f1000research.1110757.1)](http://f1000research.com/posters/4-1041)
 
+* [Publication in the Journal of Open Source Software](http://joss.theoj.org/papers/10.21105/joss.00257)
+
 Varistran is developed by Paul Harrison (paul.harrison@monash.edu, [@paulfharrisson](https://twitter.com/paulfharrison)) for the [Monash Bioinformatics platform](https://platforms.monash.edu/bioinformatics/).
+
+<a href="https://platforms.monash.edu/bioinformatics/"><img src="MBP-logo.png" height="88"></a>
 
 ## Install
 
@@ -141,6 +145,13 @@ Pull requests gratefully considered.
 * [Monash Bioinformatics Platform, Monash University](https://platforms.monash.edu/bioinformatics)
 
 * [RNA Systems Laboratory, Monash University](http://rnasystems.erc.monash.edu)
+
+
+## Citing Varistran
+
+To cite this R package, use:
+
+> Harrison, Paul F. 2017. "Varistran: Anscombe's variance stabilizing transformation for RNA-seq gene expression data." *The Journal of Open Source Software* 2 (16). [doi:10.21105/joss.00257](http://dx.doi.org/10.21105/joss.00257)
 
 
 ## References

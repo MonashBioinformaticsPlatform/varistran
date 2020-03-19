@@ -4,8 +4,12 @@
 \alias{varistran_grob}
 \title{Make a grob better.}
 \usage{
-varistran_grob(grob, width = unit(1, "null"), height = unit(1, "null"),
-  pad = 0)
+varistran_grob(
+  grob,
+  width = unit(1, "null"),
+  height = unit(1, "null"),
+  pad = 0
+)
 }
 \arguments{
 \item{grob}{to wrap.}

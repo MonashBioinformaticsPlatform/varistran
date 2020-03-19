@@ -6,9 +6,9 @@
 ^test$
 ^test_output$
 ^paper
-^_pkgdown.yml$
-^index.md$
-^codemeta.json$
+^index\.md$
+^codemeta\.json$
 ^docs$
-^varistran.sublime-
-
+^varistran\.sublime-
+^MBP-logo.png$
+^_pkgdown\.yml$

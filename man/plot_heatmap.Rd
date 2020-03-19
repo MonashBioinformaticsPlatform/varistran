@@ -4,13 +4,20 @@
 \alias{plot_heatmap}
 \title{Plot a heatmap.}
 \usage{
-plot_heatmap(y, cluster_samples = FALSE, cluster_features = TRUE,
-  sample_labels = NULL, feature_labels = NULL, baseline = NULL,
-  baseline_label = "row\\nmean", scale_label = "difference from\\nrow mean",
-  n = Inf)
+plot_heatmap(
+  y,
+  cluster_samples = FALSE,
+  cluster_features = TRUE,
+  sample_labels = NULL,
+  feature_labels = NULL,
+  baseline = NULL,
+  baseline_label = "row\\nmean",
+  scale_label = "difference from\\nrow mean",
+  n = Inf
+)
 }
 \arguments{
-\item{y}{A matrix of expression levels, such as a transformed counts matrix.}
+\item{y}{A matrix of expression levels, such as a transformed counts matrix as produced by \code{varistran::vst}.}
 
 \item{cluster_samples}{Should samples (columns) be clustered?}
 
@@ -20,7 +27,7 @@ plot_heatmap(y, cluster_samples = FALSE, cluster_features = TRUE,
 
 \item{feature_labels}{Names for each feature. If not given and y has row names, these will be used instead.}
 
-\item{baseline}{Baseline level for each row, to be subtracted when drawing the heatmap colors. If omitted, the row mean will be used.}
+\item{baseline}{Baseline level for each row, to be subtracted when drawing the heatmap colors. If omitted, the row mean will be used. Specify \code{baseline=0} to not subtract anything and not show a baseline bar graph.}
 
 \item{baseline_label}{Text description of what the baseline is.}
 
@@ -37,7 +44,23 @@ Additionally $info$row_order will contain row ordering and $info$col_order will 
 Produces a heatmap as a grid grob.
 }
 \details{
-Clustering is performed using the "seriation" package, and is approximately a Travelling Salesman Problem ordering. If there are many features (more than a couple of thousand) clustering may be slow.
+This heatmap differs from other heatmaps in R in the method of clustering used:
+
+1. The distances used are cosine distances (i.e. the magnitude of log fold changes is not important, only the pattern).
+
+2. \code{hclust()} is used to produce a clustering, as normal.
+
+3. Branches in the hierarchical clustering are flipped to minimize sharp changes between neighbours, using the seriation package's OLO (Optimal Leaf Ordering) method.
+}
+\examples{
+
+# Generate some random data.
+counts <- matrix(rnbinom(1000, size=1/0.01, mu=100), ncol=10)
+
+y <- varistran::vst(counts, cpm=TRUE)
+print( varistran::plot_heatmap(y, n=20) )
+
+
 }
 \author{
 Paul Harrison.

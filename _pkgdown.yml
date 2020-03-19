@@ -13,6 +13,9 @@ reference:
     contents:
       - vst
       - shiny_report
+      - plot_stability
+      - plot_biplot
+      - plot_heatmap
 
   - title: Support functions
     contents:

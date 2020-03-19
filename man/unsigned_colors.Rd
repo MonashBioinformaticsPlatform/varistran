@@ -4,7 +4,9 @@
 \name{unsigned_colors}
 \alias{unsigned_colors}
 \title{A palette from cool to hot.}
-\format{An object of class \code{character} of length 256.}
+\format{
+An object of class \code{character} of length 256.
+}
 \usage{
 unsigned_colors
 }

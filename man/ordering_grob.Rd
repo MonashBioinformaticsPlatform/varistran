@@ -4,8 +4,12 @@
 \alias{ordering_grob}
 \title{Grob to display an ordering as a dendrogram.}
 \usage{
-ordering_grob(ordering, transpose = FALSE, mirror = FALSE,
-  hint_size = unit(5, "lines"))
+ordering_grob(
+  ordering,
+  transpose = FALSE,
+  mirror = FALSE,
+  hint_size = unit(5, "lines")
+)
 }
 \arguments{
 \item{ordering}{An ordering produced by the \code{make_ordering} function.}

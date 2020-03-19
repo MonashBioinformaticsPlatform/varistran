@@ -4,7 +4,9 @@
 \name{signed_colors}
 \alias{signed_colors}
 \title{A red-blue palette suitable for signed data.}
-\format{An object of class \code{character} of length 256.}
+\format{
+An object of class \code{character} of length 256.
+}
 \usage{
 signed_colors
 }

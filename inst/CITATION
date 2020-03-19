@@ -1,0 +1,17 @@
+
+citEntry(
+    entry = "Article",
+    author = personList(as.person("Paul Francis Harrison")),
+    title = "Varistran: Anscombe's variance stabilizing transformation for {RNA}-seq gene expression data",
+    journal = "The Journal of Open Source Software",
+    year = "2017",
+    volume = "2",
+    number = "16",
+    doi = "10.21105/joss.00257",
+    url = "http://dx.doi.org/10.21105/joss.00257",
+    textVersion = paste(
+        "Paul F. Harrison (2017).",
+        "Varistran: Anscombe's variance stabilizing transformation for RNA-seq gene expression data.",
+        "The Journal of Open Source Software 2 (16).",
+        "doi:10.21105/joss.00257")
+)

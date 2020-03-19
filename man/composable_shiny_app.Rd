@@ -4,8 +4,13 @@
 \alias{composable_shiny_app}
 \title{Composable Shiny App.}
 \usage{
-composable_shiny_app(ui, server, title = NULL, enableBookmarking = "server",
-  output = NULL)
+composable_shiny_app(
+  ui,
+  server,
+  title = NULL,
+  enableBookmarking = "server",
+  output = NULL
+)
 }
 \arguments{
 \item{ui}{UI part of the Shiny app.}

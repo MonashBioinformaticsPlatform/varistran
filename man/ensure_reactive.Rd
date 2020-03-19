@@ -4,8 +4,12 @@
 \alias{ensure_reactive}
 \title{Make a value reactive if it is not already reactive.}
 \usage{
-ensure_reactive(item, name = NULL, env = NULL, default = function()
-  stop("Missing ", name))
+ensure_reactive(
+  item,
+  name = NULL,
+  env = NULL,
+  default = function() stop("Missing ", name)
+)
 }
 \arguments{
 \item{item}{Thing to ensure reactive, either an already reactive value, or a plain value, or NULL.}

@@ -4,8 +4,15 @@
 \alias{shiny_biplot}
 \title{Shiny wrapper for plot_biplot}
 \usage{
-shiny_biplot(x, sample_labels = NULL, feature_labels = NULL,
-  n_features = 20, balance = 0.25, text_size = 0.025, prefix = "")
+shiny_biplot(
+  x,
+  sample_labels = NULL,
+  feature_labels = NULL,
+  n_features = 20,
+  balance = 0.25,
+  text_size = 0.025,
+  prefix = ""
+)
 }
 \arguments{
 \item{x}{Transformed matrix.}
