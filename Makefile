@@ -1,21 +1,4 @@
 
-#
-# Release procedure
-#
-# 1. Update DESCRIPTION to new version number.
-#
-# 2. make check
-#    To update documentation and check for problems.
-#
-# 3. make publish
-#    Create and publish HTML documentation.
-#
-# 4. git commit
-#
-# 5. git tag vX.X.X
-#
-# 6. git push --tags
-#
 
 check :
 	Rscript -e "devtools::check()"
@@ -25,10 +8,6 @@ document :
 
 site : document
 	Rscript -e "pkgdown::build_site()"
-
-publish : site
-	scp -r docs/* logarithmic.net:www/varistran/
-
 
 paper.pdf : paper.md paper.bib
 	pandoc --filter pandoc-citeproc -o paper.pdf paper.md
