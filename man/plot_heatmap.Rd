@@ -13,7 +13,11 @@ plot_heatmap(
   baseline = NULL,
   baseline_label = "row\\nmean",
   scale_label = "difference from\\nrow mean",
-  n = Inf
+  n = Inf,
+  baseline_to = NULL,
+  scale_to = NULL,
+  show_baseline = TRUE,
+  show_tree = TRUE
 )
 }
 \arguments{
@@ -34,6 +38,14 @@ plot_heatmap(
 \item{scale_label}{Text description of what the heatmap colors represent (after baseline is subtracted).}
 
 \item{n}{Show only this many rows. Rows are selected in order of greatest span of expression level.}
+
+\item{baseline_to}{If provided, the scale for the row means or baseline will include this value or these values. Use this if there is some meaningful "zero" for your data.}
+
+\item{scale_to}{If provided, the heatmap color scale will include this value. Use this to provide consistency of scales between heatmaps (note values larger than scale_to will cause the scale to be extended).}
+
+\item{show_baseline}{Show baseline barplot?}
+
+\item{show_tree}{Show dendrogram tree(s)? These dendrograms arguably over-interpret the data without adding much of values, so it may be better to hide them.}
 }
 \value{
 A grid grob. print()-ing this value will cause it to be displayed.

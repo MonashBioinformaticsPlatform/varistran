@@ -51,11 +51,11 @@ shiny_plot is the varistran-style composable app object. shiny_plot_ui and shiny
 }
 \section{Functions}{
 \itemize{
-\item \code{shiny_plot_ui}: UI part of Shiny module.
+\item \code{shiny_plot_ui()}: UI part of Shiny module.
 
-\item \code{shiny_plot_server}: server part of Shiny module, to be invoked from a server function with callModule.
+\item \code{shiny_plot_server()}: server part of Shiny module, to be invoked from a server function with callModule.
+
 }}
-
 \author{
 Paul Harrison
 }

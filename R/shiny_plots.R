@@ -209,6 +209,7 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
         shiny::p("Features are selected based on span of expression levels."),
         shiny::numericInput(ns("n"), "Number of features to show", 50, min=10,max=2000,step=10),
         shiny::checkboxInput(ns("cluster_samples"), "Cluster samples", FALSE),
+        shiny::checkboxInput(ns("show_tree"), "Show tree(s)", TRUE),
         call_ui(plot$component_ui, request),
         #shiny::uiOutput(ns("selected_text")),
         parenthetically("This plot is produced by varistran::plot_heatmap.")
@@ -222,14 +223,14 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
         env[[ns("selection")]] <- shiny::reactive({
             n <- env$input[[ns("n")]]
             if (n > 2000) stop("Drawing large heatmaps uses excessive system resources. Sorry.")
-
+            
             y_span <- apply(y_val(),1,max) - apply(y_val(),1,min)
             selection <- rep(FALSE,nrow(y_val()))
             selection[ order(-y_span)[ seq_len(n) ] ] <- TRUE
             selection <- which(selection)
             
             if (length(selection) < 1) stop("No features to show.")
-
+            
             selection
         })
     
@@ -238,7 +239,8 @@ shiny_heatmap <- function(y, sample_labels=NULL, feature_labels=NULL, prefix="")
                 y=y_val()[e("selection"),,drop=FALSE],
                 sample_labels=sample_labels(env),
                 feature_labels=feature_labels(env)[e("selection")],
-                cluster_samples=env$input[[ns("cluster_samples")]]
+                cluster_samples=env$input[[ns("cluster_samples")]],
+                show_tree=env$input[[ns("show_tree")]]
             )
         })
 

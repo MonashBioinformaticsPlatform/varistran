@@ -64,7 +64,7 @@ ensure_reactive <- function(item, name=NULL, env=NULL, default=function() stop("
 
 #' Call object with "request" if it is callable.
 #'
-#' This is used to support older Shiny UI code which doesn't wrap UI in function(request) { ... }.
+#' This is used to support older Shiny UI code which doesn't wrap UI in \code{function(request) { ... }}.
 #'
 #' @param ui A UI object, or preferably a function(request) to produce a UI object.
 #'

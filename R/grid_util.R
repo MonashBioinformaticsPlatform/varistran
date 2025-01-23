@@ -175,16 +175,18 @@ signed_colors <- hsv(
 #'
 #' @param vp_name Viewport name for heatmap grob. This is useful if you will need to refer to the grob later, for example for interaction.
 #'
+#' @param to Heatmap scale will include this value if given.
+#'
 #' @return A list containing a heatmap grob and associated legend grob.
 #'
 #' @export
-heatmap_grob <- function(data, signed=TRUE, legend_title="", vp_name=NULL) {
+heatmap_grob <- function(data, signed=TRUE, legend_title="", vp_name=NULL, to=NULL) {
     if (signed) {
-        radius <- max(abs(data), na.rm=TRUE)
+        radius <- max(abs(c(data, to)), na.rm=TRUE)
         range <- c(-radius, radius)
         col <- signed_colors
     } else {
-        range <- c(0, max(data, na.rm=TRUE))
+        range <- c(0, max(data,to, na.rm=TRUE))
         col <- unsigned_colors
     }
 

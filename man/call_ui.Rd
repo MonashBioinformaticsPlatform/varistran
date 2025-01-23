@@ -15,5 +15,5 @@ call_ui(ui, request)
 A UI object.
 }
 \description{
-This is used to support older Shiny UI code which doesn't wrap UI in function(request) { ... }.
+This is used to support older Shiny UI code which doesn't wrap UI in \code{function(request) { ... }}.
 }

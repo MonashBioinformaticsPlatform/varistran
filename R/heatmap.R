@@ -11,6 +11,7 @@
 #'
 #' 3. Branches in the hierarchical clustering are flipped to minimize sharp changes between neighbours, using the seriation package's OLO (Optimal Leaf Ordering) method.
 #'
+#' 
 #' @param y A matrix of expression levels, such as a transformed counts matrix as produced by \code{varistran::vst}.
 #' @param cluster_samples Should samples (columns) be clustered?
 #' @param cluster_features Should features (rows) be clustered?
@@ -20,6 +21,10 @@
 #' @param baseline_label Text description of what the baseline is.
 #' @param scale_label Text description of what the heatmap colors represent (after baseline is subtracted).
 #' @param n Show only this many rows. Rows are selected in order of greatest span of expression level.
+#' @param baseline_to If provided, the scale for the row means or baseline will include this value or these values. Use this if there is some meaningful "zero" for your data.
+#' @param scale_to If provided, the heatmap color scale will include this value. Use this to provide consistency of scales between heatmaps (note values larger than scale_to will cause the scale to be extended).
+#' @param show_baseline Show baseline barplot?
+#' @param show_tree Show dendrogram tree(s)? These dendrograms arguably over-interpret the data without adding much of values, so it may be better to hide them.
 #'
 #' @return A grid grob. print()-ing this value will cause it to be displayed.
 #'
@@ -45,26 +50,29 @@ plot_heatmap <- function(
         baseline=NULL,
         baseline_label="row\nmean",
         scale_label="difference from\nrow mean",
-        n=Inf) {
+        n=Inf,
+        baseline_to=NULL,
+        scale_to=NULL,
+        show_baseline=TRUE,
+        show_tree=TRUE) {
     y <- as.matrix(y)
-
+    
     if (is.null(sample_labels) && !is.null(colnames(y)))
         sample_labels <- colnames(y)
-
+    
     if (is.null(sample_labels))
         sample_labels <- rep("", ncol(y))
-
+    
     sample_labels[is.na(sample_labels)] <- ""
-
-
+    
     if (is.null(feature_labels) && !is.null(rownames(y)))
         feature_labels <- rownames(y)
-
+    
     if (is.null(feature_labels))
         feature_labels <- rep("", nrow(y))
-
+    
     feature_labels[is.na(feature_labels)] <- ""
-
+    
     if (!is.null(baseline)) {
         if (length(baseline) == 1)
             baseline <- rep(baseline, nrow(y))
@@ -73,7 +81,7 @@ plot_heatmap <- function(
     } else {
         means <- rowMeans(y, na.rm=TRUE)
     }
-
+    
     # Show only a subset of rows, if desired
     if (n < nrow(y)) {    
         y_span <- apply(y,1,max,-Inf,na.rm=TRUE) - apply(y,1,min,Inf,na.rm=TRUE)
@@ -85,39 +93,41 @@ plot_heatmap <- function(
         feature_labels <- feature_labels[selection]
         means <- means[selection]
     }
-
-
+    
     y_centered <- y - means
     
     y_scaled <- y_centered / sqrt(rowMeans(y_centered*y_centered, na.rm=TRUE))
     y_scaled[ is.na(y_scaled) ] <- 0.0
     
     row_order <- make_ordering(y_scaled, enable=cluster_features)
-
+    
     y_centered_clean <- y_centered
     y_centered_clean[ is.na(y_centered_clean) ] <- 0.0
     col_order <- make_ordering(t(y_centered_clean), enable=cluster_samples)
-
+    
     pad <- 0.25
-
-    row_ordering_grob <- ordering_grob(row_order, transpose=TRUE, mirror=TRUE)
-
-    col_ordering_grob <- ordering_grob(col_order)
-
+    
+    if (show_tree) {
+        row_ordering_grob <- ordering_grob(row_order, transpose=TRUE, mirror=TRUE)
+        col_ordering_grob <- ordering_grob(col_order)
+    } else {
+        row_ordering_grob <- nullGrob()
+        col_ordering_grob <- nullGrob()
+    }
+    
     heatmap <- heatmap_grob(
         y_centered[row_order$order,col_order$order,drop=F],
         signed=TRUE,
         legend_title=paste0(scale_label),
-        vp_name="heatmap")
-
-    mean_range <- range(means, na.rm=TRUE)
+        vp_name="heatmap",
+        to=scale_to)
     
-    need_means <- mean_range[1] != 0 || mean_range[2] != 0
+    mean_range <- range(means, baseline_to, na.rm=TRUE)
     
     if (mean_range[2] == mean_range[1]) 
         mean_range[2] <- mean_range[2]+1
     
-    if (need_means) {
+    if (show_baseline) {
         mean_graph <- rectGrob(
             x=rep(mean_range[1],nrow(y)),
             y=seq_len(nrow(y))-1,
@@ -125,6 +135,7 @@ plot_heatmap <- function(
             height=rep(1,nrow(y)),
             just=c(0,0),
             default.units="native",
+            gp=gpar(col=NA, fill="#aaaaaa"),
             vp=viewport(xscale=mean_range,yscale=c(0,nrow(y)))
         )
         mean_axis <- xaxisGrob(
@@ -159,24 +170,24 @@ plot_heatmap <- function(
         just=c(1,0.5),
         vp=viewport(xscale=c(0,ncol(y)),yscale=c(0,1))
     )
-
+    
     frame <- frameGrob(layout=grid.layout(nrow=3,ncol=4))
-
+    
     frame <- packGrob(frame, varistran_grob(col_ordering_grob,height="inherit",pad=pad), row=1,col=2)
     frame <- packGrob(frame, varistran_grob(mean_label,height="inherit",pad=mean_pad), row=1,col=3)
-
+    
     frame <- packGrob(frame, varistran_grob(row_ordering_grob,width="inherit",pad=pad), row=2,col=1)
     frame <- packGrob(frame, varistran_grob(heatmap$heatmap,pad=pad), row=2, col=2)
     frame <- packGrob(frame, varistran_grob(mean_graph,width=mean_width,pad=mean_pad), row=2,col=3)
     frame <- packGrob(frame, varistran_grob(feature_label_grob,width="inherit",pad=pad), row=2,col=4)
-
+    
     frame <- packGrob(frame, varistran_grob(sample_label_grob,height="inherit",pad=pad), row=3,col=2)
     frame <- packGrob(frame, varistran_grob(mean_axis,height=unit(3,"lines"),pad=mean_pad), row=3,col=3)
-
+    
     outer <- frameGrob()
     outer <- packGrob(outer, varistran_grob(frame), row=1,col=1)
     outer <- packGrob(outer, varistran_grob(heatmap$legend,height="inherit",pad=pad), row=2, col=1)
-
+    
     result <- varistran_grob(outer, pad=pad)
     result$info <- list(
         row_order=row_order,

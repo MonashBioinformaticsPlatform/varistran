@@ -4,7 +4,7 @@
 \alias{heatmap_grob}
 \title{A grob for heatmaps.}
 \usage{
-heatmap_grob(data, signed = TRUE, legend_title = "", vp_name = NULL)
+heatmap_grob(data, signed = TRUE, legend_title = "", vp_name = NULL, to = NULL)
 }
 \arguments{
 \item{data}{Matrix of data to display.}
@@ -14,6 +14,8 @@ heatmap_grob(data, signed = TRUE, legend_title = "", vp_name = NULL)
 \item{legend_title}{Title for legend grob.}
 
 \item{vp_name}{Viewport name for heatmap grob. This is useful if you will need to refer to the grob later, for example for interaction.}
+
+\item{to}{Heatmap scale will include this value if given.}
 }
 \value{
 A list containing a heatmap grob and associated legend grob.
