@@ -9,9 +9,9 @@
 
 # varistran 1.0.3
 
-* No code changes. Updated READEME with references and supporting/contributing section.
+* No code changes. Updated README with references and supporting/contributing section.
 
-# 1.0.2
+# varistran 1.0.2
 
 * Added n parameter to plot_heatmap, to show only the top n rows by span of expression levels.
 * Remove dependency on ggdenro, which is not available in R 3.4.1.
