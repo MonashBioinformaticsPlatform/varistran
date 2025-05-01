@@ -26,6 +26,9 @@ Suggests:
     limma,
     DESeq2,
     biomaRt,
-    NBPSeq
+    NBPSeq,
+    knitr,
+    rmarkdown
 RoxygenNote: 7.3.2
 Encoding: UTF-8
+VignetteBuilder: knitr

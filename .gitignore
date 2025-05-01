@@ -25,3 +25,4 @@ test_output/
 docs
 .Rproj.user
 
+inst/doc

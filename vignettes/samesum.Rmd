@@ -1,0 +1,28 @@
+---
+title: "samesum"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{samesum}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(varistran)
+library(airway)
+
+data("airway")
+x <- assay(airway, "counts")
+lnorm <- samesum_log2_norm(x, scale=0.25)
+
+plot_heatmap(lnorm, feature_labels=rowData(airway)$symbol, n=50)
+
+plot_stability(lnorm, bins=200)
+```
