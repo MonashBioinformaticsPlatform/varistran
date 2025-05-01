@@ -4,7 +4,7 @@
 #' @importFrom grDevices axisTicks dev.off pdf png postscript
 #' @importFrom stats as.dendrogram dist hclust is.leaf optimize order.dendrogram sd
 #' @importFrom graphics par plot.new
-
+#' @importFrom Matrix colSums t
 
 # asinh(ab) / log(2) + const, behaving as log2(a) in the limit as a -> large
 .log2ish_asinh <- function(a,b) {

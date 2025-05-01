@@ -12,17 +12,31 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# devtools::load_all()
 ```
 
 ```{r setup}
+library(Matrix)
 library(varistran)
 library(airway)
 
 data("airway")
 x <- assay(airway, "counts")
-lnorm <- samesum_log2_norm(x, scale=0.25)
+
+x[,1] <- rbinom(nrow(x), x[,1], 0.01) 
+
+lnorm <- samesum_log2_norm(x)
 
 plot_heatmap(lnorm, feature_labels=rowData(airway)$symbol, n=50)
 
 plot_stability(lnorm, bins=200)
+
+plot_biplot(lnorm)
+
+
+# You can also use a sparse matrix
+
+x <- Matrix(assay(airway, "counts"))
+lnorm <- samesum_log2_norm(x)
 ```

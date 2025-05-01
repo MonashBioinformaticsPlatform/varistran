@@ -20,7 +20,8 @@ Imports:
     shiny,
     miniUI,
     seriation,
-    gridBase
+    gridBase,
+    Matrix
 Suggests:
     edgeR,
     limma,

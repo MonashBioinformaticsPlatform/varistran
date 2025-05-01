@@ -2,10 +2,21 @@
 % Please edit documentation in R/samesum.R
 \name{samesum_log2_norm}
 \alias{samesum_log2_norm}
-\title{Normalized log2 counts using log2(count[i,j]*scale[j]+1)}
+\title{Normalized log2 counts using "scalesum" method}
 \usage{
-samesum_log2_norm(x, scale = 0.25, tol = 1e-09, verbose = FALSE)
+samesum_log2_norm(
+  x,
+  scale = 0.25,
+  target_sum = NA,
+  tol = 1e-09,
+  verbose = FALSE
+)
+}
+\arguments{
+\item{scale}{Aim to give each sample close to this value of scale.}
+
+\item{target_sum}{Aim to give each sample exactly this sum. "scale" is ignored if this parameter is used. This could be used to provide a transformation that is consistent across datasets.}
 }
 \description{
-Normalized log2 counts using log2(count[i,j]*scale[j]+1)
+Normalized log2 counts using "scalesum" method
 }
