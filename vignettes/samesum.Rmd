@@ -1,8 +1,8 @@
 ---
-title: "samesum"
+title: "samesum transformation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{samesum}
+  %\VignetteIndexEntry{samesum transformation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,27 +16,70 @@ knitr::opts_chunk$set(
 # devtools::load_all()
 ```
 
-```{r setup}
+```{r message=FALSE,warning=FALSE}
 library(Matrix)
 library(varistran)
 library(airway)
-
 data("airway")
+```
+
+```{r}
 x <- assay(airway, "counts")
 
+lnorm <- samesum_log2_norm(x)
+
+colSums(lnorm)
+```
+
+```{r fig.width=6,fig.height=8}
+plot_heatmap(
+  lnorm, 
+  feature_labels=rowData(airway)$symbol, 
+  n=50, baseline_to=0)
+```
+
+```{r fig.width=6,fig.height=8}
+plot_biplot(lnorm, feature_labels=rowData(airway)$symbol)
+```
+
+## You can also produce log2 CPM values
+
+This is quite similar to edgeR's `cpm` function with `log=TRUE`.
+
+```{r}
+lcpm <- samesum_log2_cpm(x)
+```
+
+You can check the value that zeros are transformed to.
+
+```{r}
+min(lcpm)
+
+attr(lcpm, "zero")
+```
+
+## Low library size samples produce a warning
+
+```{r}
+set.seed(463)
+
+x <- assay(airway, "counts")
 x[,1] <- rbinom(nrow(x), x[,1], 0.01) 
-
 lnorm <- samesum_log2_norm(x)
+```
 
-plot_heatmap(lnorm, feature_labels=rowData(airway)$symbol, n=50)
+You can examine the samples attribute for more details.
 
-plot_stability(lnorm, bins=200)
+```{r}
+attr(lnorm,"samples")
+```
 
-plot_biplot(lnorm)
+## Sparse matrices can be used
 
+`samesum_log2_norm` transforms zeros to zeros, so the matrix remains sparse.
 
-# You can also use a sparse matrix
-
-x <- Matrix(assay(airway, "counts"))
+```{r}
+x <- Matrix( assay(airway, "counts") )
 lnorm <- samesum_log2_norm(x)
+class(lnorm)
 ```

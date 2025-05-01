@@ -2,21 +2,48 @@
 % Please edit documentation in R/samesum.R
 \name{samesum_log2_norm}
 \alias{samesum_log2_norm}
-\title{Normalized log2 counts using "scalesum" method}
+\alias{samesum_log2_cpm}
+\title{Normalized log2 counts using samesum method}
 \usage{
-samesum_log2_norm(
-  x,
-  scale = 0.25,
-  target_sum = NA,
-  tol = 1e-09,
-  verbose = FALSE
-)
+samesum_log2_norm(x, scale = 2, target_sum = NA, tol = 1e-09, verbose = FALSE)
+
+samesum_log2_cpm(x, scale = 2, target_sum = NA, tol = 1e-09, verbose = FALSE)
 }
 \arguments{
-\item{scale}{Aim to give each sample close to this value of scale.}
+\item{x}{A matrix or a sparse matrix. Usually these will be counts, but any matrix of non-negative values could potentially be used. We regard columns as samples.}
 
-\item{target_sum}{Aim to give each sample exactly this sum. "scale" is ignored if this parameter is used. This could be used to provide a transformation that is consistent across datasets.}
+\item{scale}{Aim to give each sample close to this value of scale. The default value of 2 should be reasonable for count data, but see discussion below.}
+
+\item{target_sum}{Aim to give each sample exactly this sum. \code{scale} is ignored if this parameter is used. This could be used to provide a transformation that is consistent across datasets.}
+
+\item{tol}{Tolerance when optimizing scale values. Scale is increased using Newton's method until the sum is at least \code{target_sum*(1-tol)}.}
+
+\item{verbose}{If TRUE, output some debugging messages.}
+}
+\value{
+A matrix or a sparse matrix, depending on the input.
+
+The return value will have some attributes accessible using \code{attr()}. 
+
+\itemize{
+\item "samples" is a data frame with per-sample information. The most important value for the transformation is the "scale" column. There is also "true_library_size", which is the sum of the input column, and "adjusted_library_size" if you want to use this method just as a library size adjustment method. 
+\item "zero" is the value that zero is transformed to. This will be zero for \code{samesum_log2_norm}.
+\item "sum" is the value each column of the output sums to (but not including the CPM adjustment if using \code{samesum_log2_cpm}).
+}
 }
 \description{
-Normalized log2 counts using "scalesum" method
+This is a method of computing log counts while dealing sensibly with zeros and differing library sizes. It should cope well with very sparse data. The input is transformed using \code{log2(x/scale+1)} with a different scale for each sample. The scale for each sample is chosen so all of the samples add up to the same value.
+}
+\details{
+You can either specify the argument \code{scale}, and it will try to give individual samples scale values close to this value, or you can directly specify the value samples should add up to with \code{target_sum}.
+
+\code{samesum_log2_cpm} adds a constant to the result to produce values that can be treated as log2 Counts Per Million (CPM). The result will have the property that \code{mean(colSums(2^lcpm-2^attr(lcpm,"zero")))} equals one million.
+
+This method has some similarity to Centered Log Ratio (CLR) transformation. Where the CLR ensures each sample adds to zero, the samesum transformation ensures each sample adds to the same non-zero value. Like the CLR, distances between samesum transformed data are a good way to measure sample similarity. Transformed values could be used with PCA or with non-linear dimension reduction methods.
+
+Samesum transformed data can also be used in differential abundance analysis using the limma-trend or limma-vooma methods.
+
+The default value of 2 for scale should be reasonable for count data, but is not variance stabilizing. limma-trend or limma-vooma will take this into account. For visualization and exploratory methods you could try a larger scale value, which will damp down variation in low abundance rows. The scale parameter acts similarly to a pseudocount in log transformation methods with a pseudocount parameter such as edgeR's \code{cpm} function.
+
+When different samples have different library sizes, some of them may be given a scale much smaller than the target scale. When this happens, these samples may appear as outliers in data visualization, purely as an artifact of the transformation. A warning is produced if any samples are given a scale less than one. Consider excluding these samples from your analysis. If all the samples need to be used, you can increase the target scale to avoid this problem. This will allow you to compare all samples, but at the cost of losing some ability to resolve fine differences between samples.
 }

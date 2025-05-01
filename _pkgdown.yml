@@ -18,12 +18,18 @@ reference:
       - plot_stability
       - plot_biplot
       - plot_heatmap
+      - samesum_log2_norm
+      - samesum_log2_cpm
 
   - title: Support functions
     contents:
       - matches("")
-    exclude:
-      - vst
-      - shiny_report
+      - -vst
+      - -shiny_report
+      - -plot_stability
+      - -plot_biplot
+      - -plot_heatmap
+      - -samesum_log2_norm
+      - -samesum_log2_cpm
 
 
