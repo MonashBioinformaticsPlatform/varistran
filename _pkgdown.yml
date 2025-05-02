@@ -1,7 +1,8 @@
 
 url: "https://github.com/MonashBioinformaticsPlatform/varistran"
 
-templates:
+template:
+  bootstrap: 5
   params:
     bootswatch: cerulean
 

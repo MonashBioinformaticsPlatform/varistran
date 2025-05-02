@@ -16,10 +16,15 @@ knitr::opts_chunk$set(
 # devtools::load_all()
 ```
 
+This article puts `samesum_log2_norm()` and `samesum_log2_cpm()` through their paces.
+
+## Example usage
+
 ```{r message=FALSE,warning=FALSE}
-library(Matrix)
 library(varistran)
+library(Matrix)
 library(airway)
+
 data("airway")
 ```
 
@@ -29,6 +34,8 @@ x <- assay(airway, "counts")
 lnorm <- samesum_log2_norm(x)
 
 colSums(lnorm)
+attr(lnorm,"sum")
+attr(lnorm,"samples")
 ```
 
 ```{r fig.width=6,fig.height=8}
@@ -42,6 +49,42 @@ plot_heatmap(
 plot_biplot(lnorm, feature_labels=rowData(airway)$symbol)
 ```
 
+## Filtering
+
+Some analysis methods don't work well with features that are nearly all zero. In particular we suggest filtering before using limma. However samesum transformation works fine with very sparse data, so we suggest transforming your data before filtering it. This allows filtering to be applied fairly across samples with different scale values.
+
+```{r}
+keep <- rowSums(lnorm) >= 1
+table(keep)
+lnorm_filtered <- lnorm[keep,]
+plot_stability(lnorm_filtered)
+```
+
+## You can provide a larger target scale for greater variance stabilization
+
+The default target scale parameter is 2, which may produce noisy results for features with low abundance. This scale parameter can be increased.
+
+```{r}
+lnorm <- samesum_log2_norm(x, scale=10)
+
+colSums(lnorm)
+attr(lnorm, "samples")
+
+keep <- rowSums(lnorm) >= 1
+table(keep)
+lnorm_filtered <- lnorm[keep,]
+plot_stability(lnorm_filtered)
+```
+
+## You can provide a target sum for consistent transformation across datasets
+
+```{r}
+lnorm <- samesum_log2_norm(x, sum=1e5)
+
+colSums(lnorm)
+attr(lnorm, "samples")
+```
+
 ## You can also produce log2 CPM values
 
 This is quite similar to edgeR's `cpm` function with `log=TRUE`.
@@ -50,21 +93,33 @@ This is quite similar to edgeR's `cpm` function with `log=TRUE`.
 lcpm <- samesum_log2_cpm(x)
 ```
 
+Zeros will no longer be zero. This is fine, log transformation transforms non-negative values to cover the whole real line. It is *convenient* sometimes to pick a log transformation with a psuedocount that transforms zeros to zero, but it is not *necessary*. 
+
 You can check the value that zeros are transformed to.
 
 ```{r}
 min(lcpm)
-
 attr(lcpm, "zero")
+
+mean(colSums(2^lcpm-2^attr(lcpm,"zero")))
+```
+
+Adjust your filtering appropriately.
+
+```{r}
+keep <- rowMeans(lcpm) >= attr(lcpm,"zero")+1
+table(keep)
 ```
 
 ## Low library size samples produce a warning
 
+Here I have downsampled the first sample to 1% of the original.
+
 ```{r}
 set.seed(463)
-
 x <- assay(airway, "counts")
 x[,1] <- rbinom(nrow(x), x[,1], 0.01) 
+
 lnorm <- samesum_log2_norm(x)
 ```
 
@@ -72,6 +127,16 @@ You can examine the samples attribute for more details.
 
 ```{r}
 attr(lnorm,"samples")
+```
+
+Further warnings you may get:
+
+```{r}
+x[,1] <- 0 
+lnorm <- samesum_log2_norm(x)
+
+x[1,1] <- 1
+lnorm <- samesum_log2_norm(x)
 ```
 
 ## Sparse matrices can be used
