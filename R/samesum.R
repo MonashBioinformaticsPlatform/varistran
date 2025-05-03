@@ -48,7 +48,7 @@ get_scale <- function(x, target, tol=1e-9, verbose=FALSE) {
 #'
 #' This method has some similarity to Centered Log Ratio (CLR) transformation. Where the CLR ensures each sample adds to zero, the samesum transformation ensures each sample adds to the same non-zero value. Like the CLR, distances between samesum transformed data are a good way to measure sample similarity. Transformed values could be used with PCA or with non-linear dimension reduction methods.
 #'
-#' Samesum transformed data can also be used in differential abundance analysis using the limma-trend or limma-vooma methods.
+#' Samesum transformed data can also be used in differential abundance analysis using the limma-trend or limma-vooma methods. As usual, the assumption here is that there is a background of unchanging features that largely determine the scaling of each sample. This is usually true for RNA-Seq differential expression analysis, but seems to be questioned more often in metagenomics.
 #'
 #' The default value of 2 for scale should be reasonable for count data, but is not variance stabilizing. limma-trend or limma-vooma will take this into account. For visualization and exploratory methods you could try a larger scale value, which will damp down variation in low abundance rows and provide better variance stabilization. The scale parameter acts similarly to a pseudocount in log transformation methods with a pseudocount parameter (such as edgeR's \code{cpm} function).
 #'
