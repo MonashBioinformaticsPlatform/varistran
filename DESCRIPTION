@@ -28,6 +28,7 @@ Suggests:
     DESeq2,
     biomaRt,
     NBPSeq,
+    airway,
     knitr,
     rmarkdown
 RoxygenNote: 7.3.2
