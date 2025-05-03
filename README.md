@@ -71,7 +71,8 @@ An appropraite dispersion is estimated with the aid of the design matrix. If omi
 
 As of 2025, I am also experimenting with a new transformation method I call "samesum".
 
-
+* [Documentation](https://logarithmic.net/varistran/reference/samesum_log2_norm.html)
+* [Example usage](https://logarithmic.net/varistran/articles/samesum.html)
 
 ### Diagnostic plots
 
