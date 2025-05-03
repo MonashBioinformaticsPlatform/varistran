@@ -16,11 +16,11 @@ Varistran is developed by Paul Harrison (paul.harrison@monash.edu, [@paulfharris
 
 ## Install
 
-Varistran is most easily installed from GitHub using devtools:
+Varistran is most easily installed from GitHub using remotes:
 
 ```
-install.packages("devtools")
-devtools::install_github("MonashBioinformaticsPlatform/varistran")
+install.packages("remotes")
+remotes::install_github("MonashBioinformaticsPlatform/varistran")
 ```
 
 ### Dependencies
@@ -28,11 +28,11 @@ devtools::install_github("MonashBioinformaticsPlatform/varistran")
 By default, library size estimation is by TMM (Robinson and Oshlack, 2010), implemented in edgeR from BioConductor. You will need to install this manually if you haven't already:
 
 ```
-source("http://bioconductor.org/biocLite.R")
-biocLite("edgeR")
+install.packages("BiocManager")
+BiocManager::install("edgeR")
 ```
 
-Varistran also uses various CRAN packages, which will be installed automatically using the `devtools::install_github` method above. Refer to the DESCRIPTION file for the full list of dependencies.
+Varistran also uses various CRAN packages, which will be installed automatically using the `remotes::install_github` method above. Refer to the DESCRIPTION file for the full list of dependencies.
 
 ## Example usage
 
@@ -55,15 +55,23 @@ experiment.number <- factor( phenoData(bottomly.eset)$experiment.number )
 design <- model.matrix(~ strain + experiment.number)
 ```
 
+### Variance stabilizing transformation
+
 Say you have a count matrix `counts` and a design matrix `design`. To perform a variance stabilizing transformation:
 
 ```
 y <- varistran::vst(counts, design=design)
 ```
 
-By default, Anscombe's (1948) variance stabilizing transformation for the negative binomial distribution is used. This behaves like log2 for large counts (log2 Counts-Per-Million if `cpm=T` is given).
+By default, Anscombe's (1948) variance stabilizing transformation for the negative binomial distribution is used. This behaves like log2 for large counts (log2 Counts-Per-Million if `cpm=TRUE` is given).
 
 An appropraite dispersion is estimated with the aid of the design matrix. If omitted, this defaults to a column of ones, for blind estimation of the dispersion. This might slightly over-estimate the dispersion. A third possibility is to estimate the dispersion with edgeR.
+
+### Samesum transformation
+
+As of 2025, I am also experimenting with a new transformation method I call "samesum".
+
+
 
 ### Diagnostic plots
 
@@ -140,7 +148,7 @@ Pull requests gratefully considered.
 
 ## Links
 
-* [Monash Bioinformatics Platform, Monash University](https://platforms.monash.edu/bioinformatics)
+* [Monash Genomics annd Bioinformatics Platform, Monash University](https://www.monash.edu/researchinfrastructure/mgbp)
 
 * [RNA Systems Laboratory, Monash University](http://rnasystems.erc.monash.edu)
 

@@ -1,8 +1,8 @@
 ---
-title: "samesum transformation"
+title: "Samesum transformation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{samesum transformation}
+  %\VignetteIndexEntry{Samesum transformation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -93,7 +93,7 @@ This is quite similar to edgeR's `cpm` function with `log=TRUE`.
 lcpm <- samesum_log2_cpm(x)
 ```
 
-Zeros will no longer be zero. This is fine, log transformation transforms non-negative values to cover the whole real line. It is *convenient* sometimes to pick a log transformation with a psuedocount that transforms zeros to zero, but it is not *necessary*. 
+Zeros will no longer be zero. This is fine, log transformation transforms non-negative values to cover the whole real line. It is *convenient* sometimes to pick a log transformation with a pseudocount that transforms zeros to zero, but it is not *necessary*. 
 
 You can check the value that zeros are transformed to.
 
@@ -116,7 +116,7 @@ table(keep)
 Here I have downsampled the first sample to 1% of the original.
 
 ```{r}
-set.seed(463)
+set.seed(563)
 x <- assay(airway, "counts")
 x[,1] <- rbinom(nrow(x), x[,1], 0.01) 
 
@@ -129,12 +129,30 @@ You can examine the samples attribute for more details.
 attr(lnorm,"samples")
 ```
 
-Further warnings you may get:
+Sample 1 is indeed an outlier now, and this is purely an artifact of the transformation:
+
+```{r fig.width=6,fig.height=8}
+plot_heatmap(lnorm, feature_labels=rowData(airway)$symbol, n=50, baseline_to=0)
+```
+
+Increasing the `scale` parameter removes the warning and fixes the problem. The cost is that we squash variability in genes with low expression levels. It's like we've reduced the "resolution" of the data.
+
+```{r fig.width=6,fig.height=8}
+lnorm <- samesum_log2_norm(x, scale=200)
+
+plot_heatmap(lnorm, feature_labels=rowData(airway)$symbol, n=50, baseline_to=0)
+```
+
+You will also get a warning if a sample is all zero.
 
 ```{r}
 x[,1] <- 0 
 lnorm <- samesum_log2_norm(x)
+```
 
+Or sometimes a sample has very low library size or complexity, and the scale underflows to zero.
+
+```{r}
 x[1,1] <- 1
 lnorm <- samesum_log2_norm(x)
 ```

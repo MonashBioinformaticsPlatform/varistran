@@ -1,3 +1,7 @@
+# varistran 1.1.0
+
+* Add samesum log transformation method.
+
 # varistran 1.0.5
 
 * plot_heatmap now has parameters baseline_to and scale_to giving control over the ranges of the scales, and parameters show_baseline and show_tree giving control over what parts of the plot are shown.

@@ -16,7 +16,7 @@ samesum_log2_cpm(x, scale = 2, sum = NA, tol = 1e-09, verbose = FALSE)
 
 \item{sum}{Target sum. Aim to give each sample exactly this sum. \code{scale} is ignored if this parameter is used. This could be used to provide a transformation that is consistent across datasets.}
 
-\item{tol}{Tolerance when optimizing scale values. Scale is increased using Newton's method until the sum is at least \code{target_sum*(1-tol)}.}
+\item{tol}{Tolerance when optimizing scale values. 1/scale is increased from zero using Newton's method until the sum is at least \code{target_sum*(1-tol)}.}
 
 \item{verbose}{If TRUE, output some debugging messages.}
 }
@@ -32,7 +32,7 @@ The return value will have some attributes accessible using \code{attr()}.
 }
 }
 \description{
-This is a method of computing log counts while dealing sensibly with zeros and differing library sizes. It should cope well with very sparse data. The input is transformed using \code{log2(x/scale+1)} with a different scale for each sample. The scale for each sample is chosen so all of the samples add up to the same value.
+This is a method of computing log counts while dealing sensibly with zeros and differing library sizes. It should cope well with very sparse data. The input is transformed using \code{log2(x/scale+1)} with a different scale for each sample. The scale for each sample is chosen so all of the samples add up to the same total. Finding these scale values is done efficiently using Newton's method.
 }
 \details{
 You can either specify the argument \code{scale}, and it will try to give individual samples scale values close to this value, or directly specify the target sum with \code{sum}.
@@ -47,5 +47,15 @@ Samesum transformed data can also be used in differential abundance analysis usi
 
 The default value of 2 for scale should be reasonable for count data, but is not variance stabilizing. limma-trend or limma-vooma will take this into account. For visualization and exploratory methods you could try a larger scale value, which will damp down variation in low abundance rows and provide better variance stabilization. The scale parameter acts similarly to a pseudocount in log transformation methods with a pseudocount parameter (such as edgeR's \code{cpm} function).
 
-When different samples have different library sizes, some of them may be given a scale much smaller than the target scale. When this happens, these samples may appear as outliers in data visualization, purely as an artifact of the transformation. A warning is produced if any samples are given a scale less than one. Consider excluding these samples from your analysis. If all the samples need to be used, you can increase the target scale to avoid this problem. This will allow you to compare all samples, but at the cost of losing some ability to resolve fine differences between samples.
+When different samples have different library sizes, some of them may be given a scale much smaller than the target scale. When this happens, these samples may appear as outliers in data visualization, purely as an artifact of the transformation. A warning is produced if any samples are given a scale less than 0.5. Consider excluding these samples from your analysis. If all the samples need to be used, you can increase the target scale to avoid this problem. This will allow you to compare all samples, but at the cost of losing some ability to resolve fine differences between samples.
+}
+\examples{
+
+set.seed(563)
+x <- matrix(rpois(15, 10), ncol=3)
+
+samesum_log2_norm(x)
+
+samesum_log2_cpm(x)
+
 }

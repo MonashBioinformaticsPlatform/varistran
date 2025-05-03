@@ -3,13 +3,18 @@ url: "https://github.com/MonashBioinformaticsPlatform/varistran"
 
 template:
   bootstrap: 5
-  params:
-    bootswatch: cerulean
+  bootswatch: minty
 
 navbar:
     right:
     - icon: fa-github
       href: "https://github.com/MonashBioinformaticsPlatform/varistran"
+
+articles:
+  - title: Articles
+    navbar: ~
+    contents:
+    - samesum
 
 reference:
   - title: Main functions
