@@ -127,9 +127,9 @@ samesum_log2_norm <- function(x, scale=2, sum=NA, tol=1e-9, verbose=FALSE) {
     samples$name <- colnames(x)
     samples$scale <- scales
     
-    scaled_sums <- sums / samples$scale
-    good <- is.finite(scaled_sums) & scaled_sums != 0
-    norm_factor <- scaled_sums/exp(mean(log(scaled_sums[good]))) 
+    scale_on_sum <- samples$scale / sums
+    good <- is.finite(scale_on_sum) & scale_on_sum != 0
+    norm_factor <- scale_on_sum/exp(mean(log(scale_on_sum[good]))) 
     samples$true_lib_size <- sums
     samples$adjusted_lib_size <- sums * norm_factor 
     

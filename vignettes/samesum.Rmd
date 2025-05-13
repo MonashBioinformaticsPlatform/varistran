@@ -93,7 +93,7 @@ This is quite similar to edgeR's `cpm` function with `log=TRUE`.
 lcpm <- samesum_log2_cpm(x)
 ```
 
-Zeros will no longer be zero. This is fine, log transformation transforms non-negative values to cover the whole real line. It is *convenient* sometimes to pick a log transformation with a pseudocount that transforms zeros to zero, but it is not *necessary*. 
+Zeros will no longer be zero. This is fine, log transformation is meant to transform positive values to cover the whole real line. It is *convenient* sometimes to pick a log transformation with a pseudocount that transforms zeros to zero, but it is not *necessary*. 
 
 You can check the value that zeros are transformed to.
 
