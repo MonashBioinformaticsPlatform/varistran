@@ -257,27 +257,31 @@ vst_advice <- function(what="anscombe.nb", dispersion=NULL, cpm=FALSE, lib.size=
             stop("Extra parameters not needed")
 
         method <- attr(what,"method")
+        
+        if (method == "samesum")
+            return(samesum_advice(what))
+        
         dispersion <- attr(what,"dispersion")
         cpm <- attr(what,"cpm")
         lib.size <- mean(attr(what,"lib.size"))
     } else {
         method <- what
     }
-
+    
     method.info <- vst_methods[[method]]
     is.null(method.info) && stop("Unknown method")
-
+    
     method.info$needs.dispersion && is.null(dispersion) && stop("dispersion needed")
-
+    
     cpm && is.null(lib.size) && stop("lib.size needed")
-
+    
     count <- cbind(c(0, 2**(0:12)))
-
+    
     y <- vst(count, method=method,dispersion=dispersion,cpm=cpm,lib.size=lib.size)
-
+    
     step <- rep(NA, nrow(count))
     step[3:nrow(count)] <- y[3:nrow(count),1] - y[2:(nrow(count)-1),1]
-
+    
     data.frame(
         count=count[,1],
         transformed_count=y[,1],

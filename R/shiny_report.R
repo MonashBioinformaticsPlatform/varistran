@@ -44,14 +44,46 @@ shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
             if (is.null(sample_labels_val))
                 sample_labels_val <- as.character(seq_len(ncol(y)))
             
-            if (!is.null(attr(y,"method"))) {
+            if (!is.null(attr(y,"method")) && attr(y,"method") == "samesum") {
+                advice <- vst_advice(y)
+                colnames(advice) <- c("Count","Transformed count","2-fold step")
+                
+                libs <- attr(y,"samples")
+                colnames(libs) <- c("Sample", "Scale", "True library size", "Adjusted library size")
+                
+                advice_html <- list(                    
+                    shiny::p("Samesum tranformation."),
+                    shiny::h4("Library sizes and scaling"),
+                    shiny::renderTable(libs, include.rownames=F, digits=2),
+                    shiny::p(paste0("Library size adjustment method: samesum")),
+                    
+                    shiny::h4("Transformation"),
+                    shiny::renderTable(advice, include.rownames=F, digits=2),
+                    shiny::p(                        
+                        "The column \"2-fold step\" shows the difference in transformed ",
+                        "count from the previous row. If a simple log2 transformation were ",
+                        " used this would be uniformly 1, however the addition of a pseudocount ",
+                        "makes this smaller for counts close to zero."
+                        ),
+                    shiny::p(
+                        "Note that values shown are for a typical sample."
+                        ),
+                    
+                    parenthetically(
+                        "Samesum transformation is performed ",
+                        "by varistran::samesum_log2_norm or varistran::samesum_log2_cpm. ",
+                        "Transformed values table produced ",
+                        "by varistran::vst_advice."
+                        )
+                    )
+            } else if (!is.null(attr(y,"method"))) {
                 dispersion <- attr(y,"dispersion")
                 description <- vst_methods[[attr(y,"method")]]$description
                 units <- vst_methods[[attr(y,"method")]]$units
                 cpm <- attr(y,"cpm")
                 if (cpm)
                     units <- paste0("Units for transformed counts are ",units,
-                                    " Reads Per Million.")
+                                    " Counts Per Million.")
                 else
                     units <- paste0("Units for transformed counts are ",units," read count.")
                 
@@ -59,7 +91,7 @@ shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
                     Sample = sample_labels_val,
                     "True library size" = attr(y,"true.lib.size"),
                     "Adjusted library size" = attr(y,"lib.size"),
-                    check.names=F
+                    check.names=FALSE
                     )
             
                 advice <- vst_advice(y)
@@ -71,12 +103,12 @@ shiny_vst <- function(y=NULL, counts=NULL, sample_labels=NULL, prefix="") {
                     shiny::p(sprintf("Estimated dispersion is %.4f.", dispersion)),
                     
                     shiny::h4("Library sizes"),
-                    shiny::renderTable(libs, include.rownames=F, digits=c(0,0,0,0)),
+                    shiny::renderTable(libs, include.rownames=F, digits=0),
                     shiny::p(paste0("Library size adjustment method: ",
                         attr(y,"lib.size.method"))),
                     
                     shiny::h4("Transformation"),
-                    shiny::renderTable(advice, include.rownames=F, digits=c(0,0,2,2)),
+                    shiny::renderTable(advice, include.rownames=F, digits=2),
                     shiny::p(                        
                         "The column \"2-fold step\" shows the difference in transformed ",
                         "count from the previous row. If a simple log2 transformation were ",

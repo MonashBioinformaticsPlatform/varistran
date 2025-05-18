@@ -88,11 +88,12 @@ get_scale <- function(x, target, tol=1e-9, verbose=FALSE) {
 samesum_log2_norm <- function(x, scale=2, sum=NA, tol=1e-9, verbose=FALSE) {
     # Calculations are all done using natural log
     
-    if (is.na(sum)) {
+    sum_given <- !is.na(sum)
+    if (sum_given) {
+        sum <- sum * log(2)
+    } else {
         baseline <- colSums(log1p(x/scale))
         sum <- mean(baseline)
-    } else {
-        sum <- sum * log(2)
     }
     
     scales <- rep(0, ncol(x))
@@ -136,8 +137,11 @@ samesum_log2_norm <- function(x, scale=2, sum=NA, tol=1e-9, verbose=FALSE) {
     # Thought about including this to facilite comparison to calcNormFactors, but I think it's too confusing.
     #samples$norm_factor <- norm_factor
     
+    attr(result,"method") <- "samesum"
     attr(result,"samples") <- samples
     attr(result,"zero") <- 0
+    if (!sum_given)
+        attr(result,"scale") <- scale
     attr(result,"sum") <- sum / log(2)
     
     result
@@ -157,4 +161,29 @@ samesum_log2_cpm <- function(x, scale=2, sum=NA, tol=1e-9, verbose=FALSE) {
     attr(result, "zero") <- adj
     
     result
+}
+
+
+# Helper for vst_advice
+samesum_advice <- function(what) {
+    scale <- attr(what,"scale")
+    if (is.null(scale)) {
+        # Advice is for an average sample
+        scales <- attr(what,"samples")$scale
+        good <- is.finite(scales) & scales!=0
+        scale <- mean(scales[good])
+    }
+    
+    zero <- attr(what,"zero")
+    
+    count <- c(0, 2**(0:12))
+    y <- log1p(count/scale) / log(2) + zero
+    
+    step <- rep(NA, length(count))
+    step[3:length(count)] <- y[3:length(count)] - y[2:(length(count)-1)]
+    
+    data.frame(
+        count=count,
+        transformed_count=y,
+        twofold_step=step)
 }
