@@ -18,23 +18,15 @@ Varistran is developed by Paul Harrison (paul.harrison@monash.edu, [@paulfharris
 
 ## Install
 
-Varistran is most easily installed from GitHub using remotes:
-
-```
-install.packages("remotes")
-remotes::install_github("MonashBioinformaticsPlatform/varistran")
-```
-
-### Dependencies
-
-By default, library size estimation is by TMM (Robinson and Oshlack, 2010), implemented in edgeR from BioConductor. You will need to install this manually if you haven't already:
+Varistran is most easily installed from GitHub using `BiocManager`. This will install needed dependencies, including the `edgeR` package from BioConductor as well as various CRAN packages.
 
 ```
 install.packages("BiocManager")
-BiocManager::install("edgeR")
+
+BiocManager::install("MonashBioinformaticsPlatform/varistran")
 ```
 
-Varistran also uses various CRAN packages, which will be installed automatically using the `remotes::install_github` method above. Refer to the DESCRIPTION file for the full list of dependencies.
+Refer to the DESCRIPTION file for the full list of dependencies.
 
 ## Example usage
 
