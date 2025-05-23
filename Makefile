@@ -1,13 +1,16 @@
 
 
-check :
-	Rscript -e "devtools::check()"
-
 document :
 	Rscript -e "devtools::document()"
 
+check :
+	Rscript -e "devtools::check()"
+
 site : document
 	Rscript -e "pkgdown::build_site()"
+
+install :
+	Rscript -e "devtools::install()"
 
 paper.pdf : paper.md paper.bib
 	pandoc --filter pandoc-citeproc -o paper.pdf paper.md

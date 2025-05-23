@@ -18,20 +18,29 @@ knitr::opts_chunk$set(
 
 This article puts `samesum_log2_norm()` and `samesum_log2_cpm()` through their paces.
 
-## Example usage
+## Setup
+
+I will use the Bioconductor `airway` dataset as an example.
 
 ```{r message=FALSE,warning=FALSE}
 library(varistran)
 library(Matrix)
 library(airway)
 
+# Load example data
 data("airway")
+
+# Readable sample names
+colnames(airway) <- paste0(airway$dex,rep(1:4,each=2))
+
+counts <- assay(airway, "counts")
 ```
 
-```{r}
-x <- assay(airway, "counts")
 
-lnorm <- samesum_log2_norm(x)
+## Example usage
+
+```{r}
+lnorm <- samesum_log2_norm(counts)
 
 colSums(lnorm)
 attr(lnorm,"sum")
@@ -49,48 +58,65 @@ plot_heatmap(
 plot_biplot(lnorm, feature_labels=rowData(airway)$symbol)
 ```
 
+
 ## Filtering
 
 Some analysis methods don't work well with features that are nearly all zero. In particular we suggest filtering before using limma. However samesum transformation works fine with very sparse data, so we suggest transforming your data before filtering it. This allows filtering to be applied fairly across samples with different scale values.
 
+Here the data has four replicates per treatment group, so for each gene I require some level of expression in at least four samples. This is similar to the strategy used by `edgeR::filterByExpr`.
+
 ```{r}
-keep <- rowSums(lnorm) >= 1
+keep <- rowSums(lnorm >= 2.5) >= 4
 table(keep)
 lnorm_filtered <- lnorm[keep,]
-plot_stability(lnorm_filtered)
+
+design <- model.matrix(~ 0 + dex + cell, data=colData(airway))
+plot_stability(lnorm_filtered, counts[keep,], design=design)
 ```
+
 
 ## You can provide a larger target scale for greater variance stabilization
 
 The default target scale parameter is 2, which may produce noisy results for features with low abundance. This scale parameter can be increased.
 
 ```{r}
-lnorm <- samesum_log2_norm(x, scale=10)
+lnorm_10 <- samesum_log2_norm(counts, scale=50)
 
-colSums(lnorm)
-attr(lnorm, "samples")
+colSums(lnorm_10)
+attr(lnorm_10, "samples")
 
-keep <- rowSums(lnorm) >= 1
-table(keep)
-lnorm_filtered <- lnorm[keep,]
-plot_stability(lnorm_filtered)
+keep_10 <- rowSums(lnorm_10 >= 0.25) >= 4
+table(keep_10)
+lnorm_10_filtered <- lnorm_10[keep_10,]
+
+plot_stability(lnorm_10_filtered, counts[keep_10,], design=design)
 ```
 
-## You can provide a target sum for consistent transformation across datasets
+
+## You can provide the target sum directly
+
+By default, `samesum_log2_norm` chooses the target sum based on the average sum from a first pass transformation of the data with the target scale. You might instead provide this target sum directly. 
 
 ```{r}
-lnorm <- samesum_log2_norm(x, sum=1e5)
+lnorm_sum <- samesum_log2_norm(counts, sum=1e5)
 
-colSums(lnorm)
-attr(lnorm, "samples")
+colSums(lnorm_sum)
+attr(lnorm_sum, "samples")
 ```
+
+For example you might want to ensure the chosen scale for each sample is greater than some minimum. You could compute the first pass sums yourself with `colSums(log1p(counts/target_scale))/log(2)` and provide the minimum value as the target sum.
+
+I propose to call the units of the target sum "dublins", being roughly how many doublings of abundance are observed in each sample. You can think of this as the resolution at which we are looking at the data. Now we generally want the scale to be greater than, say, 0.5, and this will mean different technologies and sequencing depths will support different amounts of dublins.
+
+If comparing multiple datasets, using a consistent target sum allows for consistent comparisons. For example the sum of squared log fold changes minus the sum of squared standard errors can be used as an unbiassed estimate of how much differential expression there is between two conditions. To render this consistent across multiple disparate datasets, a consistent number of dublins could be used.
+
 
 ## You can also produce log2 CPM values
 
-This is quite similar to edgeR's `cpm` function with `log=TRUE`.
+Counts Per Million (CPM) is a widely used unit for RNA-Seq data, so I also provide a function to produce results in log2 CPM units. This is quite similar to edgeR's `cpm` function with `log=TRUE`.
 
 ```{r}
-lcpm <- samesum_log2_cpm(x)
+lcpm <- samesum_log2_cpm(counts)
 ```
 
 Zeros will no longer be zero. This is fine, log transformation is meant to transform positive values to cover the whole real line. It is *convenient* sometimes to pick a log transformation with a pseudocount that transforms zeros to zero, but it is not *necessary*. 
@@ -107,62 +133,74 @@ mean(colSums(2^lcpm-2^attr(lcpm,"zero")))
 Adjust your filtering appropriately.
 
 ```{r}
-keep <- rowMeans(lcpm) >= attr(lcpm,"zero")+1
-table(keep)
+keep_lcpm <- rowMeans(lcpm) >= attr(lcpm,"zero")+1
+table(keep_lcpm)
 ```
+
 
 ## Low library size samples produce a warning
 
-Here I have downsampled the first sample to 1% of the original.
+Here I have downsampled the first sample to 1% of the original. The function gives a warning.
 
 ```{r}
 set.seed(563)
-x <- assay(airway, "counts")
-x[,1] <- rbinom(nrow(x), x[,1], 0.01) 
+counts_sub <- counts
+counts_sub[,1] <- rbinom(nrow(counts_sub), counts_sub[,1], 0.01) 
 
-lnorm <- samesum_log2_norm(x)
+lnorm_sub <- samesum_log2_norm(counts_sub)
 ```
 
 You can examine the samples attribute for more details.
 
 ```{r}
-attr(lnorm,"samples")
+attr(lnorm_sub,"samples")
 ```
 
 Sample 1 is indeed an outlier now, and this is purely an artifact of the transformation:
 
 ```{r fig.width=6,fig.height=8}
-plot_heatmap(lnorm, feature_labels=rowData(airway)$symbol, n=50, baseline_to=0)
+plot_heatmap(lnorm_sub, feature_labels=rowData(airway)$symbol, n=50, baseline_to=0)
 ```
 
 Increasing the `scale` parameter removes the warning and fixes the problem. The cost is that we squash variability in genes with low expression levels. It's like we've reduced the "resolution" of the data.
 
 ```{r fig.width=6,fig.height=8}
-lnorm <- samesum_log2_norm(x, scale=200)
+lnorm_sub_200 <- samesum_log2_norm(counts_sub, scale=200)
 
-plot_heatmap(lnorm, feature_labels=rowData(airway)$symbol, n=50, baseline_to=0)
+attr(lnorm_sub,"sum")
+attr(lnorm_sub_200,"sum")
 ```
+
+We're now looking at the data at a resolution of 23,743 dublins, where previously we were looking at a resolution of 111,246 dublins.
+
+```{r fig.width=6,fig.height=8}
+plot_heatmap(lnorm_sub_200, feature_labels=rowData(airway)$symbol, n=50, baseline_to=0)
+```
+
 
 You will also get a warning if a sample is all zero.
 
 ```{r}
-x[,1] <- 0 
-lnorm <- samesum_log2_norm(x)
+counts_zeroed <- counts
+counts_zeroed[,1] <- 0 
+lnorm_zeroed <- samesum_log2_norm(counts_zeroed)
 ```
 
 Or sometimes a sample has very low library size or complexity, and the scale underflows to zero.
 
 ```{r}
-x[1,1] <- 1
-lnorm <- samesum_log2_norm(x)
+counts_low <- counts_zeroed
+counts_low[1,1] <- 1
+lnorm_low <- samesum_log2_norm(counts_low)
 ```
+
 
 ## Sparse matrices can be used
 
-`samesum_log2_norm` transforms zeros to zeros, so the matrix remains sparse.
+`samesum_log2_norm` transforms zeros to zeros, so the matrix remains sparse. This can be useful for example with scRNA-Seq data.
 
 ```{r}
-x <- Matrix( assay(airway, "counts") )
-lnorm <- samesum_log2_norm(x)
-class(lnorm)
+counts_sparse <- Matrix( assay(airway, "counts") )
+lnorm_sparse <- samesum_log2_norm(counts_sparse)
+class(lnorm_sparse)
 ```

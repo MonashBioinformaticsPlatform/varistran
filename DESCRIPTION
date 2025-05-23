@@ -21,7 +21,8 @@ Imports:
     miniUI,
     seriation,
     gridBase,
-    Matrix
+    Matrix,
+    cli
 Suggests:
     edgeR,
     limma,

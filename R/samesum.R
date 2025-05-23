@@ -96,10 +96,15 @@ samesum_log2_norm <- function(x, scale=2, sum=NA, tol=1e-9, verbose=FALSE) {
         sum <- mean(baseline)
     }
     
+    cli::cli_progress_bar("Finding scales", total=ncol(x))
+    
     scales <- rep(0, ncol(x))
     for(i in seq_len(ncol(x))) {
         scales[i] <- get_scale(x[,i], target=sum, tol=tol, verbose=verbose)
+        cli::cli_progress_update()
     }
+    
+    cli::cli_progress_done()
     
     # Comment on anything concerning
     

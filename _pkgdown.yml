@@ -15,6 +15,7 @@ articles:
     navbar: ~
     contents:
     - samesum
+    - vst
 
 reference:
   - title: Main functions

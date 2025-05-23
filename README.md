@@ -1,12 +1,14 @@
 # Varistran
 
-Varistran is an R package providing a Variance Stabilizing Transformation appropriate for RNA-Seq data, and a variety of diagnostic plots based on such transformation.
+Varistran is an R package providing a Variance Stabilizing Transformation appropriate for RNA-Seq data, and a variety of diagnostic plots based on such transformation. As of 2025, it also contains a new method of transformation and library size adjustment that I am calling "samesum", which aims to be a better cousin of the Center Log Ratio transformation.
 
-* [Function reference](http://logarithmic.net/varistran/reference/index.html)
+* [Function reference](https://logarithmic.net/varistran/reference/index.html)
+
+* [Vignettes](https://logarithmic.net/varistran/articles/)
 
 * [Online demo](http://rnasystems.erc.monash.edu:3838/pfh/2015/demo-varistran)
 
-* [A slideshow describing Varistran](http://rnasystems.erc.monash.edu:3838/pfh/2016/varistran/)
+* [A slideshow describing Varistran (2016)](http://rnasystems.erc.monash.edu:3838/pfh/2016/varistran/)
 
 * [Poster for ABACBS 2015](doc/varistran-poster-abacbs-2015.pdf) [(on F1000, doi: 10.7490/f1000research.1110757.1)](http://f1000research.com/posters/4-1041)
 
