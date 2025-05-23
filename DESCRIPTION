@@ -22,9 +22,9 @@ Imports:
     seriation,
     gridBase,
     Matrix,
-    cli
+    cli,
+    edgeR
 Suggests:
-    edgeR,
     limma,
     DESeq2,
     biomaRt,
