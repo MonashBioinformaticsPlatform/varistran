@@ -32,6 +32,6 @@ Suggests:
     airway,
     knitr,
     rmarkdown
-RoxygenNote: 7.3.2
 Encoding: UTF-8
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.0

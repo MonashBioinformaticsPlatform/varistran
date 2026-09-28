@@ -4,7 +4,7 @@
 \alias{make_ordering}
 \title{Make an object representing an ordering, usually from a hierarchical clustering.}
 \usage{
-make_ordering(mat, enable = TRUE, fast = FALSE)
+make_ordering(mat, enable = TRUE, fast = FALSE, use_olo = nrow(mat) <= 2500)
 }
 \arguments{
 \item{mat}{Matrix suitably transformed so distances between rows are meaningful.}
@@ -12,6 +12,8 @@ make_ordering(mat, enable = TRUE, fast = FALSE)
 \item{enable}{If false, don't perform clustering.}
 
 \item{fast}{If true, just order rows with a simple one dimensional PCA.}
+
+\item{use_olo}{If false, don't apply OLO ordering after hierarchical clustering.}
 }
 \description{
 Performs hierarchical clustering, and then further refines the order using the seriation library.

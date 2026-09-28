@@ -38,19 +38,27 @@ export(vertical_shrinktext_grob)
 export(vst)
 export(vst_advice)
 import(grid)
-importFrom(Matrix,colSums)
-importFrom(Matrix,t)
-importFrom(grDevices,axisTicks)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,pdf)
-importFrom(grDevices,png)
-importFrom(grDevices,postscript)
-importFrom(graphics,par)
-importFrom(graphics,plot.new)
-importFrom(stats,as.dendrogram)
-importFrom(stats,dist)
-importFrom(stats,hclust)
-importFrom(stats,is.leaf)
-importFrom(stats,optimize)
-importFrom(stats,order.dendrogram)
-importFrom(stats,sd)
+importFrom(Matrix,
+  colSums,
+  t
+)
+importFrom(grDevices,
+  axisTicks,
+  dev.off,
+  pdf,
+  png,
+  postscript
+)
+importFrom(graphics,
+  par,
+  plot.new
+)
+importFrom(stats,
+  as.dendrogram,
+  dist,
+  hclust,
+  is.leaf,
+  optimize,
+  order.dendrogram,
+  sd
+)

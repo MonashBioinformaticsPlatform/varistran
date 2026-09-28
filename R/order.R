@@ -25,16 +25,18 @@ dendrogram_paths <- function(dend) {
 #'
 #' @param fast If true, just order rows with a simple one dimensional PCA.
 #'
+#' @param use_olo If false, don't apply OLO ordering after hierarchical clustering.
+#'
 #' @export
-make_ordering <- function(mat, enable=TRUE, fast=FALSE) {
+make_ordering <- function(mat, enable=TRUE, fast=FALSE, use_olo=nrow(mat) <= 2500) {
     # Note: paths are given ordered by order
-
+    
     # Fill in NAs
     fillin <- !is.finite(mat)
     if (any(fillin)) {
         filler <- matrix(rowMeans(mat, na.rm=TRUE), nrow=nrow(mat),ncol=ncol(mat))
         mat[fillin] <- filler[fillin]
-        mat[!is.finite(mat)] <- mean(mat)
+        mat[!is.finite(mat)] <- mean(mat, na.rm=TRUE)
         mat[!is.finite(mat)] <- 0.0
     }
     
@@ -54,15 +56,19 @@ make_ordering <- function(mat, enable=TRUE, fast=FALSE) {
 
     } else {
         dist_mat <- dist(mat)
-        control <- list(hclust = hclust(dist_mat))
-        dend_mat <- as.dendrogram(
-                seriation::seriate(dist_mat,
-                method = 'OLO',
-                control = control)[[1]])
-
-        list(dendrogram = dend_mat,
-             order = order.dendrogram(dend_mat),
-             paths = dendrogram_paths(dend_mat))
+        clustering <- hclust(dist_mat)
+        
+        if (use_olo) {
+            clustering <- seriation::seriate(dist_mat,
+                    method = 'OLO',
+                    control = list(hclust=clustering))[[1]]
+        }
+        
+        dendrogram <- as.dendrogram(clustering)
+        
+        list(dendrogram = dendrogram,
+             order = order.dendrogram(dendrogram),
+             paths = dendrogram_paths(dendrogram))
     }
 }
 

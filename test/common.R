@@ -42,15 +42,15 @@ load_bottomly_gene_names <- function(bottomly.eset) {
 
 
 save_plot <- function(prefix, func, width=4,height=3.5) {
-    filename <- paste0("test_output/",prefix,".pdf")
-    cat("Plotting",filename,"/ .png\n")
-
-    pdf(filename, width=width, height=height)
+    filename <- paste0("test_output/",prefix,".png")
+    cat("Plotting",filename,"\n")
+    png(filename, width=width, height=height, units="in", res=300)
     func()
     dev.off()
-
-    filename <- paste0("test_output/",prefix,".png")
-    png(filename, width=width, height=height, units="in", res=300)
+    
+    filename <- paste0("test_output/",prefix,".pdf")
+    cat("Plotting",filename,"\n")
+    pdf(filename, width=width, height=height)
     func()
     dev.off()
 }

@@ -1,7 +1,7 @@
 
 source("test/common.R")
 
-n <- 1000
+n <- 5000
 p <- 5
 y <- matrix(rnorm(n*p), nrow=n)
 
