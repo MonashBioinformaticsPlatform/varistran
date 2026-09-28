@@ -180,7 +180,7 @@ signed_colors <- hsv(
 #' @return A list containing a heatmap grob and associated legend grob.
 #'
 #' @export
-heatmap_grob <- function(data, signed=TRUE, legend_title="", vp_name=NULL, to=NULL) {
+heatmap_grob <- function(data, signed=TRUE, legend_title="", vp_name=NULL, to=NULL, raster=FALSE) {
     if (signed) {
         radius <- max(abs(c(data, to)), na.rm=TRUE)
         range <- c(-radius, radius)
@@ -199,16 +199,26 @@ heatmap_grob <- function(data, signed=TRUE, legend_title="", vp_name=NULL, to=NU
     fill <- col[scaled]
     fill[ is.na(fill) ] <- "#888888"
 
-    heatmap <- rectGrob(
-        x=rep(seq_len(ncol(data))-1, each=nrow(data)),
-        y=rep(seq_len(nrow(data))-1, ncol(data)),
-        width=1,
-        height=1,
-        just=c(0,0),
-        default.units="native",
-        gp=gpar(col=NA, fill=fill),
-        vp=viewport(xscale=c(0,ncol(data)),yscale=c(0,nrow(data)), name=vp_name)
-    )
+    if (raster) {
+        fill <- matrix(fill, nrow=nrow(data), ncol=ncol(data))
+        heatmap <- rasterGrob(
+            fill[rev(seq_len(nrow(data))),,drop=FALSE],
+            x=0, y=0, width=1, height=1, 
+            just=c(0,0),
+            interpolate=FALSE,
+            name=vp_name)
+    } else {
+        heatmap <- rectGrob(
+            x=rep(seq_len(ncol(data))-1, each=nrow(data)),
+            y=rep(seq_len(nrow(data))-1, ncol(data)),
+            width=1,
+            height=1,
+            just=c(0,0),
+            default.units="native",
+            gp=gpar(col=NA, fill=fill),
+            vp=viewport(xscale=c(0,ncol(data)),yscale=c(0,nrow(data)), name=vp_name)
+        )
+    }
 
     legend_heatmap <- rectGrob(
         x=seq_along(col)-1,

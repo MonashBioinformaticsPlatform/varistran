@@ -17,7 +17,8 @@ plot_heatmap(
   baseline_to = NULL,
   scale_to = NULL,
   show_baseline = TRUE,
-  show_tree = TRUE
+  show_tree = TRUE,
+  raster = FALSE
 )
 }
 \arguments{
@@ -45,7 +46,9 @@ plot_heatmap(
 
 \item{show_baseline}{Show baseline barplot?}
 
-\item{show_tree}{Show dendrogram tree(s)? These dendrograms arguably over-interpret the data without adding much of values, so it may be better to hide them.}
+\item{show_tree}{Show dendrogram tree(s)? These dendrograms arguably over-interpret the data without adding much of values, so it may be better to hide them. Tree drawing can also be slow for large trees.}
+
+\item{raster}{If TRUE heatmap is drawn using a raster. If FALSE heatmap is drawn using rectangles. Note that raster may fail to render properly in some PDF viewers.}
 }
 \value{
 A grid grob. print()-ing this value will cause it to be displayed.

@@ -4,7 +4,14 @@
 \alias{heatmap_grob}
 \title{A grob for heatmaps.}
 \usage{
-heatmap_grob(data, signed = TRUE, legend_title = "", vp_name = NULL, to = NULL)
+heatmap_grob(
+  data,
+  signed = TRUE,
+  legend_title = "",
+  vp_name = NULL,
+  to = NULL,
+  raster = FALSE
+)
 }
 \arguments{
 \item{data}{Matrix of data to display.}

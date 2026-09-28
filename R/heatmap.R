@@ -24,7 +24,8 @@
 #' @param baseline_to If provided, the scale for the row means or baseline will include this value or these values. Use this if there is some meaningful "zero" for your data.
 #' @param scale_to If provided, the heatmap color scale will include this value. Use this to provide consistency of scales between heatmaps (note values larger than scale_to will cause the scale to be extended).
 #' @param show_baseline Show baseline barplot?
-#' @param show_tree Show dendrogram tree(s)? These dendrograms arguably over-interpret the data without adding much of values, so it may be better to hide them.
+#' @param show_tree Show dendrogram tree(s)? These dendrograms arguably over-interpret the data without adding much of values, so it may be better to hide them. Tree drawing can also be slow for large trees.
+#' @param raster If TRUE heatmap is drawn using a raster. If FALSE heatmap is drawn using rectangles. Note that raster may fail to render properly in some PDF viewers.
 #'
 #' @return A grid grob. print()-ing this value will cause it to be displayed.
 #'
@@ -54,7 +55,8 @@ plot_heatmap <- function(
         baseline_to=NULL,
         scale_to=NULL,
         show_baseline=TRUE,
-        show_tree=TRUE) {
+        show_tree=TRUE,
+        raster=FALSE) {
     y <- as.matrix(y)
     
     if (is.null(sample_labels) && !is.null(colnames(y)))
@@ -120,7 +122,8 @@ plot_heatmap <- function(
         signed=TRUE,
         legend_title=paste0(scale_label),
         vp_name="heatmap",
-        to=scale_to)
+        to=scale_to,
+        raster=raster)
     
     mean_range <- range(means, baseline_to, na.rm=TRUE)
     
@@ -162,7 +165,7 @@ plot_heatmap <- function(
         just=c(0,0.5),
         vp=viewport(xscale=c(0,1),yscale=c(0,nrow(y)))
     )
-
+    
     sample_label_grob <- vertical_shrinktext_grob(
         sample_labels[col_order$order],
         x=seq_len(ncol(y))-0.5,
